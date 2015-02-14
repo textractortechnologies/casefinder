@@ -1,0 +1,66 @@
+Hey Mike,
+ 
+Here are the fields we need for importing to Metriq.
+ 
+I’m trying to get the Metriq input format for you, will hopefully have by tomorrow.
+ 
+-Will
+ 
+From: Gorchow, Addie 
+Sent: Monday, February 09, 2015 10:41 AM
+To: Thompson, William
+Subject: FW: import fields
+ 
+See below…
+ 
+Addie Gorchow
+Cancer Registry
+ 
+From: Ziegler, Debra 
+Sent: Monday, February 09, 2015 10:40 AM
+To: Gorchow, Addie
+Subject: import fields
+ 
+From S014/12508 – I left this in suspense in case you and Will need to refer to it
+ 
+Demographics
+Last name
+First name
+SSN
+MRN
+Address – Current
+City – Current
+State – Current
+Postal Code – Current
+Addr Current – Country
+Telephone
+ 
+Status
+Date of Birth
+Birthplace – State
+Birthplace – Country
+Date of Last contact
+Sex
+ 
+Primary
+Primary Site
+Histo/Behavior
+Type of Reporting Source
+Date of 1st contact
+ 
+Case Status
+Address at DX
+City/Town at DX
+State at DX
+Postal Code at DX
+Addr at DX - Country
+ 
+ 
+Debra Ziegler, MLIS, CTR
+Cancer Registry
+NorthShore University HealthSystem
+2650 Ridge Avenue, Burch 101
+Evanston, IL 60201
+Tel (847) 570-3701 Fax (847) 733-5138
+dziegler@northshore.org
+ 
