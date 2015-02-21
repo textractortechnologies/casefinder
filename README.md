@@ -25,6 +25,13 @@ Things you may want to cover:
 
 * ...
 
+== Deployment for development ==
+Tested with the following versions:
+* Vagrant 1.7.2
+* VirtualBox 4.3.22
+  * VirtualBox Extensions Pack
+* An internet connection to retrieve and install dependencies
+
 
 Please feel free to use a different markup language if you do not plan to run
 <tt>rake doc:app</tt>.
