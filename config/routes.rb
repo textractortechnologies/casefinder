@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  mount Abstractor::Engine, :at => "/"
+  resources :pathology_cases
+  root 'curate#index'  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

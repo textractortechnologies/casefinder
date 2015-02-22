@@ -1,0 +1,172 @@
+.abstractor_subject_groups_container {
+ border: none;
+}
+
+.abstractor_abstraction {
+  input[type="checkbox"] + label, input[type="radio"] + label {
+    margin-right: 0rem !important;
+    margin-left: 0rem !important;
+  }
+}
+
+$abstractor_font_size: 0.8125rem;
+$abstractor_column_top_margin: 0.5rem;
+
+.abstractor_abstractions {
+  @include grid-column(
+    $columns: $total-columns,
+    $collapse:true
+  );
+  font-size: $abstractor_font_size;
+}
+.abstractor_not_applicable_all_link,
+.abstractor_unknown_all_link,
+.abstractor_group_not_applicable_all_link,
+.abstractor_group_unknown_all_link,
+.abstractor_group_add_link,
+.abstractor_group_delete_link,
+.edit_abstractor_abstraction input[type="submit"] {
+  @include button($button-tny, $radius: true);
+}
+.abstractor_group_add_link {
+  margin-bottom: 0;
+}
+.abstractor_not_applicable_all_link,
+.abstractor_unknown_all_link{
+  font-size: 1rem;
+}
+
+.abstractor_abstractions fieldset {
+  @include grid-row();
+  .abstractor_abstraction { @include grid-row(); }
+  .abstractor_abstraction_schema_name {
+    @include grid-column(
+     $columns: 5,
+     $collapse:true
+    );
+    margin-right: 0;
+    margin-top: $abstractor_column_top_margin;
+  }
+  .abstractor_abstraction_value {
+    @include grid-column(
+     $columns: 6,
+     $collapse:true
+    );
+    margin-right: 0;
+    margin-top: $abstractor_column_top_margin;
+  }
+  .abstractor_suggestions {
+    @include grid-column(
+     $columns: 13,
+     $collapse:true
+    );
+    margin-right: 0;
+    margin-top: $abstractor_column_top_margin;
+  }
+  .abstractor_suggestion {
+    margin-bottom: $abstractor_column_top_margin;
+  }
+
+  .abstractor_suggestion_values {
+    @include grid-column(
+     $columns: 10,
+     $collapse:true
+    );
+    margin-right: 0;
+  }
+  .abstractor_suggestion_status {
+    @include grid-column(
+     $columns: 14,
+     $collapse:true
+    );
+    margin-right: 0;
+  }
+}
+
+.abstractor_suggestion_status_group {
+  input {
+    display: none;
+  }
+  @include button-group-container();
+
+  .abstractor_suggestion_status_selection_label_inactive  {
+    @include button($button-tny, $secondary-color);
+    margin-right: 0.1rem;
+    margin-bottom: $abstractor_column_top_margin;
+  }
+  .abstractor_suggestion_status_selection_label_active {
+    @include button($button-tny, $primary-color);
+    margin-bottom: $abstractor_column_top_margin;
+  }
+
+  & > li {
+    @include button-group-style(
+      // This controls the radius of the left and right edges. Set to true or px value. Default: false
+      $radius:true,
+      // This makes the buttons take up even space in their container. Set to the number of buttons in the group. Default: false.
+      $even:false,
+      // Controls how the buttons in the group float set to left or right. Default: $default-float.
+      $float: $default-float
+    );
+  }
+}
+.abstractor_suggestion_status_group > *:first-child > label {
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+}
+.abstractor_suggestion_status_group > *:last-child > label {
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.abstractor_abstractions .highlighted {
+  background: none;
+  padding: 0;
+}
+.ui-dialog_abstractor p{
+  font-size: $abstractor_font_size;
+}
+.ui-widget {
+  font-size: $abstractor_font_size;
+}
+.abstractor_abstraction_edit {
+  input {
+    margin:0;
+    height: inherit;
+    padding: inherit;
+  }
+  input.combobox {
+    padding-left: 4px;
+  }
+  button.ui-button-icon-only {
+    margin-bottom: 0;
+    margin-top: 0;
+    padding-top: 4px;
+  }
+  @include alert(
+    // Adjust the background of the alert
+    $bg: $secondary-color
+  );
+  border: 1px solid $table-border-color;
+}
+.abstractor_subject_groups_container {
+  .accordion .accordion-navigation .content {
+    padding: 0;
+    fieldset {
+      border: none;
+      font-size: $abstractor_font_size;
+    }
+  }
+}
+.abstractor_abstractions_ungrouped {
+  margin-bottom: 1rem;
+  fieldset {
+    border: 1px solid $table-border-color;
+  }
+}
+.abstractor_abstraction_group {
+  margin-bottom: $abstractor_column_top_margin;
+}
+span.environment {
+  // float: left;
+  color: red;
+}

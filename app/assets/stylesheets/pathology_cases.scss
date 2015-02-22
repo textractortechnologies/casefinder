@@ -1,0 +1,80 @@
+#pathology_cases {
+  @include grid-row();
+
+  #search_pathology_cases_form {
+    @include grid-row();
+    .search {
+      @include grid-column(
+        $columns: 6
+      )
+    }
+    .filter {
+      @include grid-column(
+        $columns: 4
+      )
+    }
+    .date_from_label {
+      @include grid-column(
+        $columns: 1
+      )
+    }
+    .date_from {
+      @include grid-column(
+        $columns: 3
+      )
+    }
+    .date_to_label {
+      @include grid-column(
+        $columns: 1
+      )
+    }
+    .date_to {
+      @include grid-column(
+        $columns: 3
+      )
+    }
+    .navigation {
+      @include grid-column(
+        $columns: 6
+      )
+    }
+  }
+  .pathology_cases_list {
+    @include grid-row();
+  }
+}
+
+#pathology_case {
+  @include grid-row();
+
+  .abstractor_not_applicable_all_link, .abstractor_unknown_all_link, .abstractor_group_not_applicable_all_link, .abstractor_group_unknown_all_link, .abstractor_group_add_link, .abstractor_group_delete_link {
+    @include button($button-tny);
+	margin-left: 1rem;
+  }
+
+  .abstractor_group_delete_link  {
+    @include button($button-tny, $alert-color);
+  }
+
+  .abstractor_group_not_applicable_all_link, .abstractor_group_unknown_all_link, .abstractor_group_delete_link {
+    margin-top: .5em;
+  }
+
+  .abstractor_abstraction_value .edit_link{
+    @include button($button-tny);
+  }
+
+  .edit_abstractor_abstraction input[type='submit'] {
+    @include button($button-tny);
+  }
+  
+  .patient table {
+	  @include grid-row();  	
+	  border: none; 		  
+  }
+  .pathology_case_details table {
+	  @include grid-row(); 
+	  border: none; 	
+  }
+  
+}
