@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20150219125937) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "abstractor_abstraction_group_members", force: :cascade do |t|
     t.integer  "abstractor_abstraction_group_id"
     t.integer  "abstractor_abstraction_id"
@@ -21,8 +24,8 @@ ActiveRecord::Schema.define(version: 20150219125937) do
     t.datetime "updated_at"
   end
 
-  add_index "abstractor_abstraction_group_members", ["abstractor_abstraction_group_id"], name: "index_abstractor_abstraction_group_id"
-  add_index "abstractor_abstraction_group_members", ["abstractor_abstraction_id"], name: "index_abstractor_abstraction_id"
+  add_index "abstractor_abstraction_group_members", ["abstractor_abstraction_group_id"], name: "index_abstractor_abstraction_group_id", using: :btree
+  add_index "abstractor_abstraction_group_members", ["abstractor_abstraction_id"], name: "index_abstractor_abstraction_id", using: :btree
 
   create_table "abstractor_abstraction_groups", force: :cascade do |t|
     t.integer  "abstractor_subject_group_id"
@@ -34,7 +37,7 @@ ActiveRecord::Schema.define(version: 20150219125937) do
     t.boolean  "system_generated",            default: false
   end
 
-  add_index "abstractor_abstraction_groups", ["about_id", "about_type", "deleted_at"], name: "index_about_id_about_type_deleted_at"
+  add_index "abstractor_abstraction_groups", ["about_id", "about_type", "deleted_at"], name: "index_about_id_about_type_deleted_at", using: :btree
 
   create_table "abstractor_abstraction_schema_object_values", force: :cascade do |t|
     t.integer  "abstractor_abstraction_schema_id"
@@ -102,8 +105,8 @@ ActiveRecord::Schema.define(version: 20150219125937) do
     t.datetime "updated_at"
   end
 
-  add_index "abstractor_abstractions", ["about_id", "about_type", "deleted_at"], name: "index_about_id_about_type_deleted_at_2"
-  add_index "abstractor_abstractions", ["abstractor_subject_id"], name: "index_abstractor_subject_id"
+  add_index "abstractor_abstractions", ["about_id", "about_type", "deleted_at"], name: "index_about_id_about_type_deleted_at_2", using: :btree
+  add_index "abstractor_abstractions", ["abstractor_subject_id"], name: "index_abstractor_subject_id", using: :btree
 
   create_table "abstractor_indirect_sources", force: :cascade do |t|
     t.integer  "abstractor_abstraction_id"
@@ -192,7 +195,7 @@ ActiveRecord::Schema.define(version: 20150219125937) do
     t.datetime "updated_at"
   end
 
-  add_index "abstractor_subject_group_members", ["abstractor_subject_id"], name: "index_abstractor_subject_id_2"
+  add_index "abstractor_subject_group_members", ["abstractor_subject_id"], name: "index_abstractor_subject_id_2", using: :btree
 
   create_table "abstractor_subject_groups", force: :cascade do |t|
     t.string   "name"
@@ -222,8 +225,8 @@ ActiveRecord::Schema.define(version: 20150219125937) do
     t.integer  "namespace_id"
   end
 
-  add_index "abstractor_subjects", ["namespace_type", "namespace_id"], name: "index_namespace_type_namespace_id"
-  add_index "abstractor_subjects", ["subject_type"], name: "index_subject_type"
+  add_index "abstractor_subjects", ["namespace_type", "namespace_id"], name: "index_namespace_type_namespace_id", using: :btree
+  add_index "abstractor_subjects", ["subject_type"], name: "index_subject_type", using: :btree
 
   create_table "abstractor_suggestion_object_values", force: :cascade do |t|
     t.integer  "abstractor_suggestion_id"
@@ -249,7 +252,7 @@ ActiveRecord::Schema.define(version: 20150219125937) do
     t.string   "section_name"
   end
 
-  add_index "abstractor_suggestion_sources", ["abstractor_suggestion_id"], name: "index_abstractor_suggestion_id"
+  add_index "abstractor_suggestion_sources", ["abstractor_suggestion_id"], name: "index_abstractor_suggestion_id", using: :btree
 
   create_table "abstractor_suggestion_statuses", force: :cascade do |t|
     t.string   "name"
@@ -269,7 +272,7 @@ ActiveRecord::Schema.define(version: 20150219125937) do
     t.datetime "updated_at"
   end
 
-  add_index "abstractor_suggestions", ["abstractor_abstraction_id"], name: "index_abstractor_abstraction_id_2"
+  add_index "abstractor_suggestions", ["abstractor_abstraction_id"], name: "index_abstractor_abstraction_id_2", using: :btree
 
   create_table "pathology_cases", force: :cascade do |t|
     t.string   "accession_number", null: false
@@ -289,6 +292,6 @@ ActiveRecord::Schema.define(version: 20150219125937) do
     t.datetime "created_at"
   end
 
-  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
 end
