@@ -4,9 +4,6 @@
 [submodule "modules/stdlib"]
 	path = modules/stdlib
 	url = git@github.com:puppetlabs/puppetlabs-stdlib.git
-[submodule "modules/apache"]
-	path = modules/apache
-	url = git@github.com:puppetlabs/puppetlabs-apache.git
 [submodule "modules/concat"]
 	path = modules/concat
 	url = git@github.com:puppetlabs/puppetlabs-concat.git
@@ -16,6 +13,6 @@
 [submodule "modules/augeasproviders_core"]
 	path = modules/augeasproviders_core
 	url = git@github.com:hercules-team/augeasproviders_core.git
-[submodule "modules/augeasproviders_apache"]
-	path = modules/augeasproviders_apache
-	url = git@github.com:hercules-team/augeasproviders_apache.git
+[submodule "modules/augeasproviders_base"]
+	path = modules/augeasproviders_base
+	url = git@github.com:hercules-team/augeasproviders_base.git
