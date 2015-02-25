@@ -1,10 +1,9 @@
 node casefinder {
   include rvm
+  include webserver
+  include webserver::passenger
 
   rvm_system_ruby {
-    'ruby-2.1':
-      ensure      => 'present',
-      default_use => false;
     'ruby-2.2':
       ensure      => 'present',
       default_use => false;
@@ -42,13 +41,5 @@ node casefinder {
       user     => 'casefinder_user',
       password => 'DabcosyupKoacDytmilejRumHypHeOp6',
     }
-
-
-
-
-
-
-
-
 
 }
