@@ -7,6 +7,10 @@ node casefinder {
   include vagrant
 
 
+  service { 'firewalld':
+    status => stopped,
+  }
+
   Yumrepo <| |> -> Package <| |>
 
   yumrepo { 'local_rpms':
