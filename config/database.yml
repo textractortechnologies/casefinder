@@ -4,7 +4,7 @@ default: &default
 development:
   <<: *default
   database: casefinder_development
-  user: casefinder_development  
+  user: casefinder_development
   password: casefinder_development
 
 # Warning: The database defined as "test" will be erased and
@@ -13,17 +13,17 @@ development:
 test:
   <<: *default
   database: casefinder_test
-  user: casefinder_test  
+  user: casefinder_test
   password: casefinder_test
 
 staging:
   <<: *default
   database: casefinder_staging
-  user: casefinder_staging  
+  user: casefinder_staging
   password: casefinder_staging
-  
+
 production:
   <<: *default
   database: casefinder
-  user: casefinder
-  password: casefinder
+  user: casefinder_user
+  password: DabcosyupKoacDytmilejRumHypHeOp6
