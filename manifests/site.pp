@@ -38,6 +38,15 @@ node casefinder {
     gid    => '599',
   }
 
+  file { '/etc/httpd/conf.d/casefinder.conf':
+    ensure  => file,
+    owner   => 'deploy',
+    group   => 'root',
+    mode    => '655',
+    content => template('deploy/vhost.conf.erb'),
+    notify  => Service['httpd'],
+  }
+
   rvm_system_ruby {
     'ruby-2.2':
       ensure      => 'present',

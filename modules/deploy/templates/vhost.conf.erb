@@ -1,0 +1,18 @@
+<VirtualHost *:80>
+  ServerName linux.local
+
+#<VirtualHost *:443>
+#  PassengerFriendlyErrorPages off
+  PassengerAppEnv production
+  PassengerRuby /usr/local/rvm/wrappers/ruby-2.2/ruby
+
+
+  DocumentRoot /var/www/apps/casefinder/current/public
+  RailsBaseURI /
+  PassengerDebugLogFile /var/log/httpd/passenger.log
+
+  <Directory /var/www/apps/casefinder/current/public >
+    Allow from all
+    Options -MultiViews
+  </Directory>
+</VirtualHost>
