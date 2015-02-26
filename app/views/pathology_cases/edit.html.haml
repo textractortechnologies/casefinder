@@ -1,0 +1,78 @@
+- content_for(:title) do
+  Pathology Case
+
+#pathology_case
+  .pathology_case_details	  	
+    %h3          
+      Pathology Case
+    %table
+      %thead
+        %tr		  	
+          %th
+            Collection Date
+          %th
+            Accession Number
+          %th
+            Responsible Pathologist
+          %th
+            Ordering Provider
+      %tbody
+        %tr
+          %td
+            1/1/2015
+          %td
+            S-15-0001234
+          %td
+            John Smith
+          %td
+            Bob Jones                    
+  .patient
+    %h3          
+      Patient
+    %table
+      %thead
+        %tr		  	
+          %th
+            Name
+          %th
+            MRN
+          %th
+            Birth Date
+          %th
+            Gender
+          %th
+            Race
+          %th
+            Ethnicity
+      %tbody
+        %tr
+          %td
+            John Doe
+          %td
+            12345678
+          %td
+            12/10/1961
+          %td
+            Male
+          %td
+            White
+          %td
+            Not Hispanic or Latino
+  .pathology_case_report	  	
+    .note_text
+      %dl.accordion{ data: { accordion: true }}>
+        %dd.accordion-navigation
+          = link_to '#note_text' do
+            Pathology Case Report
+            %i.fi-plus.right
+          #note_text.content
+            Blasts present, consistent with involvement by acute leukemia (AML)
+            Few benign mesothelial cells, polymorphonuclear leukocytes, lymphocytes and red blood cells
+            See additional cytology report C04-4889, (cell block).
+            
+  = render :partial => 'abstractor/abstractor_abstractions/list', :locals => {:about => @pathology_case}
+  
+  = link_to 'Curate', root_path()
+  |
+  = link_to 'Pathology Cases', pathology_cases_path()
+  

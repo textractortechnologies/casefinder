@@ -1,0 +1,9 @@
+#curate {
+  @include grid-row();
+
+  .navigation {
+    list-style: none;
+    font-size: 1.5em;
+    a:link {text-decoration:none;}
+  }
+}

@@ -1,0 +1,52 @@
+- content_for(:title) do
+  Pathology Cases
+
+#pathology_cases
+  %h2
+    Pathology Cases
+
+  = form_tag pathology_cases_path(), :method => 'get', :id => 'search_pathology_cases_form'  do
+    .search
+      = text_field_tag :search, (params[:search].nil? ? '' : params[:search])
+    .filter
+      = select_tag :filter,options_for_select(['all'].concat(Abstractor::Enum::ABSTRACTION_STATUSES), selected = params[:filter])
+    .date_from_label
+      = label_tag :date_from, 'From:', class: 'inline'
+    .date_from
+      = text_field_tag :date_from, (params[:date_from].nil? ? '' : params[:date_from]), :class => 'datepicker', placeholder: "From"
+    .date_to_label
+      = label_tag :date_from, 'To:', class: 'inline'
+    .date_to
+      = text_field_tag :date_to, (params[:date_from].nil? ? '' : params[:date_to]), :class => 'datepicker', placeholder: "To"
+    .navigation
+      %button{ :type => 'submit', :id => 'search_pathology_cases_button', class: 'tiny' }
+        Search
+      = link_to 'Clear', pathology_cases_path()
+  .pathology_cases_list
+    = will_paginate @pathology_cases
+    %table
+      %thead
+        %tr
+          %th.pathology_case_accession_number{ width: 400 }
+            Accession Number
+          %th.pathology_case_collection_date{ width: 400 }
+            Date
+          %th.review{ width: 100 }
+            Review
+          %th.reviewed{ width: 100 }
+            Reviewed
+          %th.edit{ width: 100 }
+      - @pathology_cases.each do |pathology_case|
+        %tbody
+          = content_tag_for(:tr, pathology_case ) do
+            %td.pathology_case_accession_number
+              = pathology_case.accession_number
+            %td.pathology_case_collection_date
+              = pathology_case.collection_date
+            %td.review
+              = pathology_case.abstractor_abstractions_by_abstractor_abstraction_status(Abstractor::Enum::ABSTRACTION_STATUS_NEEDS_REVIEW).size
+            %td.reviewed
+              = pathology_case.abstractor_abstractions_by_abstractor_abstraction_status(Abstractor::Enum::ABSTRACTION_STATUS_REVIEWED).size
+            %td.edit
+              = link_to 'Edit', edit_pathology_case_path(pathology_case), { :class => 'button tiny' }
+    = will_paginate @pathology_cases
