@@ -4,6 +4,7 @@ node casefinder {
   include webserver::passenger
   include epel
   include deploy
+  include vagrant
 
 
   Yumrepo <| |> -> Package <| |>
@@ -20,6 +21,12 @@ node casefinder {
     uid        => '599',
     groups     => [ 'apache','deploy',],
     require    => Package['httpd']
+  }
+
+  ssh_authorized_key { 'mgurley':
+    user => 'deploy',
+    type => 'ssh-rsa',
+    key  => 'AAAAB3NzaC1yc2EAAAADAQABAAABAQCvCrsKN2WFXlyDQQEPGpdlXLnGZibs52a6bX3R2dt5kz1Ld5+x9eBZHf0Y97PoVdaDcQIoDL1eBNdSL7DH95Rwb0IUAMQQvu9n399tlrdded2HPxKGsGwP6mZeZ98dBRQizrF7+p/tQQvg2v3hkRrxl6bI/36m+Bv0urCGckYKLJ7Y90vmEzyKpDz1L09LcEoGv4yTTq9JRV3U/WeZfVyfi8oSyq1ZuKVeUP8+pKkl1sZL7XMbnVE9dMB0HGaSBpc1Okhor/XgpclBB/l4dG8kC37Qlm2x7et/hq3usvofA8tyW7xk5Lhz/pIZXkJkGcyhdJlMbrpw0HWO+tx2Tei/',
   }
 
   group { 'deploy':
