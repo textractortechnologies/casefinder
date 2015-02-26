@@ -2,6 +2,30 @@ node casefinder {
   include rvm
   include webserver
   include webserver::passenger
+  include epel
+  include deploy
+
+
+  Yumrepo <| |> -> Package <| |>
+
+  yumrepo { 'local_rpms':
+    ensure   => present,
+    baseurl  => 'file:///vagrant/rpms',
+    gpgcheck => '0',
+  }
+
+  user { 'deploy':
+    ensure     => present,
+    managehome => true,
+    uid        => '599',
+    groups     => [ 'apache','deploy',],
+    require    => Package['httpd']
+  }
+
+  group { 'deploy':
+    ensure => present,
+    gid    => '599',
+  }
 
   rvm_system_ruby {
     'ruby-2.2':
@@ -33,7 +57,7 @@ node casefinder {
       type => 'host',
       database => 'casefinder',
       user => 'casefinder',
-      address => '127.0.0.1',
+      address => '127.0.0.1/32',
       auth_method => 'md5',
     }
 

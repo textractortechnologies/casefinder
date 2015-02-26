@@ -1,0 +1,6 @@
+shopt -s checkwinsize
+BLUE=$(tput setaf 4)
+PURPLE=$(tput setaf 5)
+WHITE=$(tput setaf 7)
+RESET=$(tput sgr0)
+PS1='\[$BLUE\]\u@\h\[$WHITE\] <%= @env -%> \[$PURPLE\]\w \[$RESET\]\$ '

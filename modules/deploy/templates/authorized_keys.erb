@@ -1,0 +1,4 @@
+<% @authorized_keys = scope['::fsm_baseline::users_keys::authorized_keys']-%>
+<% @authorized_keys.sort.each do |key, value| -%>
+<%=value.fetch("type") + " " + value.fetch("key") + " " + key%>
+<% end -%>
