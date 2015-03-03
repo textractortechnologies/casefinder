@@ -10,6 +10,11 @@ node casefinder {
   package { 'unzip':
     ensure => installed,
   }
+
+  package { 'java-1.7.0-openjdk':
+    ensure => installed,
+  }
+
   service { 'firewalld':
     ensure => stopped,
     enable => false,
