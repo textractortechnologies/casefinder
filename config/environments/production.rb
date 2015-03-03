@@ -1,4 +1,18 @@
 Rails.application.configure do
+  StanfordCoreNLP.use :english
+  StanfordCoreNLP.model_files = {}
+  StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-corenlp-full/"
+  StanfordCoreNLP.model_path = "#{Rails.root}/lib/stanford-corenlp-full/"
+  StanfordCoreNLP.jvm_args = ['-Xms1024M', '-Xmx2048M']
+  StanfordCoreNLP.default_jars = [
+    "joda-time.jar",
+    "xom.jar",
+    "stanford-corenlp-3.5.1.jar",
+    "stanford-corenlp-3.5.1-models.jar",
+    "jollyday.jar",
+    "bridge.jar"
+  ]
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
