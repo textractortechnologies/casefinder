@@ -15,6 +15,12 @@ node casefinder {
     ensure => installed,
   }
 
+  package { 'java-1.7.0-openjdk-devel':
+    ensure => installed,
+  }
+
+
+
   service { 'firewalld':
     ensure => stopped,
     enable => false,
