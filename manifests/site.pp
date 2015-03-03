@@ -97,6 +97,10 @@ node casefinder {
       backup_path => '/var/lib/pgsql/9.4/backups',
     }
 
+    package { 'postgresql94-devel':
+      ensure => installed,
+    }
+
     postgresql::server::pg_hba_rule { 'allow localhost access by casefinder':
       description => "allow localhost access by casefinder",
       type => 'host',
