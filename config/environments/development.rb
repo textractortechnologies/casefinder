@@ -1,3 +1,4 @@
+require 'stanford-core-nlp'
 Rails.application.configure do
   StanfordCoreNLP.use :english
   StanfordCoreNLP.model_files = {}
@@ -12,7 +13,7 @@ Rails.application.configure do
     "jollyday.jar",
     "bridge.jar"
   ]
-  
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on

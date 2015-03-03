@@ -39,7 +39,8 @@ gem 'foundation-rails'
 gem 'paper_trail'
 gem 'abstractor'
 # gem 'abstractor', path: '/Users/michaelgurley1/Documents/source/abstractor'
-gem 'stanford-core-nlp', :git => 'https://github.com/louismullie/stanford-core-nlp', branch: 'master'
+# gem 'stanford-core-nlp', :git => 'https://github.com/louismullie/stanford-core-nlp', branch: 'master'
+gem 'stanford-core-nlp-abstractor'
 gem 'will_paginate'
 
 group :development, :test do

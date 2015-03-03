@@ -1,3 +1,4 @@
+require 'stanford-core-nlp'
 Rails.application.configure do
   StanfordCoreNLP.use :english
   StanfordCoreNLP.model_files = {}
