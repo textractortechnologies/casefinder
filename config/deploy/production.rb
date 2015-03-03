@@ -30,6 +30,7 @@ role :app, %w{deploy@casefinder.local}
 
 server 'deploy@casefinder.local', user: 'deploy', roles: %w{web app}#, my_property: :my_value
 
+set :bundle_env_variables, {'JAVA_HOME' => "/usr/lib/jvm/java-openjdk"}
 
 # Custom SSH Options
 # ==================
