@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.3.5'
+lock '3.4.0'
 
 set :application, 'casefinder'
 set :repo_url, 'git@github.com:mgurley/casefinder.git'
@@ -24,6 +24,8 @@ set :deploy_to, '/var/www/apps/casefinder'
 
 # Default value for :pty is false
 # set :pty, true
+
+set :conditionally_migrate, true  # Defaults to false
 
 # Default value for :linked_files is []
 # set :linked_files, fetch(:linked_files, []).push('config/database.yml')
