@@ -25,7 +25,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "casefinder" do |box|
     box.vm.hostname = "casefinder.local"
-    box.vm.network "private_network", ip: "192.168.20.3", auto_configure: false
+    box.vm.network "private_network", ip: "192.168.20.3", auto_config: false
   end
 
 end

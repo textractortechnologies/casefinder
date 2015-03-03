@@ -7,8 +7,12 @@ node casefinder {
   include vagrant
 
 
+  package { 'unzip':
+    ensure => installed,
+  }
   service { 'firewalld':
-    status => stopped,
+    ensure => stopped,
+    enable => false,
   }
 
   Yumrepo <| |> -> Package <| |>
@@ -18,6 +22,22 @@ node casefinder {
     baseurl  => 'file:///vagrant/rpms',
     gpgcheck => '0',
   }
+
+  file { '/usr/local/stanford-core-nlp':
+    ensure => directory,
+    owner  => 'deploy',
+    group  => 'root',
+    mode   => '0755',
+  }
+
+  #staging::deploy { 'stanford-core-nlp-full.zip':
+  #  source  => 'http://louismullie.com/treat/stanford-core-nlp-full.zip',
+  #  target  => '/usr/local',
+  #  require => [Package['unzip'],File['/usr/local/stanford-core-nlp']],
+  #  owner   => 'deploy',
+  #  group   => 'root',
+
+  #}
 
   user { 'deploy':
     ensure     => present,
