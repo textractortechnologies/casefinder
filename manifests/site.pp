@@ -19,6 +19,10 @@ node casefinder {
     ensure => installed,
   }
 
+  package { 'nodejs':
+    ensure => installed,
+  }
+
 
 
   service { 'firewalld':
