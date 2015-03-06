@@ -12,11 +12,23 @@ node casefinder {
   }
 
   package { 'java-1.7.0-openjdk':
-    ensure => installed,
+    ensure => absent,
   }
 
   package { 'java-1.7.0-openjdk-devel':
-    ensure => installed,
+    ensure => absent,
+  }
+
+  package { 'java-1.7.0-openjdk-headless':
+    ensure => absent,
+  }
+
+  package { 'java-1.8.0-openjdk-headless':
+    ensure => present,
+  }
+
+  package { 'java-1.8.0-openjdk-devel':
+    ensure => present,
   }
 
   package { 'nodejs':
