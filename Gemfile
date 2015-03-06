@@ -31,14 +31,18 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'unicorn'
 
 # Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+gem 'capistrano'
+gem 'capistrano-rails', group: :development
+gem 'capistrano-rvm'
+gem 'capistrano-passenger'
 
 gem 'haml'
 gem 'foundation-rails'
 gem 'paper_trail'
 gem 'abstractor'
 # gem 'abstractor', path: '/Users/michaelgurley1/Documents/source/abstractor'
-gem 'stanford-core-nlp', :git => 'https://github.com/louismullie/stanford-core-nlp', branch: 'master'
+# gem 'stanford-core-nlp', :git => 'https://github.com/louismullie/stanford-core-nlp', branch: 'master'
+gem 'stanford-core-nlp-abstractor'
 gem 'will_paginate'
 
 group :development, :test do

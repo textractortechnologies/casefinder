@@ -18,12 +18,14 @@ test:
 
 staging:
   <<: *default
+  host: localhost
   database: casefinder_staging
   user: casefinder_staging
   password: casefinder_staging
 
 production:
   <<: *default
+  host: localhost
   database: casefinder
   user: casefinder_user
   password: DabcosyupKoacDytmilejRumHypHeOp6

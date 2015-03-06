@@ -1,4 +1,8 @@
+require 'stanford-core-nlp'
 Rails.application.configure do
+  ENV['LD_LIBRARY_PATH'] = '/usr/lib/jvm/java-openjdk/bin'
+  ENV['JAVA_HOME'] = '/usr/lib/jvm/java-openjdk'
+
   StanfordCoreNLP.use :english
   StanfordCoreNLP.model_files = {}
   StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-corenlp-full/"
@@ -12,7 +16,7 @@ Rails.application.configure do
     "jollyday.jar",
     "bridge.jar"
   ]
-  
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.

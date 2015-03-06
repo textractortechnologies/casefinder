@@ -1,8 +1,14 @@
+require 'stanford-core-nlp'
 Rails.application.configure do
+  ENV['LD_LIBRARY_PATH'] = '/usr/lib/jvm/java-openjdk/bin'
+  ENV['JAVA_HOME'] = '/usr/lib/jvm/java-openjdk'
+
   StanfordCoreNLP.use :english
   StanfordCoreNLP.model_files = {}
-  StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-corenlp-full/"
-  StanfordCoreNLP.model_path = "#{Rails.root}/lib/stanford-corenlp-full/"
+  # StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-corenlp-full/"
+  # StanfordCoreNLP.model_path = "#{Rails.root}/lib/stanford-corenlp-full/"
+  StanfordCoreNLP.jar_path = "/usr/local/stanford-core-nlp/"
+  StanfordCoreNLP.model_path = "/usr/local/stanford-core-nlp/"
   StanfordCoreNLP.jvm_args = ['-Xms1024M', '-Xmx2048M']
   StanfordCoreNLP.default_jars = [
     "joda-time.jar",

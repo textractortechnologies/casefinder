@@ -14,50 +14,54 @@ namespace :setup do
     source_type_nlp_suggestion = Abstractor::AbstractorAbstractionSourceType.where(name: 'nlp suggestion').first
     custom_suggestion_source_type = Abstractor::AbstractorAbstractionSourceType.where(name: 'custom suggestion').first
     indirect_source_type = Abstractor::AbstractorAbstractionSourceType.where(name: 'indirect').first
-    
-    cancer_diagnosis_group  = Abstractor::AbstractorSubjectGroup.create(:name => 'Cancer Diagnosis')
+
+    cancer_diagnosis_group  = Abstractor::AbstractorSubjectGroup.where(:name => 'Cancer Diagnosis').first_or_create
     abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(
       predicate: 'has_cancer_histology',
       display_name: 'Cancer Histology',
       abstractor_object_type: list_object_type,
       preferred_name: 'cancer histology').first_or_create
 
-    histologies = CSV.new(File.open('lib/setup/data/icdo3_diagnoses.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")    
+    histologies = CSV.new(File.open('lib/setup/data/icdo3_diagnoses.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
     histologies.each do |histology|
-      abstractor_object_value = Abstractor::AbstractorObjectValue.create(:value => "#{histology.to_hash['name']} (#{histology.to_hash['icdo3_code']})")
+      abstractor_object_value = Abstractor::AbstractorObjectValue.where(:value => "#{histology.to_hash['name']} (#{histology.to_hash['icdo3_code']})".downcase).first_or_create
       Abstractor::AbstractorAbstractionSchemaObjectValue.where(abstractor_abstraction_schema: abstractor_abstraction_schema,abstractor_object_value: abstractor_object_value).first_or_create
-      Abstractor::AbstractorObjectValueVariant.create(:abstractor_object_value => abstractor_object_value, :value => histology.to_hash['name'])      
-      histology_synonyms = CSV.new(File.open('lib/setup/data/icdo3_diagnosis_synonyms.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")      
+      Abstractor::AbstractorObjectValueVariant.where(:abstractor_object_value => abstractor_object_value, :value => histology.to_hash['name'].downcase).first_or_create
+      histology_synonyms = CSV.new(File.open('lib/setup/data/icdo3_diagnosis_synonyms.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
       histology_synonyms.select { |histology_synonym| histology.to_hash['icdo3_code'] == histology_synonym.to_hash['icdo3_code'] }.each do |histology_synonym|
-        Abstractor::AbstractorObjectValueVariant.create(:abstractor_object_value => abstractor_object_value, :value => histology_synonym.to_hash['synonym_name'])
-      end          
+        Abstractor::AbstractorObjectValueVariant.where(:abstractor_object_value => abstractor_object_value, :value => histology_synonym.to_hash['synonym_name'].downcase).first_or_create
+      end
+
+      northshore_histology_synonyms = CSV.new(File.open('lib/setup/data/northshore_diagnosis_synonyms.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+      northshore_histology_synonyms.select { |histology_synonym| histology.to_hash['icdo3_code'] == histology_synonym.to_hash['Code'] }.each do |histology_synonym|
+        Abstractor::AbstractorObjectValueVariant.where(:abstractor_object_value => abstractor_object_value, :value => histology_synonym.to_hash['Term'].downcase).first_or_create
+      end
     end
 
-    abstractor_subject = Abstractor::AbstractorSubject.create(:subject_type => 'PathologyCase', :abstractor_abstraction_schema => abstractor_abstraction_schema)
-    Abstractor::AbstractorAbstractionSource.create(abstractor_subject: abstractor_subject, from_method: 'note_text', :abstractor_rule_type => value_rule, abstractor_abstraction_source_type: source_type_nlp_suggestion)
-    Abstractor::AbstractorSubjectGroupMember.create(:abstractor_subject => abstractor_subject, :abstractor_subject_group => cancer_diagnosis_group, :display_order => 1)
-    
+    abstractor_subject = Abstractor::AbstractorSubject.where(:subject_type => 'PathologyCase', :abstractor_abstraction_schema => abstractor_abstraction_schema).first_or_create
+    Abstractor::AbstractorAbstractionSource.where(abstractor_subject: abstractor_subject, from_method: 'note_text', :abstractor_rule_type => value_rule, abstractor_abstraction_source_type: source_type_nlp_suggestion).first_or_create
+    Abstractor::AbstractorSubjectGroupMember.where(:abstractor_subject => abstractor_subject, :abstractor_subject_group => cancer_diagnosis_group, :display_order => 1).first_or_create
+
     abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(
       predicate: 'has_cancer_site',
       display_name: 'Cancer Site',
       abstractor_object_type: list_object_type,
       preferred_name: 'cancer site').first_or_create
 
-
-    sites = CSV.new(File.open('lib/setup/data/icdo3_sites.csv'), headers: true, col_sep: ",", return_headers: true,  quote_char: "\"")
-    site_synonyms = CSV.new(File.open('lib/setup/data/icdo3_site_synonyms.csv'), headers: true, col_sep: ",", return_headers: true,  quote_char: "\"")
+    sites = CSV.new(File.open('lib/setup/data/icdo3_sites.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
     sites.each do |site|
-      abstractor_object_value = Abstractor::AbstractorObjectValue.create(:value => "#{site.to_hash['name']} (#{site.to_hash['icdo3_code']})")
-      Abstractor::AbstractorAbstractionSchemaObjectValue.where(abstractor_abstraction_schema: abstractor_abstraction_schema,abstractor_object_value: abstractor_object_value).first_or_create
-      Abstractor::AbstractorObjectValueVariant.create(:abstractor_object_value => abstractor_object_value, :value => site.to_hash['name'])      
+      abstractor_object_value = Abstractor::AbstractorObjectValue.where(:value => "#{site.to_hash['name']} (#{site.to_hash['icdo3_code']})".downcase).first_or_create
+      Abstractor::AbstractorAbstractionSchemaObjectValue.where(abstractor_abstraction_schema: abstractor_abstraction_schema, abstractor_object_value: abstractor_object_value).first_or_create
+      Abstractor::AbstractorObjectValueVariant.where(:abstractor_object_value => abstractor_object_value, :value => site.to_hash['name'].downcase).first_or_create
+      site_synonyms = CSV.new(File.open('lib/setup/data/icdo3_site_synonyms.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
       site_synonyms.select { |site_synonym| site.to_hash['icdo3_code'] == site_synonym.to_hash['icdo3_code'] }.each do |site_synonym|
-        Abstractor::AbstractorObjectValueVariant.create(:abstractor_object_value => abstractor_object_value, :value => site_synonym.to_hash['synonym_name'])
-      end          
+        Abstractor::AbstractorObjectValueVariant.where(:abstractor_object_value => abstractor_object_value, :value => site_synonym.to_hash['synonym_name'].downcase).first_or_create
+      end
     end
 
-    abstractor_subject = Abstractor::AbstractorSubject.create(:subject_type => 'PathologyCase', :abstractor_abstraction_schema => abstractor_abstraction_schema)
-    Abstractor::AbstractorAbstractionSource.create(abstractor_subject: abstractor_subject, from_method: 'note_text', :abstractor_rule_type => value_rule, abstractor_abstraction_source_type: source_type_nlp_suggestion)
-    Abstractor::AbstractorSubjectGroupMember.create(:abstractor_subject => abstractor_subject, :abstractor_subject_group => cancer_diagnosis_group, :display_order => 2)    
+    abstractor_subject = Abstractor::AbstractorSubject.where(:subject_type => 'PathologyCase', :abstractor_abstraction_schema => abstractor_abstraction_schema).first_or_create
+    Abstractor::AbstractorAbstractionSource.where(abstractor_subject: abstractor_subject, from_method: 'note_text', :abstractor_rule_type => value_rule, abstractor_abstraction_source_type: source_type_nlp_suggestion).first_or_create
+    Abstractor::AbstractorSubjectGroupMember.where(:abstractor_subject => abstractor_subject, :abstractor_subject_group => cancer_diagnosis_group, :display_order => 2).first_or_create
   end
 
   desc "Setup pathology cases"
