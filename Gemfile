@@ -35,6 +35,7 @@ gem 'capistrano'
 gem 'capistrano-rails', group: :development
 gem 'capistrano-rvm'
 gem 'capistrano-passenger'
+gem 'capistrano-secrets-yml', '~> 1.0.0'
 
 gem 'haml'
 gem 'foundation-rails'
