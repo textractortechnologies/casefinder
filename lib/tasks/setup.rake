@@ -39,7 +39,7 @@ namespace :setup do
     end
 
     abstractor_subject = Abstractor::AbstractorSubject.where(:subject_type => 'PathologyCase', :abstractor_abstraction_schema => abstractor_abstraction_schema).first_or_create
-    Abstractor::AbstractorAbstractionSource.where(abstractor_subject: abstractor_subject, from_method: 'note_text', :abstractor_rule_type => value_rule, abstractor_abstraction_source_type: source_type_nlp_suggestion).first_or_create
+    Abstractor::AbstractorAbstractionSource.where(abstractor_subject: abstractor_subject, from_method: 'note', :abstractor_rule_type => value_rule, abstractor_abstraction_source_type: source_type_nlp_suggestion).first_or_create
     Abstractor::AbstractorSubjectGroupMember.where(:abstractor_subject => abstractor_subject, :abstractor_subject_group => cancer_diagnosis_group, :display_order => 1).first_or_create
 
     abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(
@@ -60,7 +60,7 @@ namespace :setup do
     end
 
     abstractor_subject = Abstractor::AbstractorSubject.where(:subject_type => 'PathologyCase', :abstractor_abstraction_schema => abstractor_abstraction_schema).first_or_create
-    Abstractor::AbstractorAbstractionSource.where(abstractor_subject: abstractor_subject, from_method: 'note_text', :abstractor_rule_type => value_rule, abstractor_abstraction_source_type: source_type_nlp_suggestion).first_or_create
+    Abstractor::AbstractorAbstractionSource.where(abstractor_subject: abstractor_subject, from_method: 'note', :abstractor_rule_type => value_rule, abstractor_abstraction_source_type: source_type_nlp_suggestion).first_or_create
     Abstractor::AbstractorSubjectGroupMember.where(:abstractor_subject => abstractor_subject, :abstractor_subject_group => cancer_diagnosis_group, :display_order => 2).first_or_create
   end
 
@@ -68,7 +68,7 @@ namespace :setup do
   task(pathology_cases: :environment) do  |t, args|
     pathology_cases = YAML.load(ERB.new(File.read("lib/setup/data/pathology_cases.yml")).result)
     pathology_cases.each do |pathology_case_file|
-      pathology_case = PathologyCase.where(accession_number: pathology_case_file['accession_number'], collection_date: pathology_case_file['collection_date'], patient_id: pathology_case_file['patient_id'], note_text: pathology_case_file['note_text']).first_or_create
+      pathology_case = PathologyCase.where(accession_number: pathology_case_file['accession_number'], encounter_date: pathology_case_file['encounter_date'], note: pathology_case_file['note'], patient_last_name: 'Baines', patient_first_name: 'Harold', mrn: '11111111', birth_date: '7/4/1976').first_or_create
       pathology_case.abstract
     end
   end

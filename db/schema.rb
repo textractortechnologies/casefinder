@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150219125937) do
+ActiveRecord::Schema.define(version: 20150311011741) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -274,11 +274,39 @@ ActiveRecord::Schema.define(version: 20150219125937) do
 
   add_index "abstractor_suggestions", ["abstractor_abstraction_id"], name: "index_abstractor_abstraction_id_2", using: :btree
 
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+
   create_table "pathology_cases", force: :cascade do |t|
-    t.string   "accession_number", null: false
-    t.date     "collection_date",  null: false
-    t.text     "note_text",        null: false
-    t.integer  "patient_id",       null: false
+    t.string   "accession_number"
+    t.string   "patient_last_name",   null: false
+    t.string   "patient_first_name",  null: false
+    t.string   "patient_middle_name"
+    t.string   "mrn",                 null: false
+    t.string   "ssn"
+    t.date     "birth_date",          null: false
+    t.string   "address_line_1"
+    t.string   "address_line_2"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip_code"
+    t.string   "home_phone"
+    t.string   "gender"
+    t.date     "encounter_date",      null: false
+    t.text     "note",                null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

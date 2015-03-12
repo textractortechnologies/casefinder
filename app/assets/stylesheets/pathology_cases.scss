@@ -1,3 +1,7 @@
+#upload_pathology_cases {
+  @include grid-row();
+}
+
 #pathology_cases {
   @include grid-row();
 
@@ -67,14 +71,14 @@
   .edit_abstractor_abstraction input[type='submit'] {
     @include button($button-tny);
   }
-  
+
   .patient table {
-	  @include grid-row();  	
-	  border: none; 		  
+	  @include grid-row();
+	  border: none;
   }
   .pathology_case_details table {
-	  @include grid-row(); 
-	  border: none; 	
+	  @include grid-row();
+	  border: none;
   }
-  
+
 }

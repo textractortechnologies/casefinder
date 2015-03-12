@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
   mount Abstractor::Engine, :at => "/"
-  resources :pathology_cases
-  root 'curate#index'  
+  resources :pathology_cases do
+    collection { post :import }
+    collection { get  :upload }
+  end
+  root 'curate#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

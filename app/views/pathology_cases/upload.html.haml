@@ -1,0 +1,14 @@
+- content_for(:title) do
+  Upload Pathology Cases
+
+#upload_pathology_cases
+  %h2
+    Upload Pathology Cases
+  = form_tag import_pathology_cases_path, multipart: true do
+    = file_field_tag :file
+    %button{ :type => 'submit', :id => 'upload_pathology_cases_button', class: 'tiny' }
+      Import
+
+  = link_to 'Curate', root_path()
+  |
+  = link_to 'Pathology Cases', pathology_cases_path()

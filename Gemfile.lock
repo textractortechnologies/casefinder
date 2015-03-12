@@ -47,6 +47,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    american_date (1.1.0)
     arel (6.0.0)
     bind-it (0.2.7)
       rjb (~> 1.4.3)
@@ -84,8 +85,14 @@ GEM
     coffee-script-source (1.9.1)
     colorize (0.7.5)
     columnize (0.9.0)
+    daemons (1.2.1)
     debug_inspector (0.0.2)
     debugger-linecache (1.2.0)
+    delayed_job (4.0.6)
+      activesupport (>= 3.0, < 5.0)
+    delayed_job_active_record (4.0.3)
+      activerecord (>= 3.0, < 5.0)
+      delayed_job (>= 3.0, < 4.1)
     erubis (2.7.0)
     execjs (2.3.0)
     foundation-rails (5.5.1.0)
@@ -159,6 +166,11 @@ GEM
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
     rjb (1.4.9)
+    roo (1.13.2)
+      nokogiri
+      rubyzip
+      spreadsheet (> 0.6.4)
+    ruby-ole (1.2.11.8)
     rubyzip (1.1.7)
     sass (3.4.13)
     sass-rails (5.0.1)
@@ -171,6 +183,8 @@ GEM
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     slop (3.6.0)
+    spreadsheet (1.0.2)
+      ruby-ole (>= 1.0)
     spring (1.3.3)
     sprockets (2.12.3)
       hike (~> 1.2)
@@ -207,6 +221,7 @@ PLATFORMS
 
 DEPENDENCIES
   abstractor
+  american_date
   byebug
   capistrano
   capistrano-passenger
@@ -214,6 +229,8 @@ DEPENDENCIES
   capistrano-rvm
   capistrano-secrets-yml (~> 1.0.0)
   coffee-rails (~> 4.1.0)
+  daemons
+  delayed_job_active_record
   foundation-rails
   haml
   jbuilder (~> 2.0)
@@ -222,6 +239,7 @@ DEPENDENCIES
   paper_trail
   pg
   rails (= 4.2.0)
+  roo
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring

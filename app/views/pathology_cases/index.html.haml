@@ -29,7 +29,7 @@
         %tr
           %th.pathology_case_accession_number{ width: 400 }
             Accession Number
-          %th.pathology_case_collection_date{ width: 400 }
+          %th.pathology_case_encounter_date{ width: 400 }
             Date
           %th.review{ width: 100 }
             Review
@@ -41,8 +41,8 @@
           = content_tag_for(:tr, pathology_case ) do
             %td.pathology_case_accession_number
               = pathology_case.accession_number
-            %td.pathology_case_collection_date
-              = pathology_case.collection_date
+            %td.pathology_case_encounter_date
+              = pathology_case.encounter_date
             %td.review
               = pathology_case.abstractor_abstractions_by_abstractor_abstraction_status(Abstractor::Enum::ABSTRACTION_STATUS_NEEDS_REVIEW).size
             %td.reviewed
@@ -50,3 +50,4 @@
             %td.edit
               = link_to 'Edit', edit_pathology_case_path(pathology_case), { :class => 'button tiny' }
     = will_paginate @pathology_cases
+    = link_to 'Curate', root_path()

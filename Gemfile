@@ -45,6 +45,10 @@ gem 'abstractor'
 # gem 'stanford-core-nlp', :git => 'https://github.com/louismullie/stanford-core-nlp', branch: 'master'
 gem 'stanford-core-nlp-abstractor'
 gem 'will_paginate'
+gem 'roo'
+gem 'american_date'
+gem 'delayed_job_active_record'
+gem 'daemons'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

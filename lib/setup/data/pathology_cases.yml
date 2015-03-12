@@ -1,15 +1,13 @@
 ---
 - accession_number: OR-111
-  collection_date: 2013-01-01
-  patient_id: 10
-  note_text: |
+  encounter_date: 2013-01-01
+  note: |
     Blasts present, consistent with involvement by acute leukemia (AML)
     Few benign mesothelial cells, polymorphonuclear leukocytes, lymphocytes and red blood cells
     See additional cytology report C04-4889, (cell block).
 - accession_number: OR-222
-  collection_date: 2013-02-01
-  patient_id: 20
-  note_text: |
+  encounter_date: 2013-02-01
+  note: |
     A, B, C & D. Left thalamic lesion, biopsy and resection:
     ?	Glioblastoma, WHO grade IV, see comment.
     ?	MGMT gene methylation test ordered; see separate molecular report for result.
@@ -19,9 +17,8 @@
 
     The positive controls demonstrate appropriate positive staining. The known tissue negative controls were negative. The non-immune serum control was non-reactive.
 - accession_number: OR-333
-  collection_date: 2013-02-01
-  patient_id: 30
-  note_text: |
+  encounter_date: 2013-02-01
+  note: |
     A. Left breast, mass at 12:00 and 1 cm from the nipple, ultrasound core needle biopsy (BIRADS 5):
     ?	Invasive ductal carcinoma, grade 2 (3+2+1), 0.7 cm in maximum dimension (see note).
 
