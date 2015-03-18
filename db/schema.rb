@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150311011741) do
+ActiveRecord::Schema.define(version: 20150318105858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 20150311011741) do
     t.integer  "abstractor_abstraction_source_type_id"
     t.integer  "abstractor_rule_type_id"
     t.string   "section_name"
+    t.string   "custom_nlp_provider"
   end
 
   create_table "abstractor_abstractions", force: :cascade do |t|
@@ -139,6 +140,10 @@ ActiveRecord::Schema.define(version: 20150311011741) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "properties"
+    t.string   "vocabulary_code"
+    t.string   "vocabulary"
+    t.string   "vocabulary_version"
   end
 
   create_table "abstractor_relation_types", force: :cascade do |t|
