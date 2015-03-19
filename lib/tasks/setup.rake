@@ -22,19 +22,28 @@ namespace :setup do
       abstractor_object_type: list_object_type,
       preferred_name: 'cancer histology').first_or_create
 
-    histologies = CSV.new(File.open('lib/setup/data/icdo3_diagnoses.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+    histologies = CSV.new(File.open('lib/setup/data/ICD-O Codes Updated 1.14.15.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
     histologies.each do |histology|
-      abstractor_object_value = Abstractor::AbstractorObjectValue.where(:value => "#{histology.to_hash['name']} (#{histology.to_hash['icdo3_code']})".downcase).first_or_create
-      Abstractor::AbstractorAbstractionSchemaObjectValue.where(abstractor_abstraction_schema: abstractor_abstraction_schema,abstractor_object_value: abstractor_object_value).first_or_create
-      Abstractor::AbstractorObjectValueVariant.where(:abstractor_object_value => abstractor_object_value, :value => histology.to_hash['name'].downcase).first_or_create
-      histology_synonyms = CSV.new(File.open('lib/setup/data/icdo3_diagnosis_synonyms.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
-      histology_synonyms.select { |histology_synonym| histology.to_hash['icdo3_code'] == histology_synonym.to_hash['icdo3_code'] }.each do |histology_synonym|
-        Abstractor::AbstractorObjectValueVariant.where(:abstractor_object_value => abstractor_object_value, :value => histology_synonym.to_hash['synonym_name'].downcase).first_or_create
-      end
+      if histology.to_hash['Canonical?'] == 'TRUE'
+        abstractor_object_value = Abstractor::AbstractorObjectValue.where(:value => "#{histology.to_hash['Term']} (#{histology.to_hash['Code']})".downcase, vocabulary_code: histology.to_hash['Code'], vocabulary: 'ICD-O-3', vocabulary_version: '2011 Updates to ICD-O-3', properties: { type: histology.to_hash['Type'], select_for: histology.to_hash['Select for']}.to_json).first_or_create
+        Abstractor::AbstractorAbstractionSchemaObjectValue.where(abstractor_abstraction_schema: abstractor_abstraction_schema,abstractor_object_value: abstractor_object_value).first_or_create
+        Abstractor::AbstractorObjectValueVariant.where(:abstractor_object_value => abstractor_object_value, :value => histology.to_hash['Term'].downcase).first_or_create
 
-      northshore_histology_synonyms = CSV.new(File.open('lib/setup/data/northshore_diagnosis_synonyms.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
-      northshore_histology_synonyms.select { |histology_synonym| histology.to_hash['icdo3_code'] == histology_synonym.to_hash['Code'] }.each do |histology_synonym|
-        Abstractor::AbstractorObjectValueVariant.where(:abstractor_object_value => abstractor_object_value, :value => histology_synonym.to_hash['Term'].downcase).first_or_create
+        normalized_values = normalize(histology.to_hash['Term'])
+        normalized_values.each do |normalized_value|
+          if !object_value_exists?(abstractor_abstraction_schema, normalized_value)
+            Abstractor::AbstractorObjectValueVariant.where(:abstractor_object_value => abstractor_object_value, :value => normalized_value.downcase).first_or_create
+          end
+        end
+      else
+        abstractor_object_value = Abstractor::AbstractorObjectValue.where(vocabulary_code: histology.to_hash['Code'], vocabulary: 'ICD-O-3', vocabulary_version: '2011 Updates to ICD-O-3').first
+        Abstractor::AbstractorObjectValueVariant.where(:abstractor_object_value => abstractor_object_value, :value => histology.to_hash['Term'].downcase).first_or_create
+        normalized_values = normalize(histology.to_hash['Term'])
+        normalized_values.each do |normalized_value|
+          if !object_value_exists?(abstractor_abstraction_schema, normalized_value)
+            Abstractor::AbstractorObjectValueVariant.where(:abstractor_object_value => abstractor_object_value, :value => normalized_value.downcase).first_or_create
+          end
+        end
       end
     end
 
@@ -72,4 +81,21 @@ namespace :setup do
       pathology_case.abstract
     end
   end
+end
+
+def normalize(value)
+  normalized_values = []
+  words = value.split(',').map(&:strip) - ['nos']
+  if words.size == 1
+    normalized_values << words.first
+  end
+  if words.size > 1
+    normalized_values << words.reverse.join(' ')
+    normalized_values <<  words.join(' ')
+  end
+  normalized_values
+end
+
+def object_value_exists?(abstractor_abstraction_schema, value)
+  (Abstractor::AbstractorObjectValue.joins(:abstractor_abstraction_schema_object_values).where('abstractor_abstraction_schema_object_values.abstractor_abstraction_schema_id = ? AND lower(abstractor_object_values.value) = ?', abstractor_abstraction_schema.id, value.downcase).any?  || Abstractor::AbstractorObjectValueVariant.joins(abstractor_object_value: :abstractor_abstraction_schema_object_values).where('abstractor_abstraction_schema_object_values.abstractor_abstraction_schema_id = ? AND lower(abstractor_object_value_variants.value) = ?', abstractor_abstraction_schema.id, value.downcase).any?)
 end
