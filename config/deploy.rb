@@ -73,4 +73,13 @@ namespace :deploy do
       # end
     end
   end
+
+  before :starting, :prepare_pg do
+    on roles(:all) do
+      within deploy_path do
+        execute :bundle, "config build.pg --with-pg-config=/usr/pgsql-9.4/bin/pg_config"
+      end
+    end
+  end
 end
+
