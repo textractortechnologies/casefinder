@@ -3,8 +3,9 @@
 
 #pathology_case
   .pathology_case_details
-    %h3
-      Pathology Case
+    %h2
+      %b
+        Pathology Case
     %table
       %thead
         %tr
@@ -20,7 +21,8 @@
             = @pathology_case.accession_number
   .patient
     %h3
-      Patient
+      %b
+        Patient
     %table
       %thead
         %tr
@@ -57,7 +59,3 @@
             = simple_format(@pathology_case.note)
 
   = render :partial => 'abstractor/abstractor_abstractions/list', locals: { about: @pathology_case }
-
-  = link_to 'Curate', root_path()
-  |
-  = link_to 'Pathology Cases', pathology_cases_path()

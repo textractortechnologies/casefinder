@@ -3,7 +3,8 @@
 
 #pathology_cases
   %h2
-    Pathology Cases
+    %b
+      Pathology Cases
 
   = form_tag pathology_cases_path(), :method => 'get', :id => 'search_pathology_cases_form'  do
     .search
@@ -50,4 +51,3 @@
             %td.edit
               = link_to 'Edit', edit_pathology_case_path(pathology_case), { :class => 'button tiny' }
     = will_paginate @pathology_cases
-    = link_to 'Curate', root_path()

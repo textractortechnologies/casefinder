@@ -149,6 +149,9 @@ $abstractor_column_top_margin: 0.5rem;
   border: 1px solid $table-border-color;
 }
 .abstractor_subject_groups_container {
+  fieldset {
+    border: none;
+  }
   .accordion .accordion-navigation .content {
     padding: 0;
     fieldset {

@@ -1,9 +1,22 @@
 #curate {
   @include grid-row();
 
-  .navigation {
-    list-style: none;
-    font-size: 1.5em;
-    a:link {text-decoration:none;}
+  div#instructions {
+    ul {
+      font-size: 2em;
+      font-weight: bold;
+      padding-left: .5em;
+      list-style: none;
+      margin-bottom: .5em;
+    }
+    li {
+      height:100px;
+      margin-bottom:10px;
+      line-height:100px;
+      background: url(svgs/fi-check.svg) ;
+      list-style:none;
+      padding-left:120px;
+      background-repeat:no-repeat;
+    }
   }
 }
