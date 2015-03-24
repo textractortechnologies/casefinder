@@ -9,10 +9,15 @@
     @include grid-row();
     .search {
       @include grid-column(
-        $columns: 6
+        $columns: 3
       )
     }
     .filter {
+      @include grid-column(
+        $columns: 4
+      )
+    }
+    .suggestion_filter {
       @include grid-column(
         $columns: 4
       )
@@ -39,7 +44,7 @@
     }
     .navigation {
       @include grid-column(
-        $columns: 6
+        $columns: 5
       )
     }
   }
@@ -80,5 +85,4 @@
 	  @include grid-row();
 	  border: none;
   }
-
 }

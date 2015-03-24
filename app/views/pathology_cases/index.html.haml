@@ -10,7 +10,9 @@
     .search
       = text_field_tag :search, (params[:search].nil? ? '' : params[:search])
     .filter
-      = select_tag :filter,options_for_select(['all'].concat(Abstractor::Enum::ABSTRACTION_STATUSES), selected = params[:filter])
+      = select_tag :filter, options_for_select(['all'].concat(Abstractor::Enum::ABSTRACTION_STATUSES), selected = params[:filter])
+    .suggestion_filter
+      = select_tag :suggestion_filter, options_for_select(['all'].concat(Abstractor::Enum::ABSTRACTION_SUGGESTION_TYPES), selected = params[:suggestion_filter])
     .date_from_label
       = label_tag :date_from, 'From:', class: 'inline'
     .date_from
