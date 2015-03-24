@@ -1,15 +1,15 @@
-.icon-bar.five-up
+.icon-bar.four-up
   = link_to root_path, class: 'item' do
     = image_tag 'case_finder.png', alt: 'Case Finder', class: 'case-finder-logo'
   = link_to root_path, class: 'item' do
     %i{ class: "fi-home" }
     %label Home
-  = link_to pathology_cases_path, class: 'item' do
-    %i{ class: "fi-page-multiple" }
-    %label Pathology Cases
   = link_to upload_pathology_cases_path(), class: 'item' do
     %i{ class: "fi-upload" }
     %label Upload
-  = link_to '#', class: 'item' do
-    %i{ class: "fi-archive" }
-    %label Export
+  = link_to pathology_cases_path, class: 'item' do
+    %i{ class: "fi-page-multiple" }
+    %label Pathology Cases
+  / = link_to '#', class: 'item' do
+  /   %i{ class: "fi-archive" }
+  /   %label Export

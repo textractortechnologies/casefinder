@@ -1,4 +1,5 @@
 require 'roo'
+require 'csv'
 class PathologyCase < ActiveRecord::Base
   include Abstractor::Abstractable
 
@@ -55,5 +56,19 @@ class PathologyCase < ActiveRecord::Base
 
   def patient_full_name
     [patient_first_name.titleize, patient_last_name.titleize].reject { |n| n.nil? or n.blank?  }.join(' ')
+  end
+
+  def self.to_csv(pathology_cases, options = {})
+    headers = ['patient_last_name', 'patient_first_name', 'mrn', 'ssn', 'birth_date', 'has_cancer_site', 'address_line_1', 'city', 'state', 'zip_code', 'home_phone']
+    CSV.generate(options) do |csv|
+      csv << headers
+      pathology_cases.each do |pathology_case|
+        csv << pathology_case.with_cancer_histologies.first.attributes.values_at(*headers)
+      end
+    end
+  end
+
+  def with_cancer_histologies
+    PathologyCase.pivot_grouped_abstractions('Cancer Diagnosis').where(id: id)
   end
 end

@@ -25,6 +25,7 @@
       %button{ :type => 'submit', :id => 'search_pathology_cases_button', class: 'tiny' }
         Search
       = link_to 'Clear', pathology_cases_path()
+      = submit_tag "Export", :name => "export", class: 'tiny button'
   .pathology_cases_list
     = will_paginate @pathology_cases
     %table
