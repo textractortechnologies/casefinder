@@ -13,8 +13,9 @@ class PathologyCasesController < ApplicationController
 
     respond_to do |format|
       format.html { @pathology_cases = @pathology_cases.paginate(:per_page => 10, :page => params[:page])}
-      format.csv { send_data PathologyCase.to_csv(@pathology_cases), filename: "metriq_#{DateTime.now}"  }
+      format.csv { send_data PathologyCase.to_csv(@pathology_cases), filename: "metriq_#{DateTime.now}.csv"  }
     end
+    record_history
   end
 
   def edit
