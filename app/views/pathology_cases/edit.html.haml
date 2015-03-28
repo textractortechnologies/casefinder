@@ -59,6 +59,6 @@
             Pathology Case Report
             %i.fi-plus.right
           #note_text.content
-            = simple_format(@pathology_case.note)
+            = simple_format(ERB::Util.html_escape(@pathology_case.note))
 
   = render :partial => 'abstractor/abstractor_abstractions/list', locals: { about: @pathology_case }
