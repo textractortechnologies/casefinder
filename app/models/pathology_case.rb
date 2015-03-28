@@ -59,11 +59,13 @@ class PathologyCase < ActiveRecord::Base
   end
 
   def self.to_csv(pathology_cases, options = {})
-    headers = ['patient_last_name', 'patient_first_name', 'mrn', 'ssn', 'birth_date', 'has_cancer_site', 'address_line_1', 'city', 'state', 'zip_code', 'home_phone']
+    headers = ['patient_last_name', 'patient_first_name', 'mrn', 'ssn', 'birth_date', 'has_cancer_site', 'address_line_1', 'city', 'state', 'zip_code', 'home_phone', 'vocabulary_code', 'vocabulary', 'vocabulary_version']
     CSV.generate(options) do |csv|
       csv << headers
       pathology_cases.each do |pathology_case|
-        csv << pathology_case.with_cancer_histologies.first.attributes.values_at(*headers)
+        pathology_case.with_cancer_histologies.joins('JOIN abstractor_object_values aov ON has_cancer_site = aov.value JOIN abstractor_abstraction_schema_object_values aasov ON aov.id = aasov.abstractor_object_value_id').select('pathology_cases.*, aov.vocabulary_code, aov.vocabulary, aov.vocabulary_version').each do |site|
+          csv << site.attributes.values_at(*headers)
+        end
       end
     end
   end
