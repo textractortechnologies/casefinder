@@ -13,18 +13,16 @@
       = select_tag :filter, options_for_select(['all'].concat(Abstractor::Enum::ABSTRACTION_STATUSES), selected = params[:filter])
     .suggestion_filter
       = select_tag :suggestion_filter, options_for_select(['all'].concat(Abstractor::Enum::ABSTRACTION_SUGGESTION_TYPES), selected = params[:suggestion_filter])
-    .date_from_label
-      = label_tag :date_from, 'From:', class: 'inline'
     .date_from
       = text_field_tag :date_from, (params[:date_from].nil? ? '' : params[:date_from]), :class => 'datepicker', placeholder: "From"
-    .date_to_label
-      = label_tag :date_from, 'To:', class: 'inline'
     .date_to
       = text_field_tag :date_to, (params[:date_from].nil? ? '' : params[:date_to]), :class => 'datepicker', placeholder: "To"
     .navigation
       %button{ :type => 'submit', :id => 'search_pathology_cases_button', class: 'tiny' }
         Search
+      &nbsp;
       = link_to 'Clear', pathology_cases_path()
+      &nbsp;
       = submit_tag "Export", :name => "export", class: 'tiny button'
   .pathology_cases_list
     = will_paginate @pathology_cases

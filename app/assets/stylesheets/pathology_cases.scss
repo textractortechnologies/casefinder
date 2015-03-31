@@ -22,19 +22,9 @@
         $columns: 4
       )
     }
-    .date_from_label {
-      @include grid-column(
-        $columns: 1
-      )
-    }
     .date_from {
       @include grid-column(
         $columns: 3
-      )
-    }
-    .date_to_label {
-      @include grid-column(
-        $columns: 1
       )
     }
     .date_to {
@@ -44,7 +34,7 @@
     }
     .navigation {
       @include grid-column(
-        $columns: 5
+        $columns: 7
       )
     }
   }
