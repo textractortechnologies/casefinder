@@ -52,3 +52,6 @@ ping casefinder.local
 
 vagrant login
 vagrant box update
+
+bundle exec rails g abstractor:install --customize-controllers --no-install-stanford-core-nlp
+http://casefinder.dev/abstractor_abstraction_schemas/1.json
