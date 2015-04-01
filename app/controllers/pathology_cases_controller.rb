@@ -1,4 +1,5 @@
 class PathologyCasesController < ApplicationController
+  before_action :authenticate_user!
   def index
     params[:filter] ||= Abstractor::Enum::ABSTRACTION_STATUS_NEEDS_REVIEW
     params[:suggestion_filter] ||= Abstractor::Enum::ABSTRACTION_SUGGESTION_TYPE_NOT_UNKNOWN

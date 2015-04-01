@@ -1,4 +1,4 @@
-.icon-bar.four-up
+.icon-bar.five-up
   = link_to root_path, class: 'item ' do
     = image_tag 'case_finder.png', border: 0, alt: 'Case Finder', class: 'case-finder-logo'
   = link_to root_path, class: 'item' do
@@ -7,9 +7,14 @@
   = link_to upload_pathology_cases_path(), class: 'item' do
     %i{ class: "fi-upload" }
     %label Upload
-  = link_to pathology_cases_path, class: 'item' do
+  = link_to pathology_cases_path(), class: 'item' do
     %i{ class: "fi-page-multiple" }
     %label Pathology Cases
-  / = link_to '#', class: 'item' do
-  /   %i{ class: "fi-archive" }
-  /   %label Export
+  - if user_signed_in?
+    = link_to destroy_user_session_path(), method: 'delete', class: 'item' do
+      %i{ class: "fi-unlock" }
+      %label Sign out
+  - else
+    = link_to new_user_session_path(), class: 'item' do
+      %i{ class: "fi-lock" }
+      %label Sign in
