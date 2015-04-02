@@ -1,0 +1,3 @@
+<%- @deployable_apps.sort.map do |app,value| -%>
+*:5432:<%= app-%>:<%=value['db_username']%>:<%=value['db_password']%>
+<% end %>
