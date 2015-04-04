@@ -36,7 +36,6 @@ node casefinder {
   }
 
 
-
   service { 'firewalld':
     ensure => stopped,
     enable => false,
@@ -95,9 +94,17 @@ node casefinder {
   }
 
   rvm_system_ruby {
-    'ruby-2.2':
+    'ruby-2.2.1':
       ensure      => 'present',
       default_use => false;
+  }
+
+  rvm_gem {
+    'bundler':
+      name         => 'bundler',
+      ruby_version => 'ruby-2.2.1',
+      ensure       => latest,
+      require      => Rvm_system_ruby['ruby-2.2.1'];
   }
 
   class { 'postgresql::globals':
