@@ -26,6 +26,8 @@ Tested with the following versions:
 
 ** vagrant ssh
 
+** sudo -su root
+
 ** yum install nano
 
 ** sudo -su root
@@ -36,13 +38,13 @@ Tested with the following versions:
 
 ** cd /var/www/apps/casefinder/current
 
-** RAILS_ENV=production rvm 2.2 do bundle exec rake abstractor:setup:system
+** RAILS_ENV=production rvm 2.2.0 do bundle exec rake abstractor:setup:system
 
-** RAILS_ENV=production rvm 2.2 do bundle exec rake setup:abstractor_schemas
+** RAILS_ENV=production rvm 2.2.0 do bundle exec rake setup:abstractor_schemas
 
-** RAILS_ENV=production rvm 2.2 do bundle exec rake setup:pathology_cases
+** RAILS_ENV=production rvm 2.2.0 do bundle exec rake setup:pathology_cases
 
-** RAILS_ENV=production rvm 2.2 do bin/delayed_job start
+** RAILS_ENV=production rvm 2.2.0 do bin/delayed_job start
 
 * Debugging server issues
 ** sudo -su root
@@ -55,12 +57,12 @@ Tested with the following versions:
 ** vagrant ssh
 ** vagrant box update
 
-* in deploy directory: rvm 2.2 do  bundle config build.pg --with-pg-config=/usr/pgsql-9.4/bin/pg_config
+* in deploy directory: rvm 2.2.0 do  bundle config build.pg --with-pg-config=/usr/pgsql-9.4/bin/pg_config
 * git checkout --track origin/\#13
 * git submodule update --init --recursive
 * http://casefinder.dev/
-* RAILS_ENV=production rvm 2.2 do bundle exec rails console
-* in deploy directory: rvm 2.2 do  bundle config build.pg --with-pg-config=/usr/pgsql-9.4/bin/pg_config
+* RAILS_ENV=production rvm 2.2.0 do bundle exec rails console
+* in deploy directory: rvm 2.2.0 do  bundle config build.pg --with-pg-config=/usr/pgsql-9.4/bin/pg_config
 * ping casefinder.local
 * bundle exec rails g abstractor:install --customize-controllers --no-install-stanford-core-nlp
 * http://casefinder.dev/abstractor_abstraction_schemas/1.jso

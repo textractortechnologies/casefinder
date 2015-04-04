@@ -94,7 +94,7 @@ node casefinder {
   }
 
   rvm_system_ruby {
-    'ruby-2.2.1':
+    'ruby-2.2.0':
       ensure      => 'present',
       default_use => false;
   }
@@ -102,9 +102,9 @@ node casefinder {
   rvm_gem {
     'bundler':
       name         => 'bundler',
-      ruby_version => 'ruby-2.2.1',
+      ruby_version => 'ruby-2.2.0',
       ensure       => latest,
-      require      => Rvm_system_ruby['ruby-2.2.1'];
+      require      => Rvm_system_ruby['ruby-2.2.0'];
   }
 
   class { 'postgresql::globals':

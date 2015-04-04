@@ -5,7 +5,7 @@ set :application, 'casefinder'
 set :repo_url, 'git@github.com:mgurley/casefinder.git'
 
 set :rvm_type, :system
-set :rvm_ruby_version, '2.2.1'
+set :rvm_ruby_version, '2.2.0'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
