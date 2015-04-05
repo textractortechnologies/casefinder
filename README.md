@@ -52,11 +52,10 @@
 
 * RAILS_ENV=production rvm 2.2.0 do bin/delayed_job start
 
-# Deployment of VM
+# Debug server issues
 * vagrant ssh
 * sudo -su root
 * cd /var/log/httpd/
-
 
 # Add a versioned vagrant box
 * vagrant login
