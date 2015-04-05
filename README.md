@@ -1,61 +1,71 @@
 # casefinder
-## Deployment for development
-Tested with the following versions:
+
+## Deployment of VM
+
 * Vagrant 1.7.2
+
 * VirtualBox 4.3.22
-  * VirtualBox Extensions Pack
+
+* VirtualBox Extensions Pack
+
 * An internet connection to retrieve and install dependencies
 
-* setting up the VM
+* git clone git@github.com:mgurley/casefinder.git
 
-** git submodule update --init --recursive
+* cd casefinder
 
-** comment out Vagrant file auto_config: false
+* git submodule update --init --recursive
 
-** vagrant up
+* comment out Vagrant file auto_config: false
 
-** vagrant halt
+* vagrant up
 
-** uncomment out Vagrant file auto_config: false
+* vagrant halt
 
-** vagrant up
+* uncomment out Vagrant file auto_config: false
 
-** bundle exec cap production deploy
+* vagrant up
 
-** bundle exec cap production secrets_yml:setup
+* bundle exec cap production deploy
 
-** vagrant ssh
+* bundle exec cap production secrets_yml:setup
 
-** sudo -su root
+* vagrant ssh
 
-** yum install nano
+* sudo -su root
 
-** sudo -su root
+* yum install nano
 
-** cd /vagrant/lib
+* sudo -su root
 
-** cp stanford-core-nlp/*.* /usr/local/stanford-core-nlp/
+* cd /vagrant/lib
 
-** cd /var/www/apps/casefinder/current
+* cp stanford-core-nlp/*.* /usr/local/stanford-core-nlp/
 
-** RAILS_ENV=production rvm 2.2.0 do bundle exec rake abstractor:setup:system
+* cd /var/www/apps/casefinder/current
 
-** RAILS_ENV=production rvm 2.2.0 do bundle exec rake setup:abstractor_schemas
+* RAILS_ENV=production rvm 2.2.0 do bundle exec rake abstractor:setup:system
 
-** RAILS_ENV=production rvm 2.2.0 do bundle exec rake setup:pathology_cases
+* RAILS_ENV=production rvm 2.2.0 do bundle exec rake setup:abstractor_schemas
 
-** RAILS_ENV=production rvm 2.2.0 do bin/delayed_job start
+* RAILS_ENV=production rvm 2.2.0 do bundle exec rake setup:pathology_cases
 
-* Debugging server issues
-** sudo -su root
-** cd /var/log/httpd/
+* RAILS_ENV=production rvm 2.2.0 do bin/delayed_job start
 
-* add box
-** vagrant login
-** vagrant box add mgurley/casefinder --provider virtualbox
-** vagrant up casefinder
-** vagrant ssh
-** vagrant box update
+# Deployment of VM
+* vagrant ssh
+* sudo -su root
+* cd /var/log/httpd/
+
+
+# Add a versioned vagrant box
+* vagrant login
+* vagrant box add mgurley/casefinder --provider virtualbox
+* vagrant up casefinder
+* vagrant ssh
+* vagrant box update
+
+# Miscellaneous
 
 * in deploy directory: rvm 2.2.0 do  bundle config build.pg --with-pg-config=/usr/pgsql-9.4/bin/pg_config
 * git checkout --track origin/\#13
