@@ -75,3 +75,4 @@
 * ping casefinder.local
 * bundle exec rails g abstractor:install --customize-controllers --no-install-stanford-core-nlp
 * http://casefinder.dev/abstractor_abstraction_schemas/1.jso
+* rvm all do gem list

@@ -4,3 +4,10 @@
     font-weight: bold;
   }
 }
+
+#registration_new {
+  @include grid-row();
+  label {
+    font-weight: bold;
+  }
+}

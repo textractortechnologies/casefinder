@@ -13,8 +13,8 @@
   - if user_signed_in?
     = link_to destroy_user_session_path(), method: 'delete', class: 'item' do
       %i{ class: "fi-unlock" }
-      %label Sign out
+      %label Log out
   - else
     = link_to new_user_session_path(), class: 'item' do
       %i{ class: "fi-lock" }
-      %label Sign in
+      %label Log in
