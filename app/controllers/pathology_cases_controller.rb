@@ -27,7 +27,7 @@ class PathologyCasesController < ApplicationController
 
   def import
     PathologyCase.import(params[:file])
-    redirect_to root_url, notice: "Pathology Cases imported."
+    redirect_to pathology_cases_url, notice: "Pathology Cases imported."
   end
 
   def upload

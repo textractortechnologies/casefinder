@@ -26,22 +26,24 @@ class PathologyCase < ActiveRecord::Base
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
-      pathology_case = PathologyCase.where(accession_number: row['accession_nbr']).first_or_initialize
-      pathology_case.encounter_date       = DateTime.parse(row['case_collect_date_time'].strip).to_date
-      pathology_case.patient_last_name    = 'Baines'
-      pathology_case.patient_first_name   = 'Harold'
-      pathology_case.patient_middle_name  = nil
-      pathology_case.mrn                  = '12345678'
-      pathology_case.ssn                  = '111111111'
-      pathology_case.birth_date           = DateTime.parse('7/4/1976').to_date
-      pathology_case.address_line_1       = '333 West 35th Street'
-      pathology_case.address_line_2       = nil
-      pathology_case.city                 = 'Chicago'
-      pathology_case.state                = 'IL'
-      pathology_case.zip_code             = '60616'
-      pathology_case.home_phone           = '3124444444'
-      pathology_case.gender               = 'Male'
-      pathology_case.note                 = row['diagnosis']
+      accession_num = row['ACCESSION_NUM'].is_a?(Float) ? row['ACCESSION_NUM'].to_i.to_s : row['ACCESSION_NUM']
+      pathology_case = PathologyCase.where(accession_number: accession_num).first_or_initialize
+      pathology_case.encounter_date       = DateTime.parse(row['ENC_DATE'].to_s.strip).to_date
+      pathology_case.patient_last_name    = row['LAST_NAME']
+      pathology_case.patient_first_name   = row['FIRST_NAME']
+      pathology_case.patient_middle_name  = row['MIDDLE_NAME']
+      mrn = row['MRN'].is_a?(Float) ? row['MRN'].to_i.to_s : row['MRN']
+      pathology_case.mrn                  = mrn
+      pathology_case.ssn                  = row['SSN']
+      pathology_case.birth_date           = DateTime.parse(row['BIRTH_DATE'].to_s.strip).to_date
+      pathology_case.address_line_1       = row['ADDR_LINE_1']
+      pathology_case.address_line_2       = row['ADDR_LINE_2']
+      pathology_case.city                 = row['CITY']
+      pathology_case.state                = row['STATE_CODE']
+      pathology_case.zip_code             = row['ZIP_CODE']
+      pathology_case.home_phone           = row['HOME_PHONE']
+      pathology_case.gender               = row['GENDER_CODE']
+      pathology_case.note                 = row['PATH_RESULT_TEXT']
       pathology_case.save!
       pathology_case.delay.abstract
     end

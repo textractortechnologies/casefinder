@@ -50,6 +50,8 @@
 
 * RAILS_ENV=production rvm 2.2.0 do bundle exec rake setup:pathology_cases
 
+* sudo -su root
+
 * RAILS_ENV=production rvm 2.2.0 do bin/delayed_job start
 
 # Debug server issues
