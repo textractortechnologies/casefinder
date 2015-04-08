@@ -40,7 +40,8 @@ class PathologyCase < ActiveRecord::Base
       pathology_case.address_line_2       = row['ADDR_LINE_2']
       pathology_case.city                 = row['CITY']
       pathology_case.state                = row['STATE_CODE']
-      pathology_case.zip_code             = row['ZIP_CODE']
+      zip_code = row['ZIP_CODE'].is_a?(Float) ? row['ZIP_CODE'].to_i.to_s : row['ZIP_CODE']
+      pathology_case.zip_code             = zip_code
       pathology_case.home_phone           = row['HOME_PHONE']
       pathology_case.gender               = row['GENDER_CODE']
       pathology_case.note                 = row['PATH_RESULT_TEXT']
@@ -72,7 +73,15 @@ class PathologyCase < ActiveRecord::Base
     end
   end
 
+  def self.to_metriq(pathology_cases)
+    MetriqDocument.new(pathology_cases).generate
+  end
+
   def with_cancer_histologies
     PathologyCase.pivot_grouped_abstractions('Cancer Diagnosis').where(id: id)
+  end
+
+  def addr_no_and_street
+    [address_line_1, address_line_2].reject { |n| n.nil? or n.blank? }.join(' ')
   end
 end

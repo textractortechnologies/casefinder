@@ -67,7 +67,6 @@
 * vagrant box update
 
 # Miscellaneous
-
 * in deploy directory: rvm 2.2.0 do  bundle config build.pg --with-pg-config=/usr/pgsql-9.4/bin/pg_config
 * git checkout --track origin/\#13
 * git submodule update --init --recursive
