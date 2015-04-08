@@ -1,0 +1,23 @@
+Hi Mike,
+
+These are the fields of the input document:
+
+LAST_NAME
+FIRST_NAME
+MIDDLE_NAME
+PAT_MRN_ID
+SSN
+BIRTH_DATE
+ADDR_LINE_1
+ADDR_LINE_2
+CITY
+STATE_CODE
+ZIP_CODE
+HOME_PHONE
+GENDER_CODE
+ENC_DATE
+ORD_RES_COMP_COMMENT
+
+I'm thinking these will all be text fields in an Excel spreadsheet. Is that workable for you?
+
+The ORD_RES_COMP_COMMENT field contains the text of the pathology note.
