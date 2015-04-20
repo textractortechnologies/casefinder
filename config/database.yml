@@ -28,4 +28,4 @@ production:
   host: localhost
   database: casefinder
   user: casefinder_user
-  password: DabcosyupKoacDytmilejRumHypHeOp6
+  password: casefinder_user

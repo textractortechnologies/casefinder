@@ -77,3 +77,55 @@
 * bundle exec rails g abstractor:install --customize-controllers --no-install-stanford-core-nlp
 * http://casefinder.dev/abstractor_abstraction_schemas/1.jso
 * rvm all do gem list
+
+#windows vm
+* Download windows 180 evaluation:  http://www.microsoft.com/en-us/download/details.aspx?id=11093
+* Virtual Box|Machine|New Choose
+** Version Windows 2008 (64 bit)
+** Memory Size: 9216 MB
+** Create a virtual hard drive now
+** VHD(Virtaual Hard Disk)
+** Dynamically allocated 30GB
+** Install Windows 2008 R2 Enterprise (Full Installation)
+** Networking: bridged
+** Set administrator password: Rorty1971
+* Install IIS
+** All Programs|Administrative Tools|Server Manager
+** Roles
+** Add Roles
+** Web Server (IIS)
+** Check just about every install option except the IIS6 stuff
+* Turn on automatic updates.  Get them all.
+* Install Firefox.
+* http://www.codeproject.com/Tips/805628/Ruby-on-Rails-On-Windows-Server-With-Helicon-Zoo
+* Install Ruby from http://rubyinstaller.org/
+** Install Ruby 2.1.5: http://dl.bintray.com/oneclick/rubyinstaller/rubyinstaller-2.1.5-x64.exe
+** Check Add Ruby executables to your PATH.
+** Assocaite .rb and .rbw files with this Ruby installation.
+** Install Development Kit: http://dl.bintray.com/oneclick/rubyinstaller/DevKit-mingw64-64-4.7.2-20130224-1432-sfx.exe
+* Follow steps 3-7 in http://www.codeproject.com/Tips/805628/Ruby-on-Rails-On-Windows-Server-With-Helicon-Zoo
+* Install Windows github client: https://windows.github.com/
+* Close the casefinder Github repository to c:\inetpub\wwwroot\
+* Install SSL certificate: http://stackoverflow.com/questions/19150017/ssl-error-when-installing-rubygems-unable-to-pull-data-from-https-rubygems-o/27298259#27298259
+* Download https://raw.githubusercontent.com/rubygems/rubygems/master/lib/rubygems/ssl_certs/AddTrustExternalCARoot-2048.pem
+* Copy the .pem C:/Ruby21/lib/ruby/2.1.0/rubygems/ssl_certs/
+* gem install bundler
+* bundle
+* Install Java.
+* Set Java environemnt variables: http://www.artonx.org/collabo/backyard/?HowToBuildRjb
+** Set JAVA_HOME=root of the JDK directory
+** Add %JAVA_HOME%bin to PATH
+* Install PostgreSQL
+* Create casefinder login
+** Check role privileges: Can login, Inherits rights from parent roles, Superuser, Can create databases, Can modify catalog directly
+* Change password in database.yml
+* Download Stanford Core NLP: http://nlp.stanford.edu/software/corenlp.shtml
+** Unzip and instal into "#{Rails.root}/lib/stanford-core-nlp/"
+* Download https://github.com/louismullie/stanford-core-nlp
+** Unzip and move contents of bin folder into "#{Rails.root}/lib/stanford-core-nlp/"
+* Add gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw] to Gemfile (via http://www.codeproject.com/Tips/805628/Ruby-on-Rails-On-Windows-Server-With-Helicon-Zoo)
+* Deploy secrets.yml file with production.
+* Set config.relative_url_root = "/casefinder"
+* Install NodeJs: https://nodejs.org/
+* bundle exec rake assets:precompile
+* bundle exec rake jobs:work
