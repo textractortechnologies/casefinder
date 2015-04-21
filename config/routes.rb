@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
-  # mount Abstractor::Engine, :at => "/"
+  mount Abstractor::Engine, :at => "/"
   resources :pathology_cases do
     collection { post :import }
     collection { get  :upload }
