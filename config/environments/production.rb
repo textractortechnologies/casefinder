@@ -1,4 +1,4 @@
-require 'stanford-core-nlp'
+# require 'stanford-core-nlp'
 Rails.application.configure do
   #For Linux
   ENV['LD_LIBRARY_PATH'] = '/usr/lib/jvm/java-openjdk/bin'
