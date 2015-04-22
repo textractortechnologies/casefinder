@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+# Workaround for /bin/sh -c initialization
+if [ "$1" == "/bin/sh" ] && [ "$2" == "-c" ]; then
+  shift
+  shift
+fi
+
+/exec $@
