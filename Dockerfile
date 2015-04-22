@@ -15,5 +15,3 @@ ENV PORT 3000
 EXPOSE 3000
 
 ENTRYPOINT ["/exec-wrapper"]
-# Dockerfile
-FROM quay.io/aptible/autobuild
