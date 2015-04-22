@@ -1,2 +1,2 @@
  # Dockerfile
- FROM mgurley/casefinder
+ FROM registry.hub.docker.com/u/mgurley/casefinder/
