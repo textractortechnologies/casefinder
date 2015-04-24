@@ -1,5 +1,6 @@
 require 'stanford-core-nlp'
 Rails.application.configure do
+  Abstractor::Engine.routes.default_url_options[:host] = 'http://casefinder.local'
   #For Linux
   ENV['LD_LIBRARY_PATH'] = '/usr/lib/jvm/java-openjdk/bin'
   ENV['JAVA_HOME'] = '/usr/lib/jvm/java-openjdk'
@@ -19,6 +20,8 @@ Rails.application.configure do
   ]
 
   #For Windows 2008
+  # Abstractor::Engine.routes.default_url_options[:host] = 'http://localhost/casefinder'
+  # config.relative_url_root = "/casefinder"
   # StanfordCoreNLP.use :english
   # StanfordCoreNLP.model_files = {}
   # StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-core-nlp/"

@@ -1,5 +1,7 @@
 # casefinder
 
+
+
 ## Deployment of VM
 
 * Vagrant 1.7.2
@@ -52,7 +54,10 @@
 
 * sudo -su root
 
+* java -jar text-web-service-1.0.jar
+
 * RAILS_ENV=production rvm 2.2.0 do bin/delayed_job start
+
 
 # Debug server issues
 * vagrant ssh
@@ -129,3 +134,5 @@
 * Install NodeJs: https://nodejs.org/
 * bundle exec rake assets:precompile
 * bundle exec rake jobs:work
+
+

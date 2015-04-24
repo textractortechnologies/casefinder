@@ -1,5 +1,7 @@
 require 'stanford-core-nlp'
 Rails.application.configure do
+  Abstractor::Engine.routes.default_url_options[:host] = 'http://casefinder.dev'
+
   StanfordCoreNLP.use :english
   StanfordCoreNLP.model_files = {}
   StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-core-nlp/"
