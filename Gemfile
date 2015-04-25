@@ -55,7 +55,6 @@ gem 'devise'
 gem 'simple_token_authentication', '~> 1.0'
 gem 'fixy'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
-gem  'aptible-cli'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

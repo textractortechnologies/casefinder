@@ -47,33 +47,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    addressable (2.3.8)
     american_date (1.1.0)
-    aptible-api (0.7.14)
-      aptible-auth (>= 0.5.0)
-      aptible-billforward
-      aptible-resource (>= 0.2.9)
-      gem_config
-      stripe (>= 1.13.0)
-    aptible-auth (0.8.6)
-      aptible-billforward
-      aptible-resource (>= 0.2.1)
-      gem_config
-      oauth2-aptible
-      stripe (>= 1.13.0)
-    aptible-billforward (0.0.2)
-      gem_config
-      sawyer (~> 0.5.3)
-    aptible-cli (0.5.6)
-      aptible-api (>= 0.7.3)
-      git
-      thor (>= 0.19.0)
-    aptible-resource (0.2.9)
-      activesupport
-      faraday (>= 0.8.6)
-      fridge
-      json
-      uri_template (>= 0.5.2)
     arel (6.0.0)
     bcrypt (3.1.10)
     bind-it (0.2.7)
@@ -131,18 +105,11 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
     execjs (2.4.0)
-    faraday (0.9.1)
-      multipart-post (>= 1.2, < 3)
     fixy (0.0.5)
       rake
     foundation-rails (5.5.1.0)
       railties (>= 3.1.0)
       sass (>= 3.3.0, < 3.5)
-    fridge (0.3.0)
-      gem_config
-      jwt (~> 0.1.13)
-    gem_config (0.3.1)
-    git (1.2.9.1)
     globalid (0.3.3)
       activesupport (>= 4.1.0)
     haml (4.0.6)
@@ -161,8 +128,6 @@ GEM
     jquery-ui-rails (4.2.1)
       railties (>= 3.2.16)
     json (1.8.2)
-    jwt (0.1.13)
-      multi_json (>= 1.5)
     loofah (2.0.1)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -171,20 +136,12 @@ GEM
     mini_portile (0.6.2)
     minitest (5.5.1)
     multi_json (1.11.0)
-    multi_xml (0.5.5)
-    multipart-post (2.0.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
     netrc (0.10.3)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
-    oauth2-aptible (0.9.4)
-      faraday (>= 0.8, < 0.10)
-      jwt (~> 0.1.8)
-      multi_json (~> 1.3)
-      multi_xml (~> 0.5)
-      rack (~> 1.2)
     orm_adapter (0.5.0)
     paper_trail (3.0.7)
       activerecord (>= 3.0, < 5.0)
@@ -240,9 +197,6 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
-    sawyer (0.5.5)
-      addressable (~> 2.3.5)
-      faraday (~> 0.8, < 0.10)
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -269,9 +223,6 @@ GEM
       net-ssh (>= 2.8.0)
     stanford-core-nlp-abstractor (0.5.3)
       bind-it (~> 0.2.7)
-    stripe (1.21.0)
-      json (~> 1.8.1)
-      rest-client (~> 1.4)
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
@@ -283,7 +234,6 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.6)
-    uri_template (0.7.0)
     warden (1.2.3)
       rack (>= 1.0)
     web-console (2.1.0)
@@ -299,7 +249,6 @@ PLATFORMS
 DEPENDENCIES
   abstractor
   american_date
-  aptible-cli
   byebug
   capistrano
   capistrano-passenger
