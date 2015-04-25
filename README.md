@@ -128,11 +128,8 @@
 ** Unzip and instal into "#{Rails.root}/lib/stanford-core-nlp/"
 * Download https://github.com/louismullie/stanford-core-nlp
 ** Unzip and move contents of bin folder into "#{Rails.root}/lib/stanford-core-nlp/"
-* Add gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw] to Gemfile (via http://www.codeproject.com/Tips/805628/Ruby-on-Rails-On-Windows-Server-With-Helicon-Zoo)
 * Deploy secrets.yml file with production.
 * Set config.relative_url_root = "/casefinder"
 * Install NodeJs: https://nodejs.org/
 * bundle exec rake assets:precompile
 * bundle exec rake jobs:work
-
-
