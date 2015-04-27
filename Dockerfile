@@ -1,3 +1,3 @@
- # Dockerfile
- FROM mgurley/casefinder:v1
- COPY /lib/stanford-core-nlp/ /lib/stanford-core-nlp/
+# Dockerfile
+FROM mgurley/casefinder:v1
+COPY stanford-core-nlp.zip stanford-core-nlp.zip
