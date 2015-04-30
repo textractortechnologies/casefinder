@@ -20,8 +20,24 @@ Rails.application.configure do
   # ]
 
   #For Windows 2008
-  # Abstractor::Engine.routes.default_url_options[:host] = 'http://localhost/casefinder'
-  # config.relative_url_root = "/casefinder"
+  Abstractor::Engine.routes.default_url_options[:host] = 'http://localhost/casefinder'
+  config.relative_url_root = "/casefinder"
+  StanfordCoreNLP.use :english
+  StanfordCoreNLP.model_files = {}
+  StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-core-nlp/"
+  StanfordCoreNLP.model_path = "#{Rails.root}/lib/stanford-core-nlp/"
+  StanfordCoreNLP.jvm_args = ['-Xms1024M', '-Xmx2048M']
+  StanfordCoreNLP.default_jars = [
+    "joda-time.jar",
+    "xom.jar",
+    "stanford-corenlp-3.5.1.jar",
+    "stanford-corenlp-3.5.1-models.jar",
+    "jollyday.jar",
+    "bridge.jar"
+  ]
+
+  #For Aptible
+  # Abstractor::Engine.routes.default_url_options[:host] = 'http://http://casefinder.on-aptible.com/'
   # StanfordCoreNLP.use :english
   # StanfordCoreNLP.model_files = {}
   # StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-core-nlp/"
@@ -36,21 +52,7 @@ Rails.application.configure do
   #   "bridge.jar"
   # ]
 
-  #For Aptible
-  Abstractor::Engine.routes.default_url_options[:host] = 'http://http://casefinder.on-aptible.com/'
-  StanfordCoreNLP.use :english
-  StanfordCoreNLP.model_files = {}
-  StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-core-nlp/"
-  StanfordCoreNLP.model_path = "#{Rails.root}/lib/stanford-core-nlp/"
-  StanfordCoreNLP.jvm_args = ['-Xms1024M', '-Xmx2048M']
-  StanfordCoreNLP.default_jars = [
-    "joda-time.jar",
-    "xom.jar",
-    "stanford-corenlp-3.5.1.jar",
-    "stanford-corenlp-3.5.1-models.jar",
-    "jollyday.jar",
-    "bridge.jar"
-  ]
+  config.serve_static_assets=true
 
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -130,5 +132,4 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   config.assets.precompile += %w( vendor/modernizr.js *.eot *.woff *.ttf *.otf *.svg )
-  config.serve_static_assets=true
 end
