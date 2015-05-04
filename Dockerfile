@@ -1,2 +1,2 @@
- # Dockerfile
- FROM mgurley/casefinder:v1
+# Dockerfile
+FROM mgurley/casefinder:v1
