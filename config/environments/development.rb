@@ -10,8 +10,8 @@ Rails.application.configure do
   StanfordCoreNLP.default_jars = [
     "joda-time.jar",
     "xom.jar",
-    "stanford-corenlp-3.5.1.jar",
-    "stanford-corenlp-3.5.1-models.jar",
+    "stanford-corenlp-3.5.2.jar",
+    "stanford-corenlp-3.5.2-models.jar",
     "jollyday.jar",
     "bridge.jar"
   ]
