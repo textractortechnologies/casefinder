@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150401024929) do
+ActiveRecord::Schema.define(version: 20150506013332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -312,6 +312,15 @@ ActiveRecord::Schema.define(version: 20150401024929) do
     t.string   "gender"
     t.date     "encounter_date",      null: false
     t.text     "note",                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sql_audits", force: :cascade do |t|
+    t.string   "username",       null: false
+    t.string   "auditable_type"
+    t.text     "auditable_ids"
+    t.text     "sql",            null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
