@@ -2,7 +2,7 @@ class PathologyCasesController < ApplicationController
   before_action :authenticate_user!
   def index
     params[:filter] ||= Abstractor::Enum::ABSTRACTION_STATUS_NEEDS_REVIEW
-    params[:suggestion_filter] ||= Abstractor::Enum::ABSTRACTION_SUGGESTION_TYPE_NOT_UNKNOWN
+    params[:suggestion_filter] ||= Abstractor::Enum::ABSTRACTION_SUGGESTION_TYPE_SUGGESTED
     abstractor_abstraction_schema_cancer_histology = PathologyCase.abstractor_abstraction_schemas.detect { |abstractor_abstraction_schema| abstractor_abstraction_schema.display_name = 'Cancer Histology' }
     @pathology_cases = SqlAudit.find_and_audit(
       current_user.email,

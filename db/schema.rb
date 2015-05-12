@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150506013332) do
+ActiveRecord::Schema.define(version: 20150510183425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20150506013332) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "system_generated",            default: false
+    t.string   "subtype"
   end
 
   add_index "abstractor_abstraction_groups", ["about_id", "about_type", "deleted_at"], name: "index_about_id_about_type_deleted_at", using: :btree
@@ -45,6 +46,7 @@ ActiveRecord::Schema.define(version: 20150506013332) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "display_order"
   end
 
   create_table "abstractor_abstraction_schema_predicate_variants", force: :cascade do |t|
@@ -208,6 +210,7 @@ ActiveRecord::Schema.define(version: 20150506013332) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "cardinality"
+    t.string   "subtype"
   end
 
   create_table "abstractor_subject_relations", force: :cascade do |t|

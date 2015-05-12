@@ -12,6 +12,11 @@
         $columns: 3
       )
     }
+    label {
+      font-weight: bold;
+      margin-bottom: .5rem;
+      padding-left: .25rem;
+    }
     .filter {
       @include grid-column(
         $columns: 4
@@ -33,6 +38,7 @@
       )
     }
     .navigation {
+      margin-top: 2rem;
       @include grid-column(
         $columns: 7
       )

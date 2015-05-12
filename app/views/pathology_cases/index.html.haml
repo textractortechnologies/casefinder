@@ -8,15 +8,20 @@
 
   = form_tag pathology_cases_path(), :method => 'get', :id => 'search_pathology_cases_form'  do
     .search
+      = label_tag :filter, 'Search'
       = text_field_tag :search, (params[:search].nil? ? '' : params[:search])
     .filter
+      = label_tag :filter, 'Reviewed?'
       = select_tag :filter, options_for_select(['all'].concat(Abstractor::Enum::ABSTRACTION_STATUSES), selected = params[:filter])
     .suggestion_filter
+      = label_tag :filter, 'Histology?'
       = select_tag :suggestion_filter, options_for_select(['all'].concat(Abstractor::Enum::ABSTRACTION_SUGGESTION_TYPES), selected = params[:suggestion_filter])
     .date_from
-      = text_field_tag :date_from, (params[:date_from].nil? ? '' : params[:date_from]), :class => 'datepicker', placeholder: "From"
+      = label_tag :date_from, 'From'
+      = text_field_tag :date_from, (params[:date_from].nil? ? '' : params[:date_from]), :class => 'datepicker'
     .date_to
-      = text_field_tag :date_to, (params[:date_from].nil? ? '' : params[:date_to]), :class => 'datepicker', placeholder: "To"
+      = label_tag :date_to, 'To'
+      = text_field_tag :date_to, (params[:date_from].nil? ? '' : params[:date_to]), :class => 'datepicker'
     .navigation
       %button{ :type => 'submit', :id => 'search_pathology_cases_button', class: 'tiny' }
         Search
