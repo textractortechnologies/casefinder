@@ -66,7 +66,7 @@ class PathologyCase < ActiveRecord::Base
     CSV.generate(options) do |csv|
       csv << headers
       pathology_cases.each do |pathology_case|
-        pathology_case.with_cancer_histologies.joins('JOIN abstractor_object_values aov ON has_cancer_site = aov.value JOIN abstractor_abstraction_schema_object_values aasov ON aov.id = aasov.abstractor_object_value_id').select('pathology_cases.*, aov.vocabulary_code, aov.vocabulary, aov.vocabulary_version').each do |site|
+        pathology_case.with_cancer_diagnoses.joins('JOIN abstractor_object_values aov ON has_cancer_site = aov.value JOIN abstractor_abstraction_schema_object_values aasov ON aov.id = aasov.abstractor_object_value_id').select('pathology_cases.*, aov.vocabulary_code, aov.vocabulary, aov.vocabulary_version').each do |site|
           csv << site.attributes.values_at(*headers)
         end
       end
@@ -77,7 +77,7 @@ class PathologyCase < ActiveRecord::Base
     MetriqDocument.new(pathology_cases).generate
   end
 
-  def with_cancer_histologies
+  def with_cancer_diagnoses
     PathologyCase.pivot_grouped_abstractions('Cancer Diagnosis').where(id: id)
   end
 
