@@ -15,9 +15,10 @@ class PathologyCase < ActiveRecord::Base
     end
   end
 
-  scope :search_across_fields, ->(search_token) do
+  scope :search_across_fields, ->(search_token, options={}) do
+    options = { abstractor_abstraction_schemas: abstractor_abstraction_schemas }.merge(options)
     if search_token
-      where("lower(accession_number) like ?", "%#{search_token.downcase}%")
+      where(["lower(accession_number) like ? OR EXISTS (SELECT 1 FROM abstractor_abstractions aa JOIN abstractor_subjects sub ON aa.abstractor_subject_id = sub.id AND sub.abstractor_abstraction_schema_id IN (?) JOIN abstractor_suggestions sug ON aa.id = sug.abstractor_abstraction_id WHERE aa.deleted_at IS NULL AND aa.about_type = '#{self.to_s}' AND #{self.table_name}.id = aa.about_id AND sug.suggested_value like ?)", "%#{search_token}%", options[:abstractor_abstraction_schemas], "%#{search_token}%"])
     end
   end
 
@@ -79,6 +80,18 @@ class PathologyCase < ActiveRecord::Base
 
   def with_cancer_diagnoses
     PathologyCase.pivot_grouped_abstractions('Cancer Diagnosis').where(id: id)
+  end
+
+  def suggested_histologies
+    histology_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_histology').first
+    abstractions = abstractor_abstractions_by_abstraction_schemas(abstractor_abstraction_schema_ids: [histology_abstraction_schema.id])
+    suggestions = abstractions.map { |a| a.abstractor_suggestions }.flatten.uniq
+  end
+
+  def suggested_sites
+    histology_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
+    abstractions = abstractor_abstractions_by_abstraction_schemas(abstractor_abstraction_schema_ids: [histology_abstraction_schema.id])
+    suggestions = abstractions.map { |a| a.abstractor_suggestions }.flatten.uniq
   end
 
   def addr_no_and_street

@@ -10,10 +10,9 @@
     = javascript_include_tag "vendor/modernizr"
     = stylesheet_link_tag "abstractor/application"
     = stylesheet_link_tag "application"
+    = javascript_include_tag "application"
+    = javascript_include_tag "abstractor/application"
     = csrf_meta_tag
-
   %body
     = render "shared/navigation"
     = yield
-    = javascript_include_tag "application"
-    = javascript_include_tag "abstractor/application"

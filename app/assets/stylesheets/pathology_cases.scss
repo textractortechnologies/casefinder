@@ -1,17 +1,24 @@
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+  border-bottom-right-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  border-top-left-radius: 0px !important;
+}
+
 #upload_pathology_cases {
   @include grid-row();
 }
 
 #pathology_cases {
   @include grid-row();
-
   #search_pathology_cases_form {
     @include grid-row();
     .search {
       @include grid-column(
-        $columns: 3
+        $columns: 6
       )
     }
+
     label {
       font-weight: bold;
       margin-bottom: .5rem;
@@ -22,9 +29,9 @@
         $columns: 4
       )
     }
-    .suggestion_filter {
+    .flagged_filter {
       @include grid-column(
-        $columns: 4
+        $columns: 3
       )
     }
     .date_from {
@@ -40,7 +47,7 @@
     .navigation {
       margin-top: 2rem;
       @include grid-column(
-        $columns: 7
+        $columns: 5
       )
     }
   }

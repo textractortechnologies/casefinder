@@ -5,17 +5,16 @@
   %h2
     %b
       Pathology Cases
-
   = form_tag pathology_cases_path(), :method => 'get', :id => 'search_pathology_cases_form'  do
     .search
       = label_tag :filter, 'Search'
-      = text_field_tag :search, (params[:search].nil? ? '' : params[:search])
+      = text_field_tag :search, (params[:search].nil? ? '' : params[:search]), type: 'search'
     .filter
       = label_tag :filter, 'Reviewed?'
-      = select_tag :filter, options_for_select(['all'].concat(Abstractor::Enum::ABSTRACTION_STATUSES), selected = params[:filter])
-    .suggestion_filter
-      = label_tag :filter, 'Histology?'
-      = select_tag :suggestion_filter, options_for_select(['all'].concat(Abstractor::Enum::ABSTRACTION_SUGGESTION_TYPES), selected = params[:suggestion_filter])
+      = select_tag :filter, options_for_select(['all'].concat(@filter_statuses), selected = params[:filter])
+    .flagged_filter
+      = label_tag :filter, 'Flagged?'
+      = select_tag :suggestion_filter, options_for_select(['all'].concat(@flag_statuses.keys), selected = params[:suggestion_filter])
     .date_from
       = label_tag :date_from, 'From'
       = text_field_tag :date_from, (params[:date_from].nil? ? '' : params[:date_from]), :class => 'datepicker'
@@ -27,22 +26,20 @@
         Search
       &nbsp;
       = link_to 'Clear', pathology_cases_path()
-      &nbsp;
-      = submit_tag "Export", :name => "export", class: 'tiny button'
   .pathology_cases_list
     = will_paginate @pathology_cases
     %table
       %thead
         %tr
-          %th.pathology_case_accession_number{ width: 400 }
+          %th.pathology_case_accession_number{ width: 200 }
             Accession Number
-          %th.pathology_case_encounter_date{ width: 400 }
+          %th.pathology_case_encounter_date{ width: 100 }
             Date
+          %th.suggested_histologies{ width: 300 }
+            Suggested Histologies
+          %th.suggested_sites{ width: 300 }
+            Suggested Sites
           %th.review{ width: 100 }
-            Review
-          %th.reviewed{ width: 100 }
-            Reviewed
-          %th.edit{ width: 100 }
       - @pathology_cases.each do |pathology_case|
         %tbody
           = content_tag_for(:tr, pathology_case ) do
@@ -50,10 +47,22 @@
               = pathology_case.accession_number
             %td.pathology_case_encounter_date
               = pathology_case.encounter_date
+            %td.suggested_histologies
+              - pathology_case.suggested_histologies.map(&:suggested_value).each do |histology|
+                = histology
+                %br
+            %td.suggested_sites
+              - pathology_case.suggested_sites.map(&:suggested_value).each do |site|
+                = site
+                %br
             %td.review
-              = pathology_case.abstractor_abstractions_by_abstractor_abstraction_status(Abstractor::Enum::ABSTRACTION_STATUS_NEEDS_REVIEW).size
-            %td.reviewed
-              = pathology_case.abstractor_abstractions_by_abstractor_abstraction_status(Abstractor::Enum::ABSTRACTION_STATUS_REVIEWED).size
-            %td.edit
-              = link_to 'Edit', edit_pathology_case_path(pathology_case), { :class => 'button tiny' }
+              = link_to 'Review', edit_pathology_case_path(pathology_case), { :class => 'button tiny' }
     = will_paginate @pathology_cases
+
+.sites.hide
+  = @sites.map(&:value).to_json
+
+:javascript
+  $(function () {
+    new PathologyCasesUI();
+  });
