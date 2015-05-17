@@ -50,9 +50,24 @@
         $columns: 5
       )
     }
+
   }
   .pathology_cases_list {
     @include grid-row();
+  }
+
+  th .current {
+    padding-right: 2em;
+    background-repeat: no-repeat;
+    background-position: right center;
+  }
+
+  th .asc {
+    background-image: asset_url("drop25.png");
+  }
+
+  th .desc {
+    background-image: asset_url("drop27.png");
   }
 }
 
@@ -61,7 +76,7 @@
 
   .abstractor_not_applicable_all_link, .abstractor_unknown_all_link, .abstractor_group_not_applicable_all_link, .abstractor_group_unknown_all_link, .abstractor_group_add_link, .abstractor_group_delete_link {
     @include button($button-tny);
-	margin-left: 1rem;
+	  margin-left: 1rem;
   }
 
   .abstractor_group_delete_link  {

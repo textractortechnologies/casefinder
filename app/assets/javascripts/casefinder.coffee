@@ -15,6 +15,8 @@ $ ->
 
 (exports ? this).PathologyCasesUI = (config) ->
     sites = JSON.parse($('.sites').html())
-    $('#search').autocomplete source: sites
+    histologies = JSON.parse($('.histologies').html())
+    source = sites.concat(histologies)
+    $('#search').catcomplete source: source
 
     return

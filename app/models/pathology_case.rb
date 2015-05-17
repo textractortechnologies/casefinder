@@ -17,9 +17,46 @@ class PathologyCase < ActiveRecord::Base
 
   scope :search_across_fields, ->(search_token, options={}) do
     options = { abstractor_abstraction_schemas: abstractor_abstraction_schemas }.merge(options)
+
     if search_token
-      where(["lower(accession_number) like ? OR EXISTS (SELECT 1 FROM abstractor_abstractions aa JOIN abstractor_subjects sub ON aa.abstractor_subject_id = sub.id AND sub.abstractor_abstraction_schema_id IN (?) JOIN abstractor_suggestions sug ON aa.id = sug.abstractor_abstraction_id WHERE aa.deleted_at IS NULL AND aa.about_type = '#{self.to_s}' AND #{self.table_name}.id = aa.about_id AND sug.suggested_value like ?)", "%#{search_token}%", options[:abstractor_abstraction_schemas], "%#{search_token}%"])
+      s = where(["lower(accession_number) like ? OR EXISTS (SELECT 1 FROM abstractor_abstractions aa JOIN abstractor_subjects sub ON aa.abstractor_subject_id = sub.id AND sub.abstractor_abstraction_schema_id IN (?) JOIN abstractor_suggestions sug ON aa.id = sug.abstractor_abstraction_id WHERE aa.deleted_at IS NULL AND aa.about_type = '#{self.to_s}' AND #{self.table_name}.id = aa.about_id AND sug.suggested_value like ?)", "%#{search_token}%", options[:abstractor_abstraction_schemas], "%#{search_token}%"])
     end
+
+    joins_clause = prepare_joins_and_select_clauses(options[:sort_column], options[:sort_direction])
+
+    if joins_clause
+      options[:sort_column] = 'suggested_value'
+      s = s.nil? ? joins(joins_clause) : s.joins(joins_clause)
+    end
+
+    sort = options[:sort_column] + ' ' + options[:sort_direction]
+    s = s.nil? ? order(sort) : s.order(sort)
+
+    s
+  end
+
+  def self.prepare_joins_and_select_clauses(sort_column, sort_direction)
+    joins_clause = nil
+    predicate = case sort_column
+    when 'suggested_histologies'
+      'has_cancer_histology'
+    when 'suggested_sites'
+      'has_cancer_site'
+    end
+
+    if predicate
+      abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: predicate).first
+      joins_clause ="
+      LEFT JOIN LATERAL(
+      SELECT  aa.about_id
+            , sug.suggested_value
+      FROM abstractor_abstractions aa JOIN abstractor_suggestions sug ON aa.id = sug.abstractor_abstraction_id AND aa.deleted_at IS NULL
+                                      JOIN abstractor_subjects sub ON aa.abstractor_subject_id = sub.id and sub.abstractor_abstraction_schema_id = #{abstractor_abstraction_schema.id}
+      WHERE aa.about_id = pathology_cases.id
+      ORDER BY sug.suggested_value #{sort_direction} LIMIT 1
+       ) AS suggestions ON TRUE"
+    end
+    joins_clause
   end
 
   def self.import(file)
@@ -85,13 +122,13 @@ class PathologyCase < ActiveRecord::Base
   def suggested_histologies
     histology_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_histology').first
     abstractions = abstractor_abstractions_by_abstraction_schemas(abstractor_abstraction_schema_ids: [histology_abstraction_schema.id])
-    suggestions = abstractions.map { |a| a.abstractor_suggestions }.flatten.uniq
+    suggestions = abstractions.map { |a| a.abstractor_suggestions }.flatten.uniq.sort_by(&:suggested_value)
   end
 
   def suggested_sites
     histology_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
     abstractions = abstractor_abstractions_by_abstraction_schemas(abstractor_abstraction_schema_ids: [histology_abstraction_schema.id])
-    suggestions = abstractions.map { |a| a.abstractor_suggestions }.flatten.uniq
+    suggestions = abstractions.map { |a| a.abstractor_suggestions }.flatten.uniq.sort_by(&:suggested_value)
   end
 
   def addr_no_and_street

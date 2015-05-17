@@ -32,13 +32,13 @@
       %thead
         %tr
           %th.pathology_case_accession_number{ width: 200 }
-            Accession Number
+            = sortable 'accession_number'
           %th.pathology_case_encounter_date{ width: 100 }
-            Date
+            = sortable 'encounter_date'
           %th.suggested_histologies{ width: 300 }
-            Suggested Histologies
+            = sortable 'suggested_histologies'
           %th.suggested_sites{ width: 300 }
-            Suggested Sites
+            = sortable 'suggested_sites'
           %th.review{ width: 100 }
       - @pathology_cases.each do |pathology_case|
         %tbody
@@ -60,7 +60,10 @@
     = will_paginate @pathology_cases
 
 .sites.hide
-  = @sites.map(&:value).to_json
+  = @sites.to_json
+.histologies.hide
+  = @histologies.to_json
+
 
 :javascript
   $(function () {
