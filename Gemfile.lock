@@ -1,5 +1,7 @@
-GEM
-  remote: https://rubygems.org/
+GIT
+  remote: https://github.com/mgurley/abstractor
+  revision: bc6efa81070e25a739d75a87f7b04b0f7d43b900
+  branch: master
   specs:
     abstractor (4.4.1)
       coffee-rails (~> 4.0, >= 4.0.0)
@@ -12,6 +14,10 @@ GEM
       rubyzip (~> 1.1.0, >= 1.1.0)
       sass-rails (>= 4.0.0)
       stanford-core-nlp-abstractor (~> 0.5.3, >= 0.5.3)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
     actionmailer (4.2.0)
       actionpack (= 4.2.0)
       actionview (= 4.2.0)
@@ -112,7 +118,7 @@ GEM
       activesupport (>= 4.1.0)
     haml (4.0.6)
       tilt
-    httparty (0.13.3)
+    httparty (0.13.5)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
@@ -204,7 +210,7 @@ GEM
     spring (1.3.3)
     sprockets (3.1.0)
       rack (~> 1.0)
-    sprockets-rails (2.3.0)
+    sprockets-rails (2.3.1)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
@@ -235,7 +241,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  abstractor
+  abstractor!
   american_date
   byebug
   capistrano

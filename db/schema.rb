@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150510183425) do
+ActiveRecord::Schema.define(version: 20150520105843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -262,22 +262,15 @@ ActiveRecord::Schema.define(version: 20150510183425) do
 
   add_index "abstractor_suggestion_sources", ["abstractor_suggestion_id"], name: "index_abstractor_suggestion_id", using: :btree
 
-  create_table "abstractor_suggestion_statuses", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "deleted_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "abstractor_suggestions", force: :cascade do |t|
     t.integer  "abstractor_abstraction_id"
-    t.integer  "abstractor_suggestion_status_id"
     t.string   "suggested_value"
     t.boolean  "unknown"
     t.boolean  "not_applicable"
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "accepted"
   end
 
   add_index "abstractor_suggestions", ["abstractor_abstraction_id"], name: "index_abstractor_abstraction_id_2", using: :btree
