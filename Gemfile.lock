@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/mgurley/abstractor
-  revision: bc6efa81070e25a739d75a87f7b04b0f7d43b900
+  revision: 3c6dbe52b4131e95b58ee9dc41cb54e749f952e9
   branch: master
   specs:
     abstractor (4.4.1)

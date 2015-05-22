@@ -87,8 +87,9 @@
     margin-top: .5em;
   }
 
-  .abstractor_abstraction_value .edit_link{
+  .abstractor_abstraction_value .edit_link, .abstractor_abstraction_value .clear_link{
     @include button($button-tny);
+    margin-bottom: .5rem;
   }
 
   .edit_abstractor_abstraction input[type='submit'] {
