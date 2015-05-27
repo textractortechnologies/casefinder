@@ -6,8 +6,6 @@
     %h2
       %b
         Pathology Case
-    = link_to 'Pathology Cases', pathology_cases_path
-    |
     = link_to 'Back', controller.back
     %table
       %thead
@@ -16,21 +14,8 @@
             Encounter Date
           %th
             Accession Number
-      %tbody
-        %tr
-          %td
-            = @pathology_case.encounter_date.to_s(:date)
-          %td
-            = @pathology_case.accession_number
-  .patient
-    %h3
-      %b
-        Patient
-    %table
-      %thead
-        %tr
           %th
-            Name
+            Patient
           %th
             MRN
           %th
@@ -42,6 +27,10 @@
       %tbody
         %tr
           %td
+            = @pathology_case.encounter_date.to_s(:date)
+          %td
+            = @pathology_case.accession_number
+          %td
             = @pathology_case.patient_full_name
           %td
             = @pathology_case.mrn
@@ -51,14 +40,4 @@
             = @pathology_case.birth_date.to_s(:date)
           %td
             = @pathology_case.gender
-  .pathology_case_report
-    .note_text
-      %dl.accordion{ data: { accordion: true }}>
-        %dd.accordion-navigation
-          = link_to '#note_text' do
-            Pathology Case Report
-            %i.fi-plus.right
-          #note_text.content
-            = simple_format(ERB::Util.html_escape(@pathology_case.note))
-
   = render :partial => 'abstractor/abstractor_abstractions/list', locals: { about: @pathology_case }

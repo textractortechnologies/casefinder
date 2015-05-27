@@ -4,6 +4,7 @@ $ ->
     dateFormat: "yy-mm-dd"
     changeMonth: true
     changeYear: true
+
   return
 
   ## Display hide/show wording on accordion click
