@@ -48,11 +48,11 @@
             %td.pathology_case_encounter_date
               = pathology_case.encounter_date
             %td.suggested_histologies
-              - pathology_case.suggested_histologies.map(&:suggested_value).each do |histology|
+              - pathology_case.suggested_histologies.each do |histology|
                 = histology
                 %br
             %td.suggested_sites
-              - pathology_case.suggested_sites.map(&:suggested_value).each do |site|
+              - pathology_case.suggested_sites.each do |site|
                 = site
                 %br
             %td.review
