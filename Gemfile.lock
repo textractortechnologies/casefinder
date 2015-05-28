@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/mgurley/abstractor
-  revision: df9f24cdba2fa0aaec790813a279524d61370cdb
+  revision: 8ccddb25edf6ec349f545cc47f8750e955a71a4a
   branch: master
   specs:
     abstractor (4.4.1)
@@ -136,9 +136,9 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
-    mime-types (2.5)
+    mime-types (2.6.1)
     mini_portile (0.6.2)
-    minitest (5.6.1)
+    minitest (5.7.0)
     multi_json (1.11.0)
     multi_xml (0.5.5)
     net-scp (1.2.1)
@@ -190,7 +190,7 @@ GEM
       spreadsheet (> 0.6.4)
     ruby-ole (1.2.11.8)
     rubyzip (1.1.7)
-    sass (3.4.13)
+    sass (3.4.14)
     sass-rails (5.0.3)
       railties (>= 4.0.0, < 5.0)
       sass (~> 3.1)

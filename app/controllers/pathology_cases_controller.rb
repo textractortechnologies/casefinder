@@ -25,6 +25,14 @@ class PathologyCasesController < ApplicationController
       redirect_to pathology_cases_path(params) and return
     end
 
+    if params[:next_case]
+      if @pathology_cases.any?
+        redirect_to edit_pathology_case_url(@pathology_cases.first) and return
+      else
+        redirect_to pathology_cases_path and return
+      end
+    end
+
     respond_to do |format|
       format.html { @pathology_cases = @pathology_cases.paginate(:per_page => 10, :page => params[:page]); record_history }
       format.csv { send_data PathologyCase.to_csv(@pathology_cases), filename: "metriq_#{DateTime.now}.csv" }
@@ -49,6 +57,15 @@ class PathologyCasesController < ApplicationController
   end
 
   def upload
+  end
+
+  def next_pathology_case
+    if session[:history]
+      session[:history] = session[:history] + (session[:history].include?('?') ? '&next_case=true' : '?&next_case=true')
+      redirect_to session[:history] and return
+    else
+      redirect_to pathology_cases_url and return
+    end
   end
 
   private

@@ -40,4 +40,6 @@
             = @pathology_case.birth_date.to_s(:date)
           %td
             = @pathology_case.gender
+  = link_to 'Discard Case', Abstractor::UserInterface.abstractor_relative_path(abstractor.update_all_abstractor_abstractions_path(about_type: @pathology_case.class, about_id: @pathology_case.id, abstractor_abstraction_value: 'not applicable')), data: { confirm: 'Are you sure?'}, method: :put, class: 'abstractor_discard_case_link'
+  = link_to 'Next Case', next_pathology_case_pathology_cases_path, class: 'next_pathology_case_link'
   = render :partial => 'abstractor/abstractor_abstractions/list', locals: { about: @pathology_case }
