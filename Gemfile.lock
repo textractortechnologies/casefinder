@@ -106,7 +106,7 @@ GEM
     execjs (2.5.2)
     fixy (0.0.7)
       rake
-    foundation-rails (5.5.2.1)
+    foundation-rails (5.5.1.0)
       railties (>= 3.1.0)
       sass (>= 3.3.0, < 3.5)
     globalid (0.3.5)
@@ -244,7 +244,7 @@ DEPENDENCIES
   delayed_job_active_record
   devise
   fixy
-  foundation-rails
+  foundation-rails (= 5.5.1.0)
   haml
   jbuilder (~> 2.0)
   jquery-rails

@@ -38,7 +38,7 @@ gem 'capistrano-passenger'
 gem 'capistrano-secrets-yml', '~> 1.0.0'
 
 gem 'haml'
-gem 'foundation-rails'
+gem 'foundation-rails', '5.5.1.0'
 gem 'paper_trail'
 # gem 'abstractor', :git => 'https://github.com/mgurley/abstractor', branch: 'master'
 # gem 'abstractor', path: '/Users/michaelgurley1/Documents/source/abstractor'
