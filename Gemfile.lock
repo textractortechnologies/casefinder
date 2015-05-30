@@ -1,5 +1,5 @@
-PATH
-  remote: lib/abstractor
+GEM
+  remote: https://rubygems.org/
   specs:
     abstractor (4.4.1)
       coffee-rails (~> 4.0, >= 4.0.0)
@@ -12,10 +12,6 @@ PATH
       rubyzip (~> 1.1.0, >= 1.1.0)
       sass-rails (>= 4.0.0)
       stanford-core-nlp-abstractor (~> 0.5.3, >= 0.5.3)
-
-GEM
-  remote: https://rubygems.org/
-  specs:
     actionmailer (4.2.0)
       actionpack (= 4.2.0)
       actionview (= 4.2.0)
@@ -231,7 +227,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  abstractor!
+  abstractor
   american_date
   byebug
   capistrano
