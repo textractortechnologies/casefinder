@@ -29,7 +29,7 @@ class PathologyCase < ActiveRecord::Base
       s = s.nil? ? joins(joins_clause) : s.joins(joins_clause)
     end
 
-    sort = options[:sort_column] + ' ' + options[:sort_direction]
+    sort = options[:sort_column] + ' ' + options[:sort_direction] + ', pathology_cases.id ASC'
     s = s.nil? ? order(sort) : s.order(sort)
 
     s

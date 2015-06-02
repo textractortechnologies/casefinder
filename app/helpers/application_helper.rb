@@ -13,4 +13,8 @@ module ApplicationHelper
   def show_abstractor_all_links?
     false
   end
+
+  def generate_index(page, i)
+    ((page.to_i - 1) * 10) + i
+  end
 end

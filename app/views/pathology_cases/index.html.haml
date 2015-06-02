@@ -40,7 +40,8 @@
           %th.suggested_sites{ width: 300 }
             = sortable 'suggested_sites'
           %th.review{ width: 100 }
-      - @pathology_cases.each do |pathology_case|
+      - @pathology_cases.each_with_index do |pathology_case, i|
+        - index = generate_index(params[:page], i)
         %tbody
           = content_tag_for(:tr, pathology_case ) do
             %td.pathology_case_accession_number
@@ -56,7 +57,7 @@
                 = site
                 %br
             %td.review
-              = link_to 'Review', edit_pathology_case_path(pathology_case), { :class => 'button tiny' }
+              = link_to 'Review', edit_pathology_case_path(pathology_case, previous_pathology_case_id: pathology_case.id, index: index), { :class => 'button tiny' }
     = will_paginate @pathology_cases
 
 .sites.hide

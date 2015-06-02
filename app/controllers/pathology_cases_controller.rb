@@ -10,6 +10,7 @@ class PathologyCasesController < ApplicationController
     @histologies = Abstractor::AbstractorObjectValue.joins(:abstractor_abstraction_schema_object_values).where(abstractor_abstraction_schema_object_values: { abstractor_abstraction_schema_id: @abstraction_schema_histology } ).order('vocabulary_code ASC').map { |h| { label: h.value , category: 'Histology' }  }
     params[:filter] ||= Abstractor::Enum::ABSTRACTION_STATUS_NEEDS_REVIEW
     params[:suggestion_filter] ||= "flagged"
+    params[:page]||= 1
     options = {}
     options[:sort_column] = sort_column
     options[:sort_direction] = sort_direction
@@ -26,15 +27,28 @@ class PathologyCasesController < ApplicationController
     end
 
     if params[:next_case]
-      if @pathology_cases.any?
-        redirect_to edit_pathology_case_url(@pathology_cases.first) and return
+      index = params[:index].to_i
+      pathology_cases = @pathology_cases.select("DISTINCT #{sort_column}, pathology_cases.id").map(&:id)
+      record_history
+      if pathology_cases.any?
+        if pathology_cases.size > (index + 1)
+          if pathology_cases[index] == params[:previous_pathology_case_id].to_i
+            index = index + 1
+          end
+          next_case = pathology_cases[index]
+        else
+          index = 0
+          next_case = pathology_cases[0]
+        end
+
+        redirect_to edit_pathology_case_url(next_case, index: index) and return
       else
         redirect_to pathology_cases_path and return
       end
     end
 
     respond_to do |format|
-      format.html { @pathology_cases = @pathology_cases.paginate(:per_page => 10, :page => params[:page]); record_history }
+      format.html { @pathology_cases = @pathology_cases.paginate(per_page: 10, page: params[:page]); record_history }
       format.csv { send_data PathologyCase.to_csv(@pathology_cases), filename: "metriq_#{DateTime.now}.csv" }
       format.text { send_data PathologyCase.to_metriq(@pathology_cases), filename: "metriq_#{DateTime.now}.txt" }
     end
@@ -61,7 +75,10 @@ class PathologyCasesController < ApplicationController
 
   def next_pathology_case
     if session[:history]
-      session[:history] = session[:history] + (session[:history].include?('?') ? '&next_case=true' : '?&next_case=true')
+      session[:history].gsub!("&next_case=true","")
+      session[:history].gsub!(/&index=\d/,"")
+      session[:history].gsub!(/&previous_pathology_case_id=\d/,"")
+      session[:history] = session[:history] + (session[:history].include?('?') ? "&next_case=true&index=#{params[:index]}&previous_pathology_case_id=#{params[:previous_pathology_case_id]}" : "?&next_case=true&index=#{params[:index]}&previous_pathology_case_id=#{params[:previous_pathology_case_id]}")
       redirect_to session[:history] and return
     else
       redirect_to pathology_cases_url and return

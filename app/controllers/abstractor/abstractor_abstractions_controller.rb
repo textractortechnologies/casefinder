@@ -21,7 +21,7 @@ module Abstractor
       @about = params[:about_type].constantize.find(params[:about_id])
       Abstractor::AbstractorAbstraction.update_abstractor_abstraction_other_value(@about.abstractor_abstractions, abstractor_abstraction_value)
       respond_to do |format|
-        format.html { redirect_to main_app.next_pathology_case_pathology_cases_path }
+        format.html { redirect_to main_app.next_pathology_case_pathology_cases_path(index: params[:index], previous_pathology_case_id: params[:previous_pathology_case_id]) }
       end
     end
   end
