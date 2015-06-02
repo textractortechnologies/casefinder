@@ -38,12 +38,12 @@ gem 'capistrano-passenger'
 gem 'capistrano-secrets-yml', '~> 1.0.0'
 
 gem 'haml'
-gem 'foundation-rails', '5.5.1.0'
+gem 'foundation-rails'
 gem 'paper_trail'
 # gem 'abstractor', :git => 'https://github.com/mgurley/abstractor', branch: 'master'
 # gem 'abstractor', path: '/Users/michaelgurley1/Documents/source/abstractor'
-# gem 'abstractor', path: 'lib/abstractor'
-gem 'abstractor'
+gem 'abstractor', path: 'lib/abstractor'
+# gem 'abstractor'
 gem 'stanford-core-nlp-abstractor'
 # gem 'stanford-core-nlp', :git => 'https://github.com/louismullie/stanford-core-nlp', branch: 'master'
 gem 'will_paginate'
@@ -57,6 +57,7 @@ gem 'devise'
 gem 'simple_token_authentication', '~> 1.0'
 gem 'fixy'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
+gem 'css_splitter'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
