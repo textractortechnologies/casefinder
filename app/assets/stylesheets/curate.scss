@@ -2,6 +2,11 @@
   @include grid-row();
 
   div#instructions {
+    @include grid-column(
+     $columns: 19,
+     $push: 5
+    );
+
     ul {
       font-size: 2em;
       font-weight: bold;

@@ -11,101 +11,151 @@
 
 #pathology_cases {
   @include grid-row();
-  #search_pathology_cases_form {
-    @include grid-row();
-    .search {
-      @include grid-column(
-        $columns: 6
-      )
+
+  .pathology_cases_header {
+    @include grid-column(
+     $columns: 22,
+     $offset: 1
+    );
+
+    #search_pathology_cases_form {
+
+      .search {
+        @include grid-column(
+          $columns: 6
+        )
+      }
+
+      label {
+        font-weight: bold;
+        margin-bottom: .5rem;
+        padding-left: .25rem;
+      }
+      .filter {
+        @include grid-column(
+          $columns: 4
+        )
+      }
+      .flagged_filter {
+        @include grid-column(
+          $columns: 3
+        )
+      }
+      .date_from {
+        @include grid-column(
+          $columns: 3
+        )
+      }
+      .date_to {
+        @include grid-column(
+          $columns: 3
+        )
+      }
+      .navigation {
+        margin-top: 2rem;
+        @include grid-column(
+          $columns: 5
+        )
+      }
+
+    }
+  }
+    .pathology_cases_list {
+    @include grid-column(
+      $columns: 22,
+      $offset: 1
+    );
+
+    th .current {
+      padding-right: 2em;
+      background-repeat: no-repeat;
+      background-position: right center;
     }
 
-    label {
-      font-weight: bold;
-      margin-bottom: .5rem;
-      padding-left: .25rem;
-    }
-    .filter {
-      @include grid-column(
-        $columns: 4
-      )
-    }
-    .flagged_filter {
-      @include grid-column(
-        $columns: 3
-      )
-    }
-    .date_from {
-      @include grid-column(
-        $columns: 3
-      )
-    }
-    .date_to {
-      @include grid-column(
-        $columns: 3
-      )
-    }
-    .navigation {
-      margin-top: 2rem;
-      @include grid-column(
-        $columns: 5
-      )
+    th .asc {
+      background-image: asset_url("drop25.png");
     }
 
-  }
-  .pathology_cases_list {
-    @include grid-row();
+    th .desc {
+      background-image: asset_url("drop27.png");
+    }
+
+    table {
+      @include grid-column(
+       $columns: 24
+      );
+    }
   }
 
-  th .current {
-    padding-right: 2em;
-    background-repeat: no-repeat;
-    background-position: right center;
-  }
-
-  th .asc {
-    background-image: asset_url("drop25.png");
-  }
-
-  th .desc {
-    background-image: asset_url("drop27.png");
-  }
 }
 
 #pathology_case {
-  .next_pathology_case_link {
-    @include button($button-tny, $radius: false);
-  }
-
   @include grid-row();
 
-  .abstractor_not_applicable_all_link, .abstractor_unknown_all_link, .abstractor_group_not_applicable_all_link, .abstractor_group_unknown_all_link, .abstractor_group_add_link, .abstractor_group_delete_link {
-    @include button($button-tny);
-    margin-left: 1rem;
+  .pathology_case_details {
+    @include grid-column(
+     $columns: 22,
+     $offset: 1
+    );
+
+    table {
+      @include grid-column(
+       $columns: 23
+      );
+    }
+
+    .patient table {
+      @include grid-row();
+      border: none;
+    }
+    .pathology_case_details table {
+      @include grid-row();
+      border: none;
+    }
   }
 
-  .abstractor_group_delete_link  {
-    @include button($button-tny, $alert-color);
-  }
-
-  .abstractor_group_not_applicable_all_link, .abstractor_group_unknown_all_link, .abstractor_group_delete_link {
-    margin-top: .5em;
-  }
-
-  .abstractor_abstraction_value .edit_link, .abstractor_abstraction_value .clear_link{
-    @include button($button-tny);
-    margin-bottom: .5rem;
-  }
-
-  .edit_abstractor_abstraction input[type='submit'] {
-    @include button($button-tny);
-  }
-
-  .patient table {
+  .pathology_case_abstractions {
     @include grid-row();
-    border: none;
-  }
-  .pathology_case_details table {
-    @include grid-row();
-    border: none;
+
+    .abstractor_abstractions {
+      @include grid-column(
+       $columns: 11,
+       $offset: 1
+      );
+      clear: both;
+    }
+
+    .abstractor_group_add_link,
+    .edit_abstractor_abstraction input[type="submit"] {
+      @include button($button-tny, $radius: false);
+    }
+
+    .abstractor_group_delete_link  {
+      @include button($button-tny, $alert-color, $radius: false);
+    }
+
+    .pathology_case_header_actions {
+      @include grid-column(
+       $columns: 11,
+       $offset: 1
+      );
+      .next_pathology_case_link {
+        float: left;
+      }
+    }
+    .pathology_case_footer_actions {
+      @include grid-column(
+       $columns: 11,
+       $offset: 1
+      );
+      clear: both;
+      .abstractor_discard_case_link {
+        @include button($button-tny, $radius: false);
+      }
+      .next_pathology_case_link, .abstractor_discard_case_link {
+        float: right;
+        margin-right: 1em;
+      }
+    }
   }
 }

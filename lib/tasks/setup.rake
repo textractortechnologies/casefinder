@@ -83,6 +83,13 @@ namespace :setup do
       pathology_case.abstract
     end
   end
+
+  desc "Setup Users"
+  task(users: :environment) do  |t, args|
+    user = User.where(email: 'michaeljamesgurley@gmail.com').first_or_create
+    user.password = 'password'
+    user.save!
+  end
 end
 
 def normalize(value)
