@@ -6,6 +6,10 @@ module ApplicationHelper
     link_to title, params.merge({sort: column, direction: direction}), { class: css_class }
   end
 
+  def generate_index(page, i)
+    ((page.to_i - 1) * 10) + i
+  end
+
   def show_abstractor_group_all_links?
     false
   end
@@ -14,7 +18,15 @@ module ApplicationHelper
     false
   end
 
-  def generate_index(page, i)
-    ((page.to_i - 1) * 10) + i
+  def show_abstractor_headers?
+    false
+  end
+
+  def show_abstractor_history?
+    false
+  end
+
+  def show_abstractor_edit_other_values?
+    false
   end
 end

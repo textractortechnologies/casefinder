@@ -52,6 +52,8 @@
 
 * RAILS_ENV=production rvm 2.2.0 do bundle exec rake setup:pathology_cases
 
+* RAILS_ENV=production rvm 2.2.0 do bundle exec rake setup:users
+
 * sudo -su root
 
 * java -jar text-web-service-1.0.jar
