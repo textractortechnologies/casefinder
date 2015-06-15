@@ -122,13 +122,13 @@ class PathologyCase < ActiveRecord::Base
   def suggested_histologies
     histology_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_histology').first
     abstractions = abstractor_abstractions_by_abstraction_schemas(abstractor_abstraction_schema_ids: [histology_abstraction_schema.id])
-    suggestions = abstractions.map { |a| a.abstractor_suggestions }.flatten.sort_by(&:suggested_value).map(&:suggested_value).uniq
+    suggestions = abstractions.map { |a| a.abstractor_suggestions }.flatten.select { |s| s.abstractor_suggestion_sources.not_deleted.any? }.map(&:suggested_value).uniq.compact.sort
   end
 
   def suggested_sites
     histology_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
     abstractions = abstractor_abstractions_by_abstraction_schemas(abstractor_abstraction_schema_ids: [histology_abstraction_schema.id])
-    suggestions = abstractions.map { |a| a.abstractor_suggestions }.flatten.sort_by(&:suggested_value).map(&:suggested_value).uniq
+    suggestions = abstractions.map { |a| a.abstractor_suggestions }.flatten.select { |s| s.abstractor_suggestion_sources.not_deleted.any? }.map(&:suggested_value).uniq.compact.sort
   end
 
   def addr_no_and_street
