@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150520105843) do
+ActiveRecord::Schema.define(version: 20150616164053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -106,6 +106,7 @@ ActiveRecord::Schema.define(version: 20150520105843) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "workflow_status"
   end
 
   add_index "abstractor_abstractions", ["about_id", "about_type", "deleted_at"], name: "index_about_id_about_type_deleted_at_2", using: :btree
@@ -211,6 +212,9 @@ ActiveRecord::Schema.define(version: 20150520105843) do
     t.datetime "updated_at"
     t.integer  "cardinality"
     t.string   "subtype"
+    t.boolean  "enable_workflow_status",    default: false
+    t.string   "workflow_status_pending"
+    t.string   "workflow_status_submitted"
   end
 
   create_table "abstractor_subject_relations", force: :cascade do |t|
