@@ -1,12 +1,5 @@
 module Abstractor
   module AbstractorAbstractionGroupsControllerCustomMethods
-    def create
-      super
-    end
-
-    def destroy
-      super
-    end
   end
 
   class AbstractorAbstractionGroupsController < ApplicationController

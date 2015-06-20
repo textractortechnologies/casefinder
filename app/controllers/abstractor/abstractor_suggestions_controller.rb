@@ -1,8 +1,5 @@
 module Abstractor
   module AbstractorSuggestionsControllerCustomMethods
-    def update
-      super
-    end
   end
 
   class AbstractorSuggestionsController < ApplicationController

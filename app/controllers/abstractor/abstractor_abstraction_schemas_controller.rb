@@ -1,8 +1,5 @@
 module Abstractor
   module AbstractorAbstractionSchemasControllerCustomMethods
-    def show
-      super
-    end
   end
 
   class AbstractorAbstractionSchemasController < ApplicationController

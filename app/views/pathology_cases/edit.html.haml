@@ -44,5 +44,8 @@
       = link_to 'Next Case', next_pathology_case_pathology_cases_path(index: params[:index], previous_pathology_case_id: @pathology_case.id), class: 'next_pathology_case_link'
     = render :partial => 'abstractor/abstractor_abstractions/list', locals: { about: @pathology_case }
     .pathology_case_footer_actions
-      = link_to 'Discard Case', Abstractor::UserInterface.abstractor_relative_path(abstractor.update_all_abstractor_abstractions_path(about_type: @pathology_case.class, about_id: @pathology_case.id, abstractor_abstraction_value: 'not applicable', index: params[:index], previous_pathology_case_id: @pathology_case.id)), data: { confirm: 'Are you sure?'}, method: :put, class: 'abstractor_discard_case_link'
+      - if @pathology_case.discarded?
+        = link_to 'Undiscard Case', Abstractor::UserInterface.abstractor_relative_path(abstractor.undiscard_abstractor_abstractions_path(about_type: @pathology_case.class, about_id: @pathology_case.id, index: params[:index], previous_pathology_case_id: @pathology_case.id)), data: { confirm: 'Are you sure?'}, method: :put, class: 'abstractor_discard_case_link'
+      - else
+        = link_to 'Discard Case', Abstractor::UserInterface.abstractor_relative_path(abstractor.discard_abstractor_abstractions_path(about_type: @pathology_case.class, about_id: @pathology_case.id, index: params[:index], previous_pathology_case_id: @pathology_case.id)), data: { confirm: 'Are you sure?'}, method: :put, class: 'abstractor_discard_case_link'
       = link_to 'Next Case', next_pathology_case_pathology_cases_path(index: params[:index], previous_pathology_case_id: @pathology_case.id), class: 'next_pathology_case_link'

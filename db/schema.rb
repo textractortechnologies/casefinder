@@ -212,9 +212,9 @@ ActiveRecord::Schema.define(version: 20150616164053) do
     t.datetime "updated_at"
     t.integer  "cardinality"
     t.string   "subtype"
-    t.boolean  "enable_workflow_status",    default: false
-    t.string   "workflow_status_pending"
-    t.string   "workflow_status_submitted"
+    t.boolean  "enable_workflow_status", default: false
+    t.string   "workflow_status_submit"
+    t.string   "workflow_status_pend"
   end
 
   create_table "abstractor_subject_relations", force: :cascade do |t|

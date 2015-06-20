@@ -134,4 +134,8 @@ class PathologyCase < ActiveRecord::Base
   def addr_no_and_street
     [address_line_1, address_line_2].reject { |n| n.nil? or n.blank? }.join(' ')
   end
+
+  def discarded?
+    !abstractor_abstractions.not_deleted.any? { |abstractor_abstraction| !abstractor_abstraction.discarded? }
+  end
 end

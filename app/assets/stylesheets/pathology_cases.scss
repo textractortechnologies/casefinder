@@ -115,8 +115,12 @@
   }
 
   .pathology_case_abstractions {
-    .abstractor_abstraction_group .submitted {
+    .abstractor_abstraction_group .workflow_status_submitted {
       background-color: $info-color;
+    }
+
+    .abstractor_abstraction_group .workflow_status_discarded {
+      background-color: $alert-color;
     }
 
     @include grid-row();

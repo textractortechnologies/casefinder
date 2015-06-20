@@ -15,7 +15,7 @@ namespace :setup do
     source_type_custom_nlp_suggestion = Abstractor::AbstractorAbstractionSourceType.where(name: 'custom nlp suggestion').first
     indirect_source_type = Abstractor::AbstractorAbstractionSourceType.where(name: 'indirect').first
 
-    primary_cancer_group  = Abstractor::AbstractorSubjectGroup.where(:name => 'Primary Cancer').first_or_create
+    primary_cancer_group  = Abstractor::AbstractorSubjectGroup.where(name: 'Primary Cancer', enable_workflow_status: true, workflow_status_submit: 'Submit to METRIQ',  workflow_status_pend: 'Remove from METRIQ').first_or_create
     abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(
       predicate: 'has_cancer_histology',
       display_name: 'Histology',
