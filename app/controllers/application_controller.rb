@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def back
-    session[:history]
+    session[:history] || pathology_cases_url
   end
 
   def user_for_paper_trail

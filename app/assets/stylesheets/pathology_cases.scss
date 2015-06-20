@@ -155,9 +155,11 @@
        $columns: 11,
        $offset: 1
       );
-      .next_pathology_case_link {
+
+      .actions {
         float: left;
       }
+
     }
     .pathology_case_footer_actions {
       @include grid-column(
@@ -165,11 +167,14 @@
        $offset: 1
       );
       clear: both;
-      .abstractor_discard_case_link {
+      .actions {
+        float: right;
+      }
+
+      .abstractor_discard_case_link, .abstractor_undiscard_case_link  {
         @include button($button-tny, $radius: false);
       }
-      .next_pathology_case_link, .abstractor_discard_case_link {
-        float: right;
+      .next_pathology_case_link, .abstractor_discard_case_link, .abstractor_undiscard_case_link {
         margin-right: 1em;
       }
     }
