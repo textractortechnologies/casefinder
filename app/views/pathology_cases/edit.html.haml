@@ -44,6 +44,8 @@
       .actions
         = link_to 'Back', controller.back, class: 'next_pathology_case_link'
         |
+        = link_to 'Last Case', last_pathology_case_pathology_cases_path, class: 'last_pathology_case_link'
+        |
         = link_to 'Next Case', next_pathology_case_pathology_cases_path(index: params[:index], previous_pathology_case_id: @pathology_case.id), class: 'next_pathology_case_link'
     = render :partial => 'abstractor/abstractor_abstractions/list', locals: { about: @pathology_case }
     .pathology_case_footer_actions

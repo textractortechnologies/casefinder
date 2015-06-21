@@ -55,6 +55,14 @@ class PathologyCasesController < ApplicationController
   end
 
   def edit
+    unless params[:last_case]
+      session[:last_pathology_case] ||= []
+      if session[:current_pathology_case]
+        session[:last_pathology_case] << session[:current_pathology_case]
+      end
+      session[:current_pathology_case] = params[:id]
+    end
+
     @pathology_case = SqlAudit.find_and_audit(
       current_user.email,
       PathologyCase.where(id: params[:id])
@@ -80,6 +88,14 @@ class PathologyCasesController < ApplicationController
       session[:history].gsub!(/&previous_pathology_case_id=\d/,"")
       session[:history] = session[:history] + (session[:history].include?('?') ? "&next_case=true&index=#{params[:index]}&previous_pathology_case_id=#{params[:previous_pathology_case_id]}" : "?&next_case=true&index=#{params[:index]}&previous_pathology_case_id=#{params[:previous_pathology_case_id]}")
       redirect_to session[:history] and return
+    else
+      redirect_to pathology_cases_url and return
+    end
+  end
+
+  def last_pathology_case
+    if session[:last_pathology_case].any?
+      redirect_to edit_pathology_case_url(session[:last_pathology_case].pop, last_case: true) and return
     else
       redirect_to pathology_cases_url and return
     end

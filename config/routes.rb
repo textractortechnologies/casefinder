@@ -3,8 +3,9 @@ Rails.application.routes.draw do
   mount Abstractor::Engine, :at => "/"
   resources :pathology_cases do
     collection { post :import }
-    collection { get  :upload }
-    collection { get  :next_pathology_case }
+    collection { get :upload }
+    collection { get :next_pathology_case }
+    collection { get :last_pathology_case }
   end
   root 'curate#index'
   # The priority is based upon order of creation: first created -> highest priority.
