@@ -1,14 +1,14 @@
 class MetriqDocument < Fixy::Document
-  attr_accessor :pathology_cases
-  def initialize(pathology_cases)
-    @pathology_cases = pathology_cases
+  attr_accessor :abstractor_abstraction_groups
+  def initialize(abstractor_abstraction_groups)
+    @abstractor_abstraction_groups = abstractor_abstraction_groups
   end
 
   def build
-    pathology_cases.each do |pathology_case|
-      pathology_case.with_cancer_diagnoses.where(["has_cancer_histology IS NOT NULL AND has_cancer_histology NOT IN('',?,?) AND has_cancer_site IS NOT NULL AND NOT IN('',?,?)", Abstractor::Enum::ABSTRACTION_OTHER_VALUE_TYPE_UNKNOWN, Abstractor::Enum::ABSTRACTION_OTHER_VALUE_TYPE_NOT_APPLICABLE, Abstractor::Enum::ABSTRACTION_OTHER_VALUE_TYPE_UNKNOWN, Abstractor::Enum::ABSTRACTION_OTHER_VALUE_TYPE_NOT_APPLICABLE]).joins('JOIN abstractor_object_values aov ON has_cancer_site = aov.value JOIN abstractor_abstraction_schema_object_values aasov ON aov.id = aasov.abstractor_object_value_id').select('pathology_cases.*, aov.vocabulary_code, aov.vocabulary, aov.vocabulary_version').each do |site|
-        append_record MetriqRecord.new(pathology_case.patient_last_name, pathology_case.patient_first_name, site.vocabulary_code, pathology_case.mrn, pathology_case.ssn, pathology_case.addr_no_and_street, pathology_case.city, pathology_case.state, pathology_case.zip_code, pathology_case.home_phone, pathology_case.birth_date, pathology_case.gender)
-      end
+    abstraction_schema_has_cancer_site = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
+    abstractor_abstraction_groups.each do |abstractor_abstraction_group|
+      site = Abstractor::AbstractorObjectValue.joins(:abstractor_abstraction_schema_object_values).where('abstractor_abstraction_schema_object_values.abstractor_abstraction_schema_id = ? AND abstractor_object_values.value = ? AND abstractor_object_values.deleted_at IS NULL', abstraction_schema_has_cancer_site.id, abstractor_abstraction_group.about.abstractor_abstractions_by_abstraction_schemas(abstractor_abstraction_schema_ids: [abstraction_schema_has_cancer_site.id], abstractor_abstraction_group: abstractor_abstraction_group).first.value).first
+      append_record MetriqRecord.new(abstractor_abstraction_group.about.patient_last_name, abstractor_abstraction_group.about.patient_first_name, site.vocabulary_code, abstractor_abstraction_group.about.mrn, abstractor_abstraction_group.about.ssn, abstractor_abstraction_group.about.addr_no_and_street, abstractor_abstraction_group.about.city, abstractor_abstraction_group.about.state, abstractor_abstraction_group.about.zip_code, abstractor_abstraction_group.about.home_phone, abstractor_abstraction_group.about.birth_date, abstractor_abstraction_group.about.gender)
     end
   end
 end

@@ -3,10 +3,15 @@
   border-bottom-left-radius: 0px !important;
   border-top-right-radius: 0px !important;
   border-top-left-radius: 0px !important;
+  margin-bottom: .30rem;
 }
 
 #upload_pathology_cases {
   @include grid-row();
+  @include grid-column(
+   $columns: 22,
+   $offset: 1
+  );
 }
 
 #pathology_cases {
@@ -84,6 +89,9 @@
       @include grid-column(
        $columns: 24
       );
+    }
+    .pathology_case_review_link {
+      @include button($button-tny, $radius: false);
     }
   }
 

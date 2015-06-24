@@ -1,0 +1,52 @@
+- content_for(:title) do
+  New Export
+
+#batch_export
+  .batch_export_header
+    %h2
+      %b
+        New Export
+    .batch_export_header_actions
+      = button_to 'Create Export', batch_exports_path, data: { confirm: 'Are you sure?' }, method: :post, class: "#{@abstractor_abstraction_groups.empty? ? 'create_batch_export_link_disabled' : 'create_batch_export_link' }", disabled: @abstractor_abstraction_groups.empty?, form_class: 'create_batch_export_button'
+      = label_tag :btch_exports, 'Load prior export:'
+      = select_tag :batch_exports, options_for_select(BatchExport.all.map { |batch_export| ["#{batch_export.id} (#{batch_export.exported_at.to_date.to_s(:date)})", batch_export.id]}), { include_blank: true }
+  .batch_export_details_list
+    = will_paginate @abstractor_abstraction_groups
+    %table
+      %thead
+        %tr
+          %th.pathology_case_accession_number{ width: 200 }
+            = sortable 'accession_number'
+
+          %th.pathology_case_encounter_date{ width: 100 }
+            = sortable 'encounter_date'
+          %th.histology{ width: 300 }
+            = sortable 'histology'
+          %th.site{ width: 300 }
+            = sortable 'site'
+          %th.review{ width: 100 }
+          - @abstractor_abstraction_groups.each do |abstractor_abstraction_group|
+            %tbody
+              = content_tag_for(:tr, abstractor_abstraction_group ) do
+                %td.pathology_case_accession_number
+                  = abstractor_abstraction_group.about.accession_number
+                %td.pathology_case_encounter_date
+                  = abstractor_abstraction_group.about.encounter_date
+                %td.histology
+                  = abstractor_abstraction_group.histology
+                %td.site
+                  = abstractor_abstraction_group.site
+                %td.review
+                  = link_to 'Review', edit_pathology_case_path(abstractor_abstraction_group.about), { class: 'pathology_case_review_link' }
+    = will_paginate @abstractor_abstraction_groups
+
+  - if @abstractor_abstraction_groups.empty?
+    .no_abstractor_abstraction_groups
+      %strong
+        No primary cancers are ready to be exported.
+
+:javascript
+  $(function () {
+    var batchExportUrl = decodeURIComponent('#{batch_export_path(id: ':id')}');
+    new Casefinder.BatchExportUI({ batchExportUrl: batchExportUrl });
+  });

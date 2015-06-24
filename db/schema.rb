@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150616164053) do
+ActiveRecord::Schema.define(version: 20150622112411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -278,6 +278,19 @@ ActiveRecord::Schema.define(version: 20150616164053) do
   end
 
   add_index "abstractor_suggestions", ["abstractor_abstraction_id"], name: "index_abstractor_abstraction_id_2", using: :btree
+
+  create_table "batch_export_details", force: :cascade do |t|
+    t.integer  "batch_export_id",                 null: false
+    t.integer  "abstractor_abstraction_group_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "batch_exports", force: :cascade do |t|
+    t.datetime "exported_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false

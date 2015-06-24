@@ -11,7 +11,7 @@
         = label_tag :filter, 'Search'
         = text_field_tag :search, (params[:search].nil? ? '' : params[:search]), type: 'search'
       .filter
-        = label_tag :filter, 'Submitted?'
+        = label_tag :filter, 'Reviewed?'
         = select_tag :filter, options_for_select(['all'].concat(@filter_statuses), selected = params[:filter])
       .flagged_filter
         = label_tag :filter, 'Flagged?'
@@ -58,7 +58,7 @@
                 = site
                 %br
             %td.review
-              = link_to 'Review', edit_pathology_case_path(pathology_case, previous_pathology_case_id: pathology_case.id, index: index), { :class => 'button tiny' }
+              = link_to 'Review', edit_pathology_case_path(pathology_case, previous_pathology_case_id: pathology_case.id, index: index), { class: 'pathology_case_review_link' }
     = will_paginate @pathology_cases
 
 .sites.hide
@@ -69,5 +69,5 @@
 
 :javascript
   $(function () {
-    new PathologyCasesUI();
+    new Casefinder.PathologyCasesUI();
   });

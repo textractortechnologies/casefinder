@@ -1,4 +1,4 @@
-.icon-bar.five-up
+.icon-bar.six-up
   = link_to root_path, class: 'item ' do
     = image_tag 'case_finder.png', border: 0, alt: 'Case Finder', class: 'case-finder-logo'
   = link_to root_path, class: 'item' do
@@ -10,6 +10,9 @@
   = link_to pathology_cases_path(), class: 'item' do
     %i{ class: "fi-page-multiple" }
     %label Pathology Cases
+  = link_to new_batch_export_path(), class: 'item' do
+    %i{ class: "fi-download" }
+    %label Export
   - if user_signed_in?
     = link_to destroy_user_session_path(), method: 'delete', class: 'item' do
       %i{ class: "fi-unlock" }

@@ -1,0 +1,65 @@
+#batch_export {
+  @include grid-row();
+  @include grid-column(
+   $columns: 22,
+   $offset: 1
+  );
+
+  button.ui-button {
+    height: 1.7rem;
+  }
+
+  .batch_export_header {
+
+    .batch_export_header_actions_show {
+      @include grid-column(
+       $columns: 3,
+       $offset: 20
+      );
+
+      .create_batch_export_file_link {
+        @include button($button-tny, $radius: false);
+      }
+    }
+
+    .batch_export_header_actions {
+      @include grid-column(
+       $columns: 10,
+       $offset: 13
+      );
+
+      .create_batch_export_button {
+        display: inline;
+      }
+
+      label {
+        font-weight: bold;
+        display: inline;
+      }
+
+      .create_batch_export_link {
+        @include button($button-tny, $radius: false);
+      }
+      .create_batch_export_link_disabled {
+        @include button($button-tny, $radius: false, $bg: $secondary-color);
+      }
+    }
+  }
+
+  .batch_export_details_list {
+    table {
+      @include grid-column(
+       $columns: 23
+      );
+    }
+
+    .pathology_case_review_link {
+      @include button($button-tny, $radius: false);
+    }
+  }
+  .no_abstractor_abstraction_groups {
+    @include grid-column(
+     $columns: 23
+    );
+  }
+}
