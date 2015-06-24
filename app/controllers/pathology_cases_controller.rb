@@ -1,7 +1,13 @@
 class PathologyCasesController < ApplicationController
   helper_method :sort_column, :sort_direction
   before_action :authenticate_user!
+
+  def back_to_pathology_cases_index
+    session[:index_history] || pathology_cases_url
+  end
+
   def index
+    session[:index_history] = request.url unless params[:next_case]
     @filter_statuses = Abstractor::Enum::ABSTRACTION_WORKFLOW_STATUSES
     @flag_statuses = { "flagged" => Abstractor::Enum::ABSTRACTION_SUGGESTION_TYPE_SUGGESTED, "not flagged" => Abstractor::Enum::ABSTRACTION_SUGGESTION_TYPE_UNKNOWN }
     @abstraction_schema_site = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
@@ -102,7 +108,6 @@ class PathologyCasesController < ApplicationController
   end
 
   private
-
     def sort_column
       PathologyCase.column_names.concat(['suggested_sites', 'suggested_histologies']).include?(params[:sort]) ? params[:sort] : "encounter_date"
     end
