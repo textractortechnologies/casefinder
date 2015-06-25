@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150622112411) do
+ActiveRecord::Schema.define(version: 20150625012730) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(version: 20150622112411) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "workflow_status"
+    t.string   "workflow_status_whodunnit"
   end
 
   add_index "abstractor_abstractions", ["about_id", "about_type", "deleted_at"], name: "index_about_id_about_type_deleted_at_2", using: :btree

@@ -24,23 +24,30 @@
     );
 
     #search_pathology_cases_form {
-
-      .search {
-        @include grid-column(
-          $columns: 6
-        )
-      }
-
       label {
         font-weight: bold;
         margin-bottom: .5rem;
         padding-left: .25rem;
       }
+
+      .search {
+        @include grid-column(
+          $columns: 5
+        )
+      }
+
       .filter {
+        @include grid-column(
+          $columns: 3
+        )
+      }
+
+      .filter_by {
         @include grid-column(
           $columns: 4
         )
       }
+
       .flagged_filter {
         @include grid-column(
           $columns: 3
@@ -48,12 +55,12 @@
       }
       .date_from {
         @include grid-column(
-          $columns: 3
+          $columns: 2
         )
       }
       .date_to {
         @include grid-column(
-          $columns: 3
+          $columns: 2
         )
       }
       .navigation {

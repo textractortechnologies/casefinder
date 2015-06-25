@@ -13,6 +13,9 @@
       .filter
         = label_tag :filter, 'Reviewed?'
         = select_tag :filter, options_for_select(['all'].concat(@filter_statuses), selected = params[:filter])
+      .filter_by
+        = label_tag :filter, 'By'
+        = select_tag :filter_by, options_for_select(@filter_by, selected = params[:filter_by]), include_blank: true
       .flagged_filter
         = label_tag :filter, 'Flagged?'
         = select_tag :suggestion_filter, options_for_select(['all'].concat(@flag_statuses.keys), selected = params[:suggestion_filter])
