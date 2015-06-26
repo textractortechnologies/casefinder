@@ -55,18 +55,18 @@
       }
       .date_from {
         @include grid-column(
-          $columns: 2
+          $columns: 3
         )
       }
       .date_to {
         @include grid-column(
-          $columns: 2
+          $columns: 3
         )
       }
       .navigation {
         margin-top: 2rem;
         @include grid-column(
-          $columns: 5
+          $columns: 3
         )
       }
 
