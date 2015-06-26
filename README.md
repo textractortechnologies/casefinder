@@ -1,7 +1,5 @@
 # casefinder
 
-
-
 ## Deployment of VM
 
 * Vagrant 1.7.2
