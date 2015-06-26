@@ -86,9 +86,12 @@ namespace :setup do
 
   desc "Setup Users"
   task(users: :environment) do  |t, args|
-    user = User.where(email: 'michaeljamesgurley@gmail.com').first_or_create
-    user.password = 'password'
-    user.save!
+    users = CSV.new(File.open('lib/setup/data/users.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+    users.each do |user_from_file|
+      user = User.where(email: user_from_file['email']).first_or_initialize
+      user.password = user_from_file['password']
+      user.save!
+    end
   end
 end
 
