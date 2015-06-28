@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     collection { get :upload }
     collection { get :next_pathology_case }
     collection { get :last_pathology_case }
+    collection { get :countdown }
   end
   root 'curate#index'
 

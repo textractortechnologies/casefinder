@@ -84,7 +84,7 @@ class PathologyCase < ActiveRecord::Base
       pathology_case.gender               = row['GENDER_CODE']
       pathology_case.note                 = row['PATH_RESULT_TEXT']
       pathology_case.save!
-      pathology_case.delay.abstract
+      Delayed::Job.enqueue ProcessPathologyCaseJob.new(pathology_case.id)
     end
   end
 
@@ -133,5 +133,9 @@ class PathologyCase < ActiveRecord::Base
 
   def addr_no_and_street
     [address_line_1, address_line_2].reject { |n| n.nil? or n.blank? }.join(' ')
+  end
+
+  def self.countdown
+    Delayed::Job.where(delayed_reference_type: self.to_s).count
   end
 end

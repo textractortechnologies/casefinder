@@ -23,7 +23,43 @@
      $offset: 1
     );
 
+    .banner {
+      vertical-align: middle;
+      @include grid-column(
+       $columns: 23
+      );
+
+      h2 {
+        @include grid-column(
+         $columns: 8
+        );
+      }
+      .countdown {
+        @include grid-column(
+         $columns: 15
+        );
+
+        .progress_label {
+          display: inline-block;
+        }
+
+        .progress {
+          width: 50%;
+          display: inline-block;
+          margin-bottom: 0rem;
+          .meter {
+            text-align: center;
+            font-size: 80%;
+          }
+        }
+      }
+    }
+
     #search_pathology_cases_form {
+      @include grid-column(
+       $columns: 23
+      );
+
       label {
         font-weight: bold;
         margin-bottom: .5rem;

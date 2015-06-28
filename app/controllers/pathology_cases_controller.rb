@@ -110,6 +110,14 @@ class PathologyCasesController < ApplicationController
     end
   end
 
+  def countdown
+    @countdown = PathologyCase.countdown
+
+    respond_to do |format|
+      format.json { render json: { countdown: @countdown } }
+    end
+  end
+
   private
     def sort_column
       PathologyCase.column_names.concat(['suggested_sites', 'suggested_histologies']).include?(params[:sort]) ? params[:sort] : "encounter_date"

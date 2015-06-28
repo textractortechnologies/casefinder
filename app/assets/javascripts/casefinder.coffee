@@ -13,6 +13,24 @@ $ ->
     source = sites.concat(histologies)
     $('#search').catcomplete source: source
 
+    set_delay = 5000
+
+    total = $('#countdown_total').val()
+    callout = ->
+      $.ajax(config.countdownPathologyCasesUrl, {}).done((response) ->
+        total = $('#countdown_total').val()
+        $('.countdown .pending').html(response['countdown'])
+        done = ((Number(response['countdown']) / Number(total)) * 100).toFixed(2);
+        $('.countdown .progress .meter').width(done + '%')
+        $('.countdown .progress .meter').html(done + '%')
+        return
+      ).always ->
+        setTimeout callout, set_delay
+        return
+      return
+    if total > 0
+      callout()
+
     return
 
 (exports ? this).Casefinder.BatchExportUI = (config) ->

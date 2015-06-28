@@ -3,9 +3,25 @@
 
 #pathology_cases
   .pathology_cases_header
-    %h2
-      %b
-        Pathology Cases
+    .banner
+      %h2
+        %b
+          Pathology Cases
+      .countdown
+        - countdown = PathologyCase.countdown
+        = hidden_field_tag :countdown_total, countdown
+        - if countdown > 0
+          .progress_label
+            %strong
+              Countdown:
+            %span{ class: 'pending' }
+              = PathologyCase.countdown
+            %span{ class: 'total' }
+              = "of #{PathologyCase.countdown}"
+          .progress
+            %span{ width: '100%', class: 'meter' }
+          %em
+            Refresh page for new cases
     = form_tag pathology_cases_path(), :method => 'get', :id => 'search_pathology_cases_form'  do
       .search
         = label_tag :filter, 'Search'
@@ -72,5 +88,6 @@
 
 :javascript
   $(function () {
-    new Casefinder.PathologyCasesUI();
+    var countdownPathologyCasesUrl = decodeURIComponent('#{countdown_pathology_cases_path(format: :json)}');
+    new Casefinder.PathologyCasesUI({ countdownPathologyCasesUrl: countdownPathologyCasesUrl });
   });
