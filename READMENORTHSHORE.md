@@ -22,7 +22,7 @@
 
 ** bundle exec rake setup:abstractor_schemas
 
-** Add users to lib/setup/data/users.yml
+** Add users to lib/setup/data/users.csv
 
 ** bundle exec rake setup:users
 
