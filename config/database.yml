@@ -1,11 +1,13 @@
 default: &default
-  adapter: postgresql
+  adapter: mysql2
 
 development:
   <<: *default
   database: casefinder_development
-  user: casefinder_development
-  password: casefinder_development
+  username: cf_development
+  password: cf_development
+  host: 127.0.0.1
+  port: 3306
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -18,14 +20,16 @@ test:
 
 staging:
   <<: *default
-  host: localhost
   database: casefinder_staging
-  user: casefinder_staging
-  password: casefinder_staging
+  username: cf_staging
+  password: cf_staging
+  host: 127.0.0.1
+  port: 3306
 
 production:
   <<: *default
-  host: localhost
   database: casefinder
-  user: casefinder_user
-  password: casefinder_user
+  username: casefinder
+  password: casefinder
+  host: 127.0.0.1
+  port: 3306
