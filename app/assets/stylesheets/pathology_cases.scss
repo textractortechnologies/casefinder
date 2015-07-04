@@ -80,7 +80,7 @@
 
       .filter_by {
         @include grid-column(
-          $columns: 4
+          $columns: 3
         )
       }
 
@@ -102,7 +102,7 @@
       .navigation {
         margin-top: 2rem;
         @include grid-column(
-          $columns: 3
+          $columns: 4
         )
       }
 

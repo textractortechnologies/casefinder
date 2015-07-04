@@ -13,8 +13,8 @@
 
     .batch_export_header_actions_show {
       @include grid-column(
-       $columns: 3,
-       $offset: 20
+       $columns: 4,
+       $offset: 19
       );
 
       .create_batch_export_file_link {
@@ -24,8 +24,8 @@
 
     .batch_export_header_actions {
       @include grid-column(
-       $columns: 10,
-       $offset: 13
+       $columns: 11,
+       $offset: 12
       );
 
       .create_batch_export_button {
