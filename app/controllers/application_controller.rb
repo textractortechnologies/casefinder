@@ -15,6 +15,14 @@ class ApplicationController < ActionController::Base
     current_user ? current_user.email : 'unknown'
   end
 
+  def discard_redirect_to(params, about)
+    main_app.next_pathology_case_pathology_cases_path(index: params[:index], previous_pathology_case_id: about.id)
+  end
+
+  def undiscard_redirect_to(params, about)
+    :back
+  end
+
   protected
     def record_history
       session[:history] ||= nil
