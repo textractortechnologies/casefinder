@@ -19,6 +19,10 @@ class ApplicationController < ActionController::Base
     main_app.next_pathology_case_pathology_cases_path(index: params[:index], previous_pathology_case_id: about.id)
   end
 
+  def update_workflow_status_redirect_to(params, about)
+    main_app.next_pathology_case_pathology_cases_path(index: params[:index], previous_pathology_case_id: about.id)
+  end
+
   def undiscard_redirect_to(params, about)
     :back
   end

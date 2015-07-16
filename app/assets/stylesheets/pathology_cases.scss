@@ -192,6 +192,24 @@
       @include button($button-tny, $radius: false, $bg: $secondary-color);
     }
 
+    .abstraction_workflow_status_form {
+      display: inline;
+      margin-right: .5rem;
+      margin-left: .5rem;
+    }
+
+    .abstractor_update_workflow_status_link {
+      @include button($button-tny, $radius: false);
+    }
+
+    .abstractor_update_workflow_status_link_enabled {
+      @include button($button-tny, $radius: false);
+    }
+
+    .abstractor_update_workflow_status_link_disabled {
+      @include button($button-tny, $radius: false, $bg: $secondary-color);
+    }
+
     .abstractor_group_add_link,
     .edit_abstractor_abstraction input[type="submit"] {
       @include button($button-tny, $radius: false);
@@ -222,11 +240,12 @@
         float: right;
       }
 
-      .abstractor_discard_case_link, .abstractor_undiscard_case_link  {
+      .abstractor_discard_case_link, .abstractor_undiscard_case_link, .abstractor_submit_case_link, .abstractor_pending_case_link {
         @include button($button-tny, $radius: false);
       }
-      .next_pathology_case_link, .abstractor_discard_case_link, .abstractor_undiscard_case_link {
-        margin-right: 1em;
+      .next_pathology_case_link, .abstractor_discard_case_link, .abstractor_undiscard_case_link, .abstractor_submit_case_link, .abstractor_pending_case_link {
+        margin-right: .5rem;
+        margin-left: .5rem;
       }
     }
   }

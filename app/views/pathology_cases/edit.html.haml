@@ -50,6 +50,11 @@
     = render :partial => 'abstractor/abstractor_abstractions/list', locals: { about: @pathology_case }
     .pathology_case_footer_actions
       .actions
+        - if @pathology_case.submitted?
+          = button_to 'Remove from METRIQ', Abstractor::UserInterface.abstractor_relative_path(abstractor.update_wokflow_status_abstractor_abstractions_path()), data: { confirm: 'Are you sure?' }, method: :put, class: "abstractor_update_workflow_status_link", remote: false, params: { about_type: @pathology_case.class, about_id: @pathology_case.id, abstraction_workflow_status: Abstractor::Enum::ABSTRACTION_WORKFLOW_STATUS_PENDING, index: params[:index], previous_pathology_case_id: @pathology_case.id }, disabled: false, form_class: 'abstraction_workflow_status_form'
+        - else
+          = button_to 'Submit to METRIQ', Abstractor::UserInterface.abstractor_relative_path(abstractor.update_wokflow_status_abstractor_abstractions_path()), data: { confirm: 'Are you sure?' }, method: :put, class: "abstractor_update_workflow_status_link #{ @pathology_case.fully_set? ? 'abstractor_update_workflow_status_link_enabled' : 'abstractor_update_workflow_status_link_disabled' }", remote: false, params: { about_type: @pathology_case.class, about_id: @pathology_case.id, abstraction_workflow_status: Abstractor::Enum::ABSTRACTION_WORKFLOW_STATUS_SUBMITTED, index: params[:index], previous_pathology_case_id: @pathology_case.id }, disabled: !@pathology_case.fully_set?, form_class: 'abstraction_workflow_status_form'
+        |
         - if @pathology_case.discarded?
           = link_to 'Undiscard Case', Abstractor::UserInterface.abstractor_relative_path(abstractor.undiscard_abstractor_abstractions_path(about_type: @pathology_case.class, about_id: @pathology_case.id, index: params[:index], previous_pathology_case_id: @pathology_case.id)), data: { confirm: 'Are you sure?'}, method: :put, class: 'abstractor_undiscard_case_link'
         - else
