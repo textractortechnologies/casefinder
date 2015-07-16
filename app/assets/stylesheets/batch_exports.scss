@@ -11,6 +11,10 @@
 
   .batch_export_header {
 
+    .new_batch_export_link {
+      float: left;
+    }
+
     .batch_export_header_actions_show {
       @include grid-column(
        $columns: 4,
