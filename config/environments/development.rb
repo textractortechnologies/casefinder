@@ -55,6 +55,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-  config.assets.precompile += %w( vendor/modernizr.js *.eot *.woff *.ttf *.otf *.svg )
+  config.assets.precompile += %w( vendor/modernizr.js application_split2.css *.eot *.woff *.ttf *.otf *.svg )
   config.action_mailer.default_url_options = { host: 'casefinder.dev' }
+  # config.serve_static_assets=true
 end
