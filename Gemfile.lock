@@ -105,6 +105,9 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     erubis (2.7.0)
+    exception_notification (4.1.1)
+      actionmailer (>= 3.0.4)
+      activesupport (>= 3.0.4)
     execjs (2.5.2)
     fixy (0.0.7)
       rake
@@ -250,6 +253,7 @@ DEPENDENCIES
   daemons
   delayed_job_active_record
   devise
+  exception_notification
   fixy
   foundation-rails
   haml

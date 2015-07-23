@@ -132,4 +132,16 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   config.assets.precompile += %w( vendor/modernizr.js application_split2.css *.eot *.woff *.ttf *.otf *.svg )
+
+  config.middleware.use ExceptionNotification::Rack,
+    :email => {
+      :email_prefix => "[CaseFinder] Production",
+      :sender_address => %{"casefinder" <admin@northshore.org>},
+      :exception_recipients => %w{michaeljamesgurley@gmail.com}
+    }
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = { host: 'localhost', port: 25 }
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
 end
