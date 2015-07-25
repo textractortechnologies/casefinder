@@ -60,11 +60,11 @@ test:
   # <<: *AUTHORIZATIONS
 
 production:
-  host: localhost
-  port: 636
-  attribute: cn
-  base: ou=people,dc=test,dc=com
-  admin_user: cn=admin,dc=test,dc=com
-  admin_password: admin_password
-  ssl: start_tls
-  # <<: *AUTHORIZATIONS
+  host: ldap.forumsys.com
+  port: 389
+  attribute: sn
+  base: dc=example,dc=com
+  admin_user: cn=read-only-admin,dc=example,dc=com
+  admin_password: password
+  ssl: false
+  <<: *AUTHORIZATIONS
