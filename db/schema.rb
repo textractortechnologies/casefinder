@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20150627170020) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "system_generated",            limit: 1,   default: false
+    t.boolean  "system_generated",                        default: false
     t.string   "subtype",                     limit: 255
   end
 
@@ -98,8 +98,8 @@ ActiveRecord::Schema.define(version: 20150627170020) do
     t.string   "value",                     limit: 255
     t.string   "about_type",                limit: 255
     t.integer  "about_id",                  limit: 4
-    t.boolean  "unknown",                   limit: 1
-    t.boolean  "not_applicable",            limit: 1
+    t.boolean  "unknown"
+    t.boolean  "not_applicable"
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -186,7 +186,7 @@ ActiveRecord::Schema.define(version: 20150627170020) do
     t.string   "description",                  limit: 255
     t.string   "delimiter",                    limit: 255
     t.string   "custom_regular_expression",    limit: 255
-    t.boolean  "return_note_on_empty_section", limit: 1
+    t.boolean  "return_note_on_empty_section"
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -210,7 +210,7 @@ ActiveRecord::Schema.define(version: 20150627170020) do
     t.datetime "updated_at"
     t.integer  "cardinality",            limit: 4
     t.string   "subtype",                limit: 255
-    t.boolean  "enable_workflow_status", limit: 1,   default: false
+    t.boolean  "enable_workflow_status",             default: false
     t.string   "workflow_status_submit", limit: 255
     t.string   "workflow_status_pend",   limit: 255
   end
@@ -267,12 +267,12 @@ ActiveRecord::Schema.define(version: 20150627170020) do
   create_table "abstractor_suggestions", force: :cascade do |t|
     t.integer  "abstractor_abstraction_id", limit: 4
     t.string   "suggested_value",           limit: 255
-    t.boolean  "unknown",                   limit: 1
-    t.boolean  "not_applicable",            limit: 1
+    t.boolean  "unknown"
+    t.boolean  "not_applicable"
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "accepted",                  limit: 1
+    t.boolean  "accepted"
   end
 
   add_index "abstractor_suggestions", ["abstractor_abstraction_id"], name: "index_abstractor_abstraction_id_2", using: :btree
