@@ -55,6 +55,7 @@ gem 'delayed_job_active_record'
 gem 'daemons'
 
 gem 'devise'
+gem "devise_ldap_authenticatable"
 gem 'simple_token_authentication', '~> 1.0'
 gem 'fixy'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]

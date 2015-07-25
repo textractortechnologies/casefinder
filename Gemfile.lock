@@ -104,6 +104,9 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    devise_ldap_authenticatable (0.8.5)
+      devise (>= 3.4.1)
+      net-ldap (>= 0.6.0, <= 0.11)
     erubis (2.7.0)
     exception_notification (4.1.1)
       actionmailer (>= 3.0.4)
@@ -142,6 +145,7 @@ GEM
     multi_json (1.11.0)
     multi_xml (0.5.5)
     mysql2 (0.3.18)
+    net-ldap (0.11)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
@@ -254,6 +258,7 @@ DEPENDENCIES
   delayed_job_active_record
   devise
   exception_notification
+  devise_ldap_authenticatable
   fixy
   foundation-rails
   haml

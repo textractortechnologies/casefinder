@@ -1,4 +1,7 @@
 class ApplicationController < ActionController::Base
+  rescue_from DeviseLdapAuthenticatable::LdapException do |exception|
+    render :text => exception, :status => 500
+  end
   def abstractor_user
     current_user.email if defined?(current_user)
   end
