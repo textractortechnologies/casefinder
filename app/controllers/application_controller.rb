@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
     render :text => exception, :status => 500
   end
   def abstractor_user
-    current_user.email if defined?(current_user)
+    current_user.username if defined?(current_user)
   end
   helper_method :abstractor_user
   # Prevent CSRF attacks by raising an exception.
@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   end
 
   def user_for_paper_trail
-    current_user ? current_user.email : 'unknown'
+    current_user ? current_user.username : 'unknown'
   end
 
   def discard_redirect_to(params, about)
