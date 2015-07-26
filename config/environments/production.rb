@@ -20,7 +20,7 @@ Rails.application.configure do
   # ]
 
   #For Windows 2008
-  Abstractor::Engine.routes.default_url_options[:host] = 'http://localhost/casefinder'
+  Abstractor::Engine.routes.default_url_options[:host] = 'http://localhost'
   config.relative_url_root = "/casefinder"
   StanfordCoreNLP.use :english
   StanfordCoreNLP.model_files = {}
