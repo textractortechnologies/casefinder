@@ -319,14 +319,18 @@ ActiveRecord::Schema.define(version: 20150627170020) do
     t.string   "mrn",                 limit: 255,   null: false
     t.string   "ssn",                 limit: 255
     t.date     "birth_date",                        null: false
-    t.string   "address_line_1",      limit: 255
-    t.string   "address_line_2",      limit: 255
+    t.string   "street1",             limit: 255
+    t.string   "street2",             limit: 255
     t.string   "city",                limit: 255
     t.string   "state",               limit: 255
     t.string   "zip_code",            limit: 255
+    t.string   "country",             limit: 255
     t.string   "home_phone",          limit: 255
-    t.string   "gender",              limit: 255
-    t.date     "encounter_date",                    null: false
+    t.string   "sex",                 limit: 255
+    t.string   "race",                limit: 255
+    t.date     "collection_date",                   null: false
+    t.string   "attending",           limit: 255
+    t.string   "surgeon",             limit: 255
     t.text     "note",                limit: 65535, null: false
     t.datetime "created_at"
     t.datetime "updated_at"

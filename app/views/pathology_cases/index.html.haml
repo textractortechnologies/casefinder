@@ -53,8 +53,8 @@
         %tr
           %th.pathology_case_accession_number{ width: 200 }
             = sortable 'accession_number'
-          %th.pathology_case_encounter_date{ width: 100 }
-            = sortable 'encounter_date'
+          %th.pathology_case_collection_date{ width: 100 }
+            = sortable 'collection_date'
           %th.suggested_histologies{ width: 300 }
             = sortable 'suggested_histologies'
           %th.suggested_sites{ width: 300 }
@@ -66,8 +66,8 @@
           = content_tag_for(:tr, pathology_case ) do
             %td.pathology_case_accession_number
               = pathology_case.accession_number
-            %td.pathology_case_encounter_date
-              = pathology_case.encounter_date
+            %td.pathology_case_collection_date
+              = pathology_case.collection_date
             %td.suggested_histologies
               - pathology_case.suggested_histologies.each do |histology|
                 = histology

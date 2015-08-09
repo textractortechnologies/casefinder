@@ -3,7 +3,7 @@ require 'csv'
 class PathologyCase < ActiveRecord::Base
   include Abstractor::Abstractable
 
-  scope :by_encounter_date, ->(date_from, date_to) do
+  scope :by_collection_date, ->(date_from, date_to) do
     if (!date_from.blank? && !date_to.blank?)
       date_range = [date_from, date_to]
     else
@@ -11,7 +11,7 @@ class PathologyCase < ActiveRecord::Base
     end
 
     unless (date_range.first.blank? || date_range.last.blank?)
-      where("encounter_date BETWEEN ? AND ?", date_range.first, date_range.last)
+      where("collection_date BETWEEN ? AND ?", date_range.first, date_range.last)
     end
   end
 
@@ -62,27 +62,45 @@ class PathologyCase < ActiveRecord::Base
   def self.import(file)
     spreadsheet = open_spreadsheet(file)
     header = spreadsheet.row(1)
+    pathology_case = nil
+    note = ''
     (2..spreadsheet.last_row).each do |i|
-      row = Hash[[header, spreadsheet.row(i)].transpose]
-      accession_num = row['ACCESSION_NUM'].is_a?(Float) ? row['ACCESSION_NUM'].to_i.to_s : row['ACCESSION_NUM']
-      pathology_case = PathologyCase.where(accession_number: accession_num).first_or_initialize
-      pathology_case.encounter_date       = DateTime.parse(row['ENC_DATE'].to_s.strip).to_date
-      pathology_case.patient_last_name    = row['LAST_NAME']
-      pathology_case.patient_first_name   = row['FIRST_NAME']
-      pathology_case.patient_middle_name  = row['MIDDLE_NAME']
-      mrn = row['MRN'].is_a?(Float) ? row['MRN'].to_i.to_s : row['MRN']
-      pathology_case.mrn                  = mrn
-      pathology_case.ssn                  = row['SSN']
-      pathology_case.birth_date           = DateTime.parse(row['BIRTH_DATE'].to_s.strip).to_date
-      pathology_case.address_line_1       = row['ADDR_LINE_1']
-      pathology_case.address_line_2       = row['ADDR_LINE_2']
-      pathology_case.city                 = row['CITY']
-      pathology_case.state                = row['STATE_CODE']
-      zip_code = row['ZIP_CODE'].is_a?(Float) ? row['ZIP_CODE'].to_i.to_s : row['ZIP_CODE']
-      pathology_case.zip_code             = zip_code
-      pathology_case.home_phone           = row['HOME_PHONE']
-      pathology_case.gender               = row['GENDER_CODE']
-      pathology_case.note                 = row['PATH_RESULT_TEXT']
+      if spreadsheet.row(i).compact.size > 3
+        save_pathology_case(pathology_case, note)
+        row = Hash[[header, spreadsheet.row(i)].transpose]
+        note = ''
+        accession_num = row['ACCESSION_NUM'].is_a?(Float) ? row['ACCESSION_NUM'].to_i.to_s : row['ACCESSION_NUM']
+        pathology_case = PathologyCase.where(accession_number: accession_num).first_or_initialize
+        pathology_case.collection_date       = DateTime.parse(row['COLLECTION_DATE'].to_s.strip).to_date
+        patient_last_name, patient_first_name = row['Name'].split(',')
+        pathology_case.patient_last_name          = patient_last_name.strip
+        pathology_case.patient_first_name          = patient_first_name.strip
+        mrn = row['MRN'].is_a?(Float) ? row['MRN'].to_i.to_s : row['MRN']
+        pathology_case.mrn                  = mrn
+        pathology_case.ssn                  = row['SSN']
+        pathology_case.birth_date           = DateTime.parse(row['DOB'].to_s.strip).to_date
+        pathology_case.street1              = row['STREET1']
+        pathology_case.street2              = row['STREET2']
+        pathology_case.city                 = row['CITY']
+        pathology_case.state                = row['STATE']
+        zip_code = row['ZIP_CODE'].is_a?(Float) ? row['ZIP_CODE'].to_i.to_s : row['ZIP_CODE']
+        pathology_case.zip_code             = zip_code
+        pathology_case.country              = row['COUNTRY']
+        pathology_case.home_phone           = row['HOME_PHONE']
+        pathology_case.sex                  = row['SEX']
+        pathology_case.race                 = row['RACE']
+        pathology_case.attending            = row['ATTENDING']
+        pathology_case.surgeon              = row['SURGEON']
+      else
+        note += spreadsheet.row(i).compact.join(' ') +  "\r\n"
+      end
+    end
+    save_pathology_case(pathology_case, note)
+  end
+
+  def self.save_pathology_case(pathology_case, note)
+    if !pathology_case.nil? && pathology_case.is_a?(PathologyCase)
+      pathology_case.note = note
       pathology_case.save!
       Delayed::Job.enqueue ProcessPathologyCaseJob.new(pathology_case.id)
     end
@@ -132,7 +150,7 @@ class PathologyCase < ActiveRecord::Base
   end
 
   def addr_no_and_street
-    [address_line_1, address_line_2].reject { |n| n.nil? or n.blank? }.join(' ')
+    [street1, street2].reject { |n| n.nil? or n.blank? }.join(' ')
   end
 
   def self.countdown

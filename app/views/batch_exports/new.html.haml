@@ -18,8 +18,8 @@
           %th.pathology_case_accession_number{ width: 200 }
             = sortable 'accession_number'
 
-          %th.pathology_case_encounter_date{ width: 100 }
-            = sortable 'encounter_date'
+          %th.pathology_case_collection_date{ width: 100 }
+            = sortable 'collection_date'
           %th.histology{ width: 300 }
             = sortable 'histology'
           %th.site{ width: 300 }
@@ -30,8 +30,8 @@
               = content_tag_for(:tr, abstractor_abstraction_group ) do
                 %td.pathology_case_accession_number
                   = abstractor_abstraction_group.about.accession_number
-                %td.pathology_case_encounter_date
-                  = abstractor_abstraction_group.about.encounter_date
+                %td.pathology_case_collection_date
+                  = abstractor_abstraction_group.about.collection_date
                 %td.histology
                   = abstractor_abstraction_group.histology
                 %td.site

@@ -57,7 +57,7 @@ class BatchExportsController < ApplicationController
   private
 
     def sort_column
-      ['accession_number', 'encounter_date', 'histology', 'site'].include?(params[:sort]) ? params[:sort] : "encounter_date"
+      ['accession_number', 'collection_date', 'histology', 'site'].include?(params[:sort]) ? params[:sort] : "collection_date"
     end
 
     def sort_direction

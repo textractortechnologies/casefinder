@@ -22,11 +22,15 @@
           %th
             Birth Date
           %th
-            Gender
+            Sex
+          %th
+            Attending
+          %th
+            Surgeon
       %tbody
         %tr
           %td
-            = @pathology_case.encounter_date.to_s(:date)
+            = @pathology_case.collection_date.to_s(:date)
           %td
             = @pathology_case.accession_number
           %td
@@ -38,7 +42,11 @@
           %td
             = @pathology_case.birth_date.to_s(:date)
           %td
-            = @pathology_case.gender
+            = @pathology_case.sex
+          %td
+            = @pathology_case.attending
+          %td
+            = @pathology_case.surgeon
   .pathology_case_abstractions
     .pathology_case_header_actions
       .actions

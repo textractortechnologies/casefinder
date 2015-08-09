@@ -26,7 +26,7 @@ class PathologyCasesController < ApplicationController
     abstractor_abstraction_schema_cancer_histology = PathologyCase.abstractor_abstraction_schemas.detect { |abstractor_abstraction_schema| abstractor_abstraction_schema.display_name = 'Cancer Histology' }
     @pathology_cases = SqlAudit.find_and_audit(
       current_user.email,
-      PathologyCase.search_across_fields(params[:search], options).by_abstraction_workflow_status(params[:filter], { workflow_status_whodunnit: params[:filter_by] }).by_abstractor_suggestion_type(@flag_statuses[params[:suggestion_filter]], abstractor_abstraction_schemas: abstractor_abstraction_schema_cancer_histology).by_encounter_date(params[:date_from], params[:date_to])
+      PathologyCase.search_across_fields(params[:search], options).by_abstraction_workflow_status(params[:filter], { workflow_status_whodunnit: params[:filter_by] }).by_abstractor_suggestion_type(@flag_statuses[params[:suggestion_filter]], abstractor_abstraction_schemas: abstractor_abstraction_schema_cancer_histology).by_collection_date(params[:date_from], params[:date_to])
     )
 
     if params[:export]
@@ -120,7 +120,7 @@ class PathologyCasesController < ApplicationController
 
   private
     def sort_column
-      PathologyCase.column_names.concat(['suggested_sites', 'suggested_histologies']).include?(params[:sort]) ? params[:sort] : "encounter_date"
+      PathologyCase.column_names.concat(['suggested_sites', 'suggested_histologies']).include?(params[:sort]) ? params[:sort] : "collection_date"
     end
 
     def sort_direction

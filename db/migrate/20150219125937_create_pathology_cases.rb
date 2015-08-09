@@ -8,31 +8,20 @@ class CreatePathologyCases < ActiveRecord::Migration
       t.string      :mrn,                   null: false
       t.string      :ssn,                   null: true
       t.date        :birth_date,            null: false
-      t.string      :address_line_1,        null: true
-      t.string      :address_line_2,        null: true
+      t.string      :street1,               null: true
+      t.string      :street2,               null: true
       t.string      :city,                  null: true
       t.string      :state,                 null: true
       t.string      :zip_code,              null: true
+      t.string      :country,               null: true
       t.string      :home_phone,            null: true
-      t.string      :gender,                null: true
-      t.date        :encounter_date,        null: false
+      t.string      :sex,                   null: true
+      t.string      :race,                  null: true
+      t.date        :collection_date,       null: false
+      t.string      :attending,             null: true
+      t.string      :surgeon,               null: true
       t.text        :note,                  null: false
       t.timestamps
     end
   end
 end
-# last_name
-# first_name
-# middle_name
-# pat_mrn_id
-# ssn
-# birth_date
-# addr_line_1
-# addr_line_2
-# city
-# state_code
-# zip_code
-# home_phone
-# gender_code
-# enc_date
-# ord_res_comp_comment
