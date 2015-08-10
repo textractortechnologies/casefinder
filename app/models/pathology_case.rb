@@ -44,17 +44,22 @@ class PathologyCase < ActiveRecord::Base
       'has_cancer_site'
     end
 
+    if sort_direction == 'ASC'
+      aggregrate = 'MIN'
+    else
+      aggregrate = 'MAX'
+    end
+
     if predicate
       abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: predicate).first
       joins_clause ="
-      LEFT JOIN LATERAL(
+      LEFT JOIN (
       SELECT  aa.about_id
-            , sug.suggested_value
+            , #{aggregrate}(sug.suggested_value) AS suggested_value
       FROM abstractor_abstractions aa JOIN abstractor_suggestions sug ON aa.id = sug.abstractor_abstraction_id AND aa.deleted_at IS NULL
                                       JOIN abstractor_subjects sub ON aa.abstractor_subject_id = sub.id and sub.abstractor_abstraction_schema_id = #{abstractor_abstraction_schema.id}
-      WHERE aa.about_id = pathology_cases.id
-      ORDER BY sug.suggested_value #{sort_direction} LIMIT 1
-       ) AS suggestions ON TRUE"
+      GROUP BY aa.about_id
+       ) AS suggestions ON suggestions.about_id = pathology_cases.id"
     end
     joins_clause
   end
