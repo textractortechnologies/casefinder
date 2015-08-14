@@ -5,9 +5,9 @@ class CreatePathologyCases < ActiveRecord::Migration
       t.string      :patient_last_name,     null: false
       t.string      :patient_first_name,    null: false
       t.string      :patient_middle_name,   null: true
-      t.string      :mrn,                   null: false
+      t.string      :mrn,                   null: true
       t.string      :ssn,                   null: true
-      t.date        :birth_date,            null: false
+      t.date        :birth_date,            null: true
       t.string      :street1,               null: true
       t.string      :street2,               null: true
       t.string      :city,                  null: true

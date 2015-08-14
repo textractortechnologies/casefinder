@@ -316,9 +316,9 @@ ActiveRecord::Schema.define(version: 20150627170020) do
     t.string   "patient_last_name",   limit: 255,   null: false
     t.string   "patient_first_name",  limit: 255,   null: false
     t.string   "patient_middle_name", limit: 255
-    t.string   "mrn",                 limit: 255,   null: false
+    t.string   "mrn",                 limit: 255
     t.string   "ssn",                 limit: 255
-    t.date     "birth_date",                        null: false
+    t.date     "birth_date"
     t.string   "street1",             limit: 255
     t.string   "street2",             limit: 255
     t.string   "city",                limit: 255

@@ -74,28 +74,28 @@ class PathologyCase < ActiveRecord::Base
         save_pathology_case(pathology_case, note)
         row = Hash[[header, spreadsheet.row(i)].transpose]
         note = ''
-        accession_num = row['ACCESSION_NUM'].is_a?(Float) ? row['ACCESSION_NUM'].to_i.to_s : row['ACCESSION_NUM']
+        accession_num = spreadsheet.row(i)[5].is_a?(Float) ? spreadsheet.row(i)[5].to_i.to_s : spreadsheet.row(i)[5]
         pathology_case = PathologyCase.where(accession_number: accession_num).first_or_initialize
-        pathology_case.collection_date       = DateTime.parse(row['COLLECTION_DATE'].to_s.strip).to_date
-        patient_last_name, patient_first_name = row['Name'].split(',')
+        pathology_case.collection_date       = DateTime.parse(spreadsheet.row(i)[13].to_s.strip).to_date
+        patient_last_name, patient_first_name = spreadsheet.row(i)[1].split(',')
         pathology_case.patient_last_name          = patient_last_name.strip
         pathology_case.patient_first_name          = patient_first_name.strip
-        mrn = row['MRN'].is_a?(Float) ? row['MRN'].to_i.to_s : row['MRN']
+        mrn = spreadsheet.row(i)[3].is_a?(Float) ? spreadsheet.row(i)[3].to_i.to_s : spreadsheet.row(i)[3]
         pathology_case.mrn                  = mrn
-        pathology_case.ssn                  = row['SSN']
-        pathology_case.birth_date           = DateTime.parse(row['DOB'].to_s.strip).to_date
-        pathology_case.street1              = row['STREET1']
-        pathology_case.street2              = row['STREET2']
-        pathology_case.city                 = row['CITY']
-        pathology_case.state                = row['STATE']
-        zip_code = row['ZIP_CODE'].is_a?(Float) ? row['ZIP_CODE'].to_i.to_s : row['ZIP_CODE']
+        pathology_case.ssn                  = spreadsheet.row(i)[15]
+        pathology_case.birth_date           = DateTime.parse(spreadsheet.row(i)[7].to_s.strip).to_date unless spreadsheet.row(i)[7].blank?
+        pathology_case.street1              = spreadsheet.row(i)[17]
+        pathology_case.street2              = spreadsheet.row(i)[19]
+        pathology_case.city                 = spreadsheet.row(i)[21]
+        pathology_case.state                = spreadsheet.row(i)[23]
+        zip_code = spreadsheet.row(i)[25].is_a?(Float) ? spreadsheet.row(i)[25].to_i.to_s : spreadsheet.row(i)[25]
         pathology_case.zip_code             = zip_code
-        pathology_case.country              = row['COUNTRY']
-        pathology_case.home_phone           = row['HOME_PHONE']
-        pathology_case.sex                  = row['SEX']
-        pathology_case.race                 = row['RACE']
-        pathology_case.attending            = row['ATTENDING']
-        pathology_case.surgeon              = row['SURGEON']
+        pathology_case.country              = spreadsheet.row(i)[27]
+        pathology_case.home_phone           = spreadsheet.row(i)[29]
+        pathology_case.sex                  = spreadsheet.row(i)[9]
+        pathology_case.race                 = spreadsheet.row(i)[11]
+        pathology_case.attending            = spreadsheet.row(i)[31]
+        pathology_case.surgeon              = spreadsheet.row(i)[33].blank? ? spreadsheet.row(i)[31] :  spreadsheet.row(i)[31]
       else
         note += spreadsheet.row(i).compact.join(' ') +  "\r\n"
       end
@@ -105,6 +105,7 @@ class PathologyCase < ActiveRecord::Base
 
   def self.save_pathology_case(pathology_case, note)
     if !pathology_case.nil? && pathology_case.is_a?(PathologyCase)
+      note.gsub!('_x000D_', '')
       pathology_case.note = note
       pathology_case.save!
       Delayed::Job.enqueue ProcessPathologyCaseJob.new(pathology_case.id)
