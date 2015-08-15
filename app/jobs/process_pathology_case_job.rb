@@ -1,8 +1,8 @@
 class ProcessPathologyCaseJob < Struct.new(:pathology_case_id)
   def enqueue(job)
-      job.delayed_reference_id   = pathology_case_id
-      job.delayed_reference_type = 'PathologyCase'
-      job.save!
+    job.delayed_reference_id   = pathology_case_id
+    job.delayed_reference_type = 'PathologyCase'
+    job.save!
   end
 
   def error(job, exception)
