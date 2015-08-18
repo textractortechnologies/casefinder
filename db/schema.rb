@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150627170020) do
+ActiveRecord::Schema.define(version: 20150816124002) do
 
   create_table "abstractor_abstraction_group_members", force: :cascade do |t|
     t.integer  "abstractor_abstraction_group_id", limit: 4
@@ -286,6 +286,13 @@ ActiveRecord::Schema.define(version: 20150627170020) do
 
   create_table "batch_exports", force: :cascade do |t|
     t.datetime "exported_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "batch_imports", force: :cascade do |t|
+    t.datetime "imported_at",             null: false
+    t.string   "import_file", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end

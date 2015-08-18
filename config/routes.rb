@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   devise_for :users
   mount Abstractor::Engine, :at => "/"
 
+  resources :batch_imports do
+  end
+
   resources :batch_exports do
   end
 
@@ -12,8 +15,8 @@ Rails.application.routes.draw do
     collection { get :last_pathology_case }
     collection { get :countdown }
   end
-  root 'curate#index'
 
+  root 'curate#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

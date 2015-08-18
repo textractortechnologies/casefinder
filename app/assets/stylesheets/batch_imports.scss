@@ -1,0 +1,11 @@
+#batch_import {
+  @include grid-row();
+  @include grid-column(
+   $columns: 22,
+   $offset: 1
+  );
+
+  .create_batch_import_button {
+    @include button($button-tny, $radius: false);
+  }
+}
