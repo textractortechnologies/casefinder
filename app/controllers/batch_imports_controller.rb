@@ -15,7 +15,6 @@ class BatchImportsController < ApplicationController
     end
   end
 
-
   private
     def batch_import_params
       params.require(:batch_import).permit(:imported_at, :import_file)

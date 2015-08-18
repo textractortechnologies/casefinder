@@ -24,9 +24,6 @@ class BatchImport < ActiveRecord::Base
     (2..spreadsheet.last_row).each do |i|
       if spreadsheet.row(i).compact.size > 3
         save_pathology_case(pathology_case, note)
-        if pathology_case
-          saved_pathology_cases << pathology_case
-        end
         note = ''
         accession_num = spreadsheet.row(i)[5].is_a?(Float) ? spreadsheet.row(i)[5].to_i.to_s : spreadsheet.row(i)[5]
         pathology_case = PathologyCase.where(accession_number: accession_num).first_or_initialize
@@ -55,12 +52,6 @@ class BatchImport < ActiveRecord::Base
       end
     end
     save_pathology_case(pathology_case, note)
-    if pathology_case
-      saved_pathology_cases << pathology_case
-    end
-    saved_pathology_cases.each do |saved_pathology_case|
-      saved_pathology_case.abstract
-    end
   end
 
   def save_pathology_case(pathology_case, note)
@@ -68,6 +59,7 @@ class BatchImport < ActiveRecord::Base
       note.gsub!('_x000D_', '')
       pathology_case.note = note
       pathology_case.save!
+      pathology_case.abstract
     end
     pathology_case
   end
