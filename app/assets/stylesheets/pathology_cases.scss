@@ -9,8 +9,7 @@
 #upload_pathology_cases {
   @include grid-row();
   @include grid-column(
-   $columns: 22,
-   $offset: 1
+   $columns: 24
   );
 }
 
@@ -19,24 +18,15 @@
 
   .pathology_cases_header {
     @include grid-column(
-     $columns: 22,
-     $offset: 1
+     $columns: 24
     );
 
     .banner {
       vertical-align: middle;
-      @include grid-column(
-       $columns: 23
-      );
 
-      h2 {
-        @include grid-column(
-         $columns: 8
-        );
-      }
       .countdown {
         @include grid-column(
-         $columns: 15
+         $columns: 16
         );
 
         .progress_label {
@@ -57,7 +47,7 @@
 
     #search_pathology_cases_form {
       @include grid-column(
-       $columns: 23
+       $columns: 24
       );
 
       label {
@@ -68,7 +58,8 @@
 
       .search {
         @include grid-column(
-          $columns: 5
+          $columns: 4,
+          $collapse:true
         )
       }
 
@@ -80,7 +71,7 @@
 
       .filter_by {
         @include grid-column(
-          $columns: 3
+          $columns: 2
         )
       }
 
@@ -89,20 +80,50 @@
           $columns: 3
         )
       }
-      .date_from {
+      .date_filter {
         @include grid-column(
-          $columns: 3
-        )
+          $columns: 7
+        );
+        border: $microformat-border-width $microformat-border-style $microformat-border-color;
+
+        .date_filter_components {
+          @include grid-row();
+          .date_filter_toggle {
+            @include grid-column(
+              $columns: 8
+            );
+            padding-left: 0;
+            padding-right: 0;
+          }
+          .date_filter_range {
+            @include grid-column(
+              $columns: 16
+            );
+            padding-left: 0;
+            padding-right: 0;
+
+            .date_filter_range_components {
+              @include grid-row();
+
+              .date_from {
+                @include grid-column(
+                  $columns: 12
+                )
+              }
+              .date_to {
+                @include grid-column(
+                  $columns: 12
+                )
+              }
+            }
+          }
+        }
       }
-      .date_to {
-        @include grid-column(
-          $columns: 3
-        )
-      }
+
       .navigation {
         margin-top: 2rem;
         @include grid-column(
-          $columns: 4
+          $columns: 5
         )
       }
 
@@ -110,8 +131,7 @@
   }
     .pathology_cases_list {
     @include grid-column(
-      $columns: 22,
-      $offset: 1
+      $columns: 24
     );
 
     th .current {
@@ -145,13 +165,12 @@
 
   .pathology_case_details {
     @include grid-column(
-     $columns: 22,
-     $offset: 1
+     $columns: 24
     );
 
     table {
       @include grid-column(
-       $columns: 23
+       $columns: 24
       );
     }
 

@@ -9,8 +9,7 @@
     = link_to 'New Export', new_batch_export_path(), class: 'new_batch_export_link'
     .batch_export_header_actions_show
       = link_to 'Create File', batch_export_path(@batch_export, export: true), class: 'create_batch_export_file_link', disabled: @abstractor_abstraction_groups.empty?
-  .batch_export_details_list
-
+  .batch_export_details
     = will_paginate @abstractor_abstraction_groups
     %table
       %thead

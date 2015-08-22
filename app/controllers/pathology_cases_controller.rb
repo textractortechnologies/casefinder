@@ -17,7 +17,8 @@ class PathologyCasesController < ApplicationController
     @histologies = Abstractor::AbstractorObjectValue.joins(:abstractor_abstraction_schema_object_values).where(abstractor_abstraction_schema_object_values: { abstractor_abstraction_schema_id: @abstraction_schema_histology } ).order('vocabulary_code ASC').map { |h| { label: h.value , category: 'Histology' }  }
     params[:filter] ||= Abstractor::Enum::ABSTRACTION_WORKFLOW_STATUS_PENDING
     params[:filter_by] = nil if params[:filter_by].blank?
-    params[:suggestion_filter] ||= "flagged"
+    params[:suggestion_filter] ||= 'flagged'
+    params[:date_filter_type] ||= 'collected'
 
     params[:page]||= 1
     options = {}
@@ -26,12 +27,12 @@ class PathologyCasesController < ApplicationController
     abstractor_abstraction_schema_cancer_histology = PathologyCase.abstractor_abstraction_schemas.detect { |abstractor_abstraction_schema| abstractor_abstraction_schema.display_name = 'Cancer Histology' }
     @pathology_cases = SqlAudit.find_and_audit(
       current_user.email,
-      PathologyCase.search_across_fields(params[:search], options).by_abstraction_workflow_status(params[:filter], { workflow_status_whodunnit: params[:filter_by] }).by_abstractor_suggestion_type(@flag_statuses[params[:suggestion_filter]], abstractor_abstraction_schemas: abstractor_abstraction_schema_cancer_histology).by_collection_date(params[:date_from], params[:date_to])
+      PathologyCase.search_across_fields(params[:search], options).by_abstraction_workflow_status(params[:filter], { workflow_status_whodunnit: params[:filter_by] }).by_abstractor_suggestion_type(@flag_statuses[params[:suggestion_filter]], abstractor_abstraction_schemas: abstractor_abstraction_schema_cancer_histology).by_date(params[:date_filter_type], params[:date_from], params[:date_to])
     )
 
-    if params[:export]
-      params.delete(:export)
-      params.merge!({ format: 'text' })
+    if params[:download]
+      params.delete(:download)
+      params.merge!({ format: 'csv' })
       redirect_to pathology_cases_path(params) and return
     end
 

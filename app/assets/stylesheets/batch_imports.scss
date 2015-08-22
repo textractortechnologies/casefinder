@@ -1,9 +1,17 @@
 #batch_import {
   @include grid-row();
-  @include grid-column(
-   $columns: 22,
-   $offset: 1
-  );
+
+  .batch_import_header {
+    @include grid-column(
+     $columns: 24
+    );
+  }
+  .batch_import_detail {
+    @include grid-column(
+     $columns: 24
+    );
+  }
+
 
   .create_batch_import_button {
     @include button($button-tny, $radius: false);

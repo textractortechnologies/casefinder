@@ -35,16 +35,26 @@
       .flagged_filter
         = label_tag :filter, 'Flagged?'
         = select_tag :suggestion_filter, options_for_select(['all'].concat(@flag_statuses.keys), selected = params[:suggestion_filter])
-      .date_from
-        = label_tag :date_from, 'From'
-        = text_field_tag :date_from, (params[:date_from].nil? ? '' : params[:date_from]), :class => 'datepicker'
-      .date_to
-        = label_tag :date_to, 'To'
-        = text_field_tag :date_to, (params[:date_from].nil? ? '' : params[:date_to]), :class => 'datepicker'
+      .date_filter
+        .date_filter_components
+          .date_filter_toggle
+            = radio_button_tag :date_filter_type, 'collected', (params[:date_filter_type] == 'collected' ? true : false)
+            = label_tag 'Collected'
+            %br
+            = radio_button_tag :date_filter_type, 'imported', (params[:date_filter_type] == 'imported' ? true : false)
+            = label_tag 'Imported'
+          .date_filter_range
+            .date_filter_range_components
+              .date_from
+                = label_tag :date_from, 'From'
+                = text_field_tag :date_from, (params[:date_from].nil? ? '' : params[:date_from]), :class => 'datepicker'
+              .date_to
+                = label_tag :date_to, 'To'
+                = text_field_tag :date_to, (params[:date_from].nil? ? '' : params[:date_to]), :class => 'datepicker'
       .navigation
         %button{ :type => 'submit', :id => 'search_pathology_cases_button', class: 'tiny' }
           Search
-        &nbsp;
+        = submit_tag "Download", :name => "download", class: 'tiny button'
         = link_to 'Clear', pathology_cases_path()
   .pathology_cases_list
     = will_paginate @pathology_cases

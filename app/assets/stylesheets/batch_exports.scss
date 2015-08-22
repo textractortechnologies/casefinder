@@ -1,15 +1,14 @@
 #batch_export {
   @include grid-row();
-  @include grid-column(
-   $columns: 22,
-   $offset: 1
-  );
 
   button.ui-button {
     height: 1.7rem;
   }
 
   .batch_export_header {
+    @include grid-column(
+     $columns: 24
+    );
 
     .new_batch_export_link {
       float: left;
@@ -28,8 +27,8 @@
 
     .batch_export_header_actions {
       @include grid-column(
-       $columns: 11,
-       $offset: 12
+       $columns: 9,
+       $offset: 15
       );
 
       .create_batch_export_button {
@@ -50,10 +49,13 @@
     }
   }
 
-  .batch_export_details_list {
+  .batch_export_details {
+    @include grid-column(
+     $columns: 24
+    );
     table {
       @include grid-column(
-       $columns: 23
+       $columns: 24
       );
     }
 
@@ -63,7 +65,7 @@
   }
   .no_abstractor_abstraction_groups {
     @include grid-column(
-     $columns: 23
+     $columns: 24
     );
   }
 }

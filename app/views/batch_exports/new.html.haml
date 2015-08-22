@@ -10,7 +10,7 @@
       = button_to 'Create Export', batch_exports_path, data: { confirm: 'Are you sure?' }, method: :post, class: "#{@abstractor_abstraction_groups.empty? ? 'create_batch_export_link_disabled' : 'create_batch_export_link' }", disabled: @abstractor_abstraction_groups.empty?, form_class: 'create_batch_export_button'
       = label_tag :btch_exports, 'Load prior export:'
       = select_tag :batch_exports, options_for_select(BatchExport.all.map { |batch_export| ["#{batch_export.id} (#{batch_export.exported_at.to_date.to_s(:date)})", batch_export.id]}), { include_blank: true }
-  .batch_export_details_list
+  .batch_export_details
     = will_paginate @abstractor_abstraction_groups
     %table
       %thead
