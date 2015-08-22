@@ -2,10 +2,6 @@ class PathologyCasesController < ApplicationController
   helper_method :sort_column, :sort_direction
   before_action :authenticate_user!
 
-  def back_to_pathology_cases_index
-    session[:index_history] || pathology_cases_url
-  end
-
   def index
     session[:index_history] = request.url unless params[:next_case]
     @filter_statuses = Abstractor::Enum::ABSTRACTION_WORKFLOW_STATUSES

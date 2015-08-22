@@ -30,6 +30,10 @@ class ApplicationController < ActionController::Base
     :back
   end
 
+  def back_from_pathology_cases_review
+    session[:index_history] || pathology_cases_url
+  end
+
   protected
     def record_history
       session[:history] ||= nil

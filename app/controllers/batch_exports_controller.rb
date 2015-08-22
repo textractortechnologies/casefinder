@@ -3,6 +3,7 @@ class BatchExportsController < ApplicationController
   before_action :authenticate_user!
 
   def new
+    session[:index_history] = request.url
     @abstraction_schema_has_cancer_histology = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_histology').first
     @abstraction_schema_has_cancer_site = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
     options = {}
@@ -33,6 +34,7 @@ class BatchExportsController < ApplicationController
   end
 
   def show
+    session[:index_history] = request.url
     options = {}
     options[:sort_column] = sort_column
     options[:sort_direction] = sort_direction
