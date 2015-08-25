@@ -14,9 +14,9 @@ class PathologyCase < ActiveRecord::Base
     unless (date_range.first.blank? || date_range.last.blank?)
       case date_type
       when 'collected'
-        where("collection_date BETWEEN ? AND ?", date_range.first, date_range.last)
+        where("collection_date BETWEEN ? AND ?", date_range.first, (Date.parse(date_range.last) +1).to_s)
       when 'imported'
-        where("created_at BETWEEN ? AND ?", date_range.first, date_range.last)
+        where("created_at BETWEEN ? AND ?", date_range.first, (Date.parse(date_range.last) +1).to_s)
       end
     end
   end
