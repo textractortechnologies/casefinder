@@ -14,7 +14,7 @@
 ** Navigate to the casefinder application
 ** Click 'Start web console'
 
-** bundle update
+** bundle
 
 ** bundle exec rake db:migrate
 
