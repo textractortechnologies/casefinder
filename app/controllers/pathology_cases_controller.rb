@@ -92,6 +92,7 @@ class PathologyCasesController < ApplicationController
       session[:history].gsub!("&next_case=true","")
       session[:history].gsub!(/&index=\d/,"")
       session[:history].gsub!(/&previous_pathology_case_id=\d/,"")
+      session[:history].gsub!(/pathology_cases\?(\d*)/,"/pathology_cases\?")
       session[:history] = session[:history] + (session[:history].include?('?') ? "&next_case=true&index=#{params[:index]}&previous_pathology_case_id=#{params[:previous_pathology_case_id]}" : "?&next_case=true&index=#{params[:index]}&previous_pathology_case_id=#{params[:previous_pathology_case_id]}")
       redirect_to session[:history] and return
     else
