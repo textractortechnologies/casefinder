@@ -39,10 +39,10 @@
         .date_filter_components
           .date_filter_toggle
             = radio_button_tag :date_filter_type, 'collected', (params[:date_filter_type] == 'collected' ? true : false)
-            = label_tag 'Collected'
+            = label_tag 'Collected', 'Collected',  for: 'date_filter_type_collected'
             %br
             = radio_button_tag :date_filter_type, 'imported', (params[:date_filter_type] == 'imported' ? true : false)
-            = label_tag 'Imported'
+            = label_tag 'Imported', 'Imported',  for: 'date_filter_type_imported'
           .date_filter_range
             .date_filter_range_components
               .date_from
