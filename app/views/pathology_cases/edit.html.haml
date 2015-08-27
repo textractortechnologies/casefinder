@@ -40,7 +40,7 @@
           %td
             = @pathology_case.ssn
           %td
-            = @pathology_case.birth_date.to_s(:date)
+            = @pathology_case.birth_date.to_s(:date) unless @pathology_case.birth_date.blank?
           %td
             = @pathology_case.sex
           %td
