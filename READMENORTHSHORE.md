@@ -40,3 +40,6 @@
 ** cd \
    cd \intepub\wwwroot\casefinder\lib
    java -jar text-web-service-1.0.jar
+
+bundle exec rake setup:migrate_to_more_fine_grained_histologies
+bundle exec rake setup:migrate_to_only_fine_grained_sites
