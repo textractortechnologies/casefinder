@@ -9,8 +9,8 @@ class PathologyCasesController < ApplicationController
     @flag_statuses = { "flagged" => Abstractor::Enum::ABSTRACTION_SUGGESTION_TYPE_SUGGESTED, "not flagged" => Abstractor::Enum::ABSTRACTION_SUGGESTION_TYPE_UNKNOWN }
     @abstraction_schema_site = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
     @abstraction_schema_histology = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_histology').first
-    @sites = Abstractor::AbstractorObjectValue.joins(:abstractor_abstraction_schema_object_values).where(abstractor_abstraction_schema_object_values: { abstractor_abstraction_schema_id: @abstraction_schema_site } ).order('vocabulary_code ASC').map { |s| { label: s.value , category: 'Site' }  }
-    @histologies = Abstractor::AbstractorObjectValue.joins(:abstractor_abstraction_schema_object_values).where(abstractor_abstraction_schema_object_values: { abstractor_abstraction_schema_id: @abstraction_schema_histology } ).order('vocabulary_code ASC').map { |h| { label: h.value , category: 'Histology' }  }
+    @sites = Abstractor::AbstractorObjectValue.joins(:abstractor_abstraction_schema_object_values).where(deleted_at: nil, abstractor_abstraction_schema_object_values: { abstractor_abstraction_schema_id: @abstraction_schema_site } ).order('vocabulary_code ASC').map { |s| { label: s.value , category: 'Site' }  }
+    @histologies = Abstractor::AbstractorObjectValue.joins(:abstractor_abstraction_schema_object_values).where(deleted_at: nil, abstractor_abstraction_schema_object_values: { abstractor_abstraction_schema_id: @abstraction_schema_histology } ).order('vocabulary_code ASC').map { |h| { label: h.value , category: 'Histology' }  }
     params[:filter] ||= Abstractor::Enum::ABSTRACTION_WORKFLOW_STATUS_PENDING
     params[:filter_by] = nil if params[:filter_by].blank?
     params[:suggestion_filter] ||= 'flagged'
