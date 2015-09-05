@@ -23,7 +23,12 @@ class ApplicationController < ActionController::Base
   end
 
   def update_workflow_status_redirect_to(params, about)
-    main_app.next_pathology_case_pathology_cases_path(index: params[:index], previous_pathology_case_id: about.id)
+    case params[:abstraction_workflow_status]
+    when Abstractor::Enum::ABSTRACTION_WORKFLOW_STATUS_SUBMITTED
+      main_app.next_pathology_case_pathology_cases_path(index: params[:index], previous_pathology_case_id: about.id)
+    when Abstractor::Enum::ABSTRACTION_WORKFLOW_STATUS_PENDING
+      :back
+    end
   end
 
   def undiscard_redirect_to(params, about)
