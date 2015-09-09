@@ -16,4 +16,8 @@
     = csrf_meta_tag
   %body
     = render "shared/navigation"
+    #flash
+      - flash.each do |message_type, message|
+        %div{ class: "alert-box #{message_type == 'notice' ? 'success' : 'warning'}", id: message_type }
+          = h(message)
     = yield

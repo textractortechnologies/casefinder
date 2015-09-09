@@ -3,6 +3,7 @@ class PathologyCasesController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    authorize PathologyCase.new
     session[:index_history] = request.url unless params[:next_case]
     @filter_statuses = Abstractor::Enum::ABSTRACTION_WORKFLOW_STATUSES
     @filter_by = PathologyCase.workflow_status_whodunnit_list.all.map(&:workflow_status_whodunnit).sort
@@ -21,9 +22,11 @@ class PathologyCasesController < ApplicationController
     options[:sort_column] = sort_column
     options[:sort_direction] = sort_direction
     abstractor_abstraction_schema_cancer_histology = PathologyCase.abstractor_abstraction_schemas.detect { |abstractor_abstraction_schema| abstractor_abstraction_schema.display_name = 'Cancer Histology' }
+
+    model = policy_scope(PathologyCase)
     @pathology_cases = SqlAudit.find_and_audit(
       current_user.email,
-      PathologyCase.search_across_fields(params[:search], options).by_abstraction_workflow_status(params[:filter], { workflow_status_whodunnit: params[:filter_by] }).by_abstractor_suggestion_type(@flag_statuses[params[:suggestion_filter]], abstractor_abstraction_schemas: abstractor_abstraction_schema_cancer_histology).by_date(params[:date_filter_type], params[:date_from], params[:date_to])
+      model.search_across_fields(params[:search], options).by_abstraction_workflow_status(params[:filter], { workflow_status_whodunnit: params[:filter_by] }).by_abstractor_suggestion_type(@flag_statuses[params[:suggestion_filter]], abstractor_abstraction_schemas: abstractor_abstraction_schema_cancer_histology).by_date(params[:date_filter_type], params[:date_from], params[:date_to])
     )
 
     if params[:download]
@@ -74,20 +77,15 @@ class PathologyCasesController < ApplicationController
       PathologyCase.where(id: params[:id])
     ).first
 
+    authorize @pathology_case
+
     respond_to do |format|
       format.html
     end
   end
 
-  def import
-    PathologyCase.import(params[:file])
-    redirect_to pathology_cases_url, notice: "Pathology Cases imported."
-  end
-
-  def upload
-  end
-
   def next_pathology_case
+    authorize PathologyCase.new
     if session[:history]
       session[:history].gsub!("&next_case=true","")
       session[:history].gsub!(/&index=(\d*)/,"")
@@ -101,6 +99,7 @@ class PathologyCasesController < ApplicationController
   end
 
   def last_pathology_case
+    authorize PathologyCase.new
     if session[:last_pathology_case].any?
       redirect_to edit_pathology_case_url(session[:last_pathology_case].pop, last_case: true) and return
     else

@@ -10,8 +10,6 @@ Rails.application.routes.draw do
   end
 
   resources :pathology_cases do
-    collection { post :import }
-    collection { get :upload }
     collection { get :next_pathology_case }
     collection { get :last_pathology_case }
     collection { get :countdown }

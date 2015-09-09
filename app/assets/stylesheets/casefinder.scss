@@ -1,0 +1,6 @@
+#flash {
+  @include grid-row();
+  @include grid-column(
+   $columns: 24
+  );
+}

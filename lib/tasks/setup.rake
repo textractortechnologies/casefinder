@@ -150,25 +150,6 @@ namespace :setup do
     Abstractor::AbstractorSubjectGroupMember.where(:abstractor_subject => abstractor_subject, :abstractor_subject_group => primary_cancer_group, :display_order => 2).first_or_create
   end
 
-  desc "Setup pathology cases"
-  task(pathology_cases: :environment) do  |t, args|
-    pathology_cases = YAML.load(ERB.new(File.read("lib/setup/data/pathology_cases.yml")).result)
-    pathology_cases.each do |pathology_case_file|
-      pathology_case = PathologyCase.where(accession_number: pathology_case_file['accession_number'], encounter_date: pathology_case_file['encounter_date'], note: pathology_case_file['note'], patient_last_name: 'Baines', patient_first_name: 'Harold', mrn: '11111111', birth_date: '7/4/1976').first_or_create
-      pathology_case.abstract
-    end
-  end
-
-  desc "Setup Users"
-  task(users: :environment) do  |t, args|
-    users = CSV.new(File.open('lib/setup/data/users.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
-    users.each do |user_from_file|
-      user = User.where(email: user_from_file['email']).first_or_initialize
-      user.password = user_from_file['password']
-      user.save!
-    end
-  end
-
   desc "To only fine grained sites"
   task(migrate_to_only_fine_grained_sites: :environment) do  |t, args|
     abstraction_schema_site = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
@@ -220,6 +201,35 @@ namespace :setup do
           Abstractor::AbstractorObjectValueVariant.where(abstractor_object_value:  abstractor_object_value, value: normalized_value.downcase, deleted_at: nil).first_or_create
         end
       end
+    end
+  end
+
+
+  desc "Setup pathology cases"
+  task(pathology_cases: :environment) do  |t, args|
+    pathology_cases = YAML.load(ERB.new(File.read("lib/setup/data/pathology_cases.yml")).result)
+    pathology_cases.each do |pathology_case_file|
+      pathology_case = PathologyCase.where(accession_number: pathology_case_file['accession_number'], encounter_date: pathology_case_file['encounter_date'], note: pathology_case_file['note'], patient_last_name: 'Baines', patient_first_name: 'Harold', mrn: '11111111', birth_date: '7/4/1976').first_or_create
+      pathology_case.abstract
+    end
+  end
+
+  desc "Setup users"
+  task(users: :environment) do  |t, args|
+    users = CSV.new(File.open('lib/setup/data/users.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+    users.each do |user_from_file|
+      user = User.where(email: user_from_file['email']).first_or_initialize
+      user.password = user_from_file['password']
+      user.save!
+    end
+  end
+
+  desc "Setup roles"
+  task(roles: :environment) do  |t, args|
+    roles = CSV.new(File.open('lib/setup/data/roles.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+    roles.each do |role_from_file|
+      role = Role.where(name: role_from_file['name'], external_identifier: role_from_file['external_identifier']).first_or_initialize
+      role.save!
     end
   end
 end

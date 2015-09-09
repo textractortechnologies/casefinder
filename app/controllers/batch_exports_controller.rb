@@ -3,6 +3,7 @@ class BatchExportsController < ApplicationController
   before_action :authenticate_user!
 
   def new
+    authorize BatchExport.new
     session[:index_history] = request.url
     @abstraction_schema_has_cancer_histology = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_histology').first
     @abstraction_schema_has_cancer_site = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
@@ -19,6 +20,7 @@ class BatchExportsController < ApplicationController
   end
 
   def create
+    authorize BatchExport.new
     @batch_export = nil
     abstractor_abstraction_groups = BatchExport.find_exportable_primary_cancer_abstractor_abstraction_groups
     if abstractor_abstraction_groups.any?
@@ -42,6 +44,8 @@ class BatchExportsController < ApplicationController
       current_user.email,
       BatchExport.where(id: params[:id])
     ).first
+
+    authorize @batch_export
 
     if params[:export]
       params.delete(:export)

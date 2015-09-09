@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150903225056) do
+ActiveRecord::Schema.define(version: 20150907124846) do
 
   create_table "abstractor_abstraction_group_members", force: :cascade do |t|
     t.integer  "abstractor_abstraction_group_id", limit: 4
@@ -340,6 +340,22 @@ ActiveRecord::Schema.define(version: 20150903225056) do
     t.string   "attending",           limit: 255
     t.string   "surgeon",             limit: 255
     t.text     "note",                limit: 65535, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "role_assignments", force: :cascade do |t|
+    t.integer  "role_id",    limit: 4, null: false
+    t.integer  "user_id",    limit: 4, null: false
+    t.datetime "deleted_at",           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.string   "name",                limit: 255, null: false
+    t.string   "external_identifier", limit: 255, null: false
+    t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

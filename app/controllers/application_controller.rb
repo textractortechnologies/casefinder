@@ -1,7 +1,11 @@
 class ApplicationController < ActionController::Base
+  include Pundit
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   rescue_from DeviseLdapAuthenticatable::LdapException do |exception|
     render :text => exception, :status => 500
   end
+
   def abstractor_user
     current_user.username if defined?(current_user)
   end
@@ -43,5 +47,12 @@ class ApplicationController < ActionController::Base
     def record_history
       session[:history] ||= nil
       session[:history] = request.url
+    end
+
+  private
+
+    def user_not_authorized
+      flash[:alert] = "You are not authorized to perform this action."
+      redirect_to(request.referrer || root_path)
     end
 end
