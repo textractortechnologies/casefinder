@@ -40,6 +40,7 @@ class BatchExportsController < ApplicationController
     options = {}
     options[:sort_column] = sort_column
     options[:sort_direction] = sort_direction
+    params[:export_type] ||= BatchExport::EXPORT_TYPE_FULL
     @batch_export = SqlAudit.find_and_audit(
       current_user.email,
       BatchExport.where(id: params[:id])
@@ -56,7 +57,7 @@ class BatchExportsController < ApplicationController
     @abstractor_abstraction_groups = @batch_export.load_primary_cancer_abstractor_abstraction_groups(options)
     respond_to do |format|
       format.html { @abstractor_abstraction_groups = @abstractor_abstraction_groups.paginate(per_page: 10, page: params[:page]) }
-      format.text { send_data BatchExport.to_metriq(@abstractor_abstraction_groups), filename: "metriq_#{@batch_export.id}_#{DateTime.now}.txt" }
+      format.text { send_data BatchExport.to_metriq(@abstractor_abstraction_groups, params[:export_type]), filename: "metriq_#{@batch_export.id}_#{DateTime.now}.txt" }
     end
   end
 

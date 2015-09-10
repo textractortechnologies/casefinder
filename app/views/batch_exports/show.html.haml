@@ -8,7 +8,15 @@
         ="Export: #{@batch_export.id} (#{@batch_export.exported_at.to_s(:date)})"
     = link_to 'New Export', new_batch_export_path(), class: 'new_batch_export_link'
     .batch_export_header_actions_show
-      = link_to 'Create File', batch_export_path(@batch_export, export: true), class: 'create_batch_export_file_link', disabled: @abstractor_abstraction_groups.empty?
+      = form_tag batch_export_path(@batch_export, export: true), :method => 'get', :id => 'create_batch_export_file_form'  do
+        .export_type_toggle
+          = radio_button_tag :export_type, BatchExport::EXPORT_TYPE_SIMPLE, (params[:export_type] == BatchExport::EXPORT_TYPE_SIMPLE ? true : false)
+          = label_tag 'Simple', 'Simple',  for: 'export_type_simple'
+          = radio_button_tag :export_type, BatchExport::EXPORT_TYPE_FULL, (params[:export_type] ==  BatchExport::EXPORT_TYPE_FULL ? true : false)
+          = label_tag 'Full', 'Full',  for: 'export_type_full'
+          = hidden_field_tag :export, true
+        %button{ :type => 'submit', :id => 'create_batch_export_file_button', class: 'tiny' }
+          Create File
   .batch_export_details
     = will_paginate @abstractor_abstraction_groups
     %table

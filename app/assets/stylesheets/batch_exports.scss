@@ -16,12 +16,20 @@
 
     .batch_export_header_actions_show {
       @include grid-column(
-       $columns: 4,
-       $offset: 19
+       $columns: 7,
+       $offset: 17
       );
 
-      .create_batch_export_file_link {
+      .export_type_toggle {
+        border: $microformat-border-width $microformat-border-style $microformat-border-color;
+        display: inline;
+        padding: 1rem .5rem;
+        margin-right: .5rem;
+      }
+
+      .create_batch_export_file_button {
         @include button($button-tny, $radius: false);
+        display: inline;
       }
     }
 

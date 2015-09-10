@@ -347,7 +347,7 @@ ActiveRecord::Schema.define(version: 20150907124846) do
   create_table "role_assignments", force: :cascade do |t|
     t.integer  "role_id",    limit: 4, null: false
     t.integer  "user_id",    limit: 4, null: false
-    t.datetime "deleted_at",           null: false
+    t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

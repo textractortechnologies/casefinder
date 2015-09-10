@@ -209,7 +209,7 @@ namespace :setup do
   task(pathology_cases: :environment) do  |t, args|
     pathology_cases = YAML.load(ERB.new(File.read("lib/setup/data/pathology_cases.yml")).result)
     pathology_cases.each do |pathology_case_file|
-      pathology_case = PathologyCase.where(accession_number: pathology_case_file['accession_number'], encounter_date: pathology_case_file['encounter_date'], note: pathology_case_file['note'], patient_last_name: 'Baines', patient_first_name: 'Harold', mrn: '11111111', birth_date: '7/4/1976').first_or_create
+      pathology_case = PathologyCase.where(accession_number: pathology_case_file['accession_number'], collection_date: pathology_case_file['encounter_date'], note: pathology_case_file['note'], patient_last_name: 'Baines', patient_first_name: 'Harold', mrn: '11111111', birth_date: '7/4/1976').first_or_create
       pathology_case.abstract
     end
   end
