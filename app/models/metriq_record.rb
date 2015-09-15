@@ -3,9 +3,10 @@ class MetriqRecord < Fixy::Record
   set_record_length 22824
   set_line_ending Fixy::Record::LINE_ENDING_CRLF
 
-  def initialize(patient_last_name, patient_first_name, primary_site_icd_o_3, primary_histology_icd_o_3, medical_record_number, social_security_number, addr_no_and_street, city, state, zip_code, telephone, birth_date, sex)
+  def initialize(patient_last_name, patient_first_name, patient_middle_name, primary_site_icd_o_3, primary_histology_icd_o_3, medical_record_number, social_security_number, addr_no_and_street, city, state, zip_code, telephone, birth_date, sex, collection_date)
     @patient_last_name = patient_last_name
     @patient_first_name = patient_first_name
+    @patient_middle_name = patient_middle_name.nil? ? '' : patient_middle_name.first
     @primary_site_icd_o_3 = primary_site_icd_o_3.blank? ? nil : primary_site_icd_o_3.gsub('.','')
     @primary_histology_icd_o_3 = primary_histology_icd_o_3.blank? ? nil : primary_histology_icd_o_3.gsub('/','')
     @medical_record_number = itegerify(medical_record_number)
@@ -17,6 +18,7 @@ class MetriqRecord < Fixy::Record
     @telephone = itegerify(telephone) || '9999999999'
     @birth_date = birth_date.blank? ? nil : birth_date.strftime("%Y%m%d")
     @sex = map_sex(sex)
+    @collection_date = collection_date.blank? ? nil : collection_date.strftime("%Y%m%d")
   end
 
   def itegerify(token)
@@ -599,7 +601,7 @@ class MetriqRecord < Fixy::Record
   field_value :record_type, ''
   field_value :registry_type, ''
   field_value :reserved_00,  ''
-  field_value :naaccr_record_version, ''
+  field_value :naaccr_record_version, '130'
   field_value :npi_registry_id, ''
   field_value :registry_id, ''
   field_value :tumor_record_number, ''
@@ -696,7 +698,7 @@ class MetriqRecord < Fixy::Record
   field_value :accession_number_hosp, ''
   field_value :sequence_number_hospital, ''
   field_value :abstracted_by, ''
-  field_value :date_of_1st_contact, ''
+  field_value :date_of_1st_contact, -> { @collection_date }
   field_value :date_of_1st_contact_flag, ''
   field_value :date_of_inpt_adm, ''
   field_value :date_of_inpt_adm_flag, ''
@@ -1062,7 +1064,7 @@ class MetriqRecord < Fixy::Record
   field_value :state_requestor_items, ''
   field_value :name_last, -> { @patient_last_name }
   field_value :name_first, -> { @patient_first_name }
-  field_value :name_middle, ''
+  field_value :name_middle, -> { @patient_middle_name }
   field_value :name_prefix, ''
   field_value :name_suffix, ''
   field_value :name_alias, ''

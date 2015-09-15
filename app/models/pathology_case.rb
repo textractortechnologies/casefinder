@@ -71,7 +71,7 @@ class PathologyCase < ActiveRecord::Base
   end
 
   def patient_full_name
-    [patient_first_name.titleize, patient_last_name.titleize].reject { |n| n.nil? or n.blank?  }.join(' ')
+    [patient_first_name.titleize, patient_middle_name.try(:titleize), patient_last_name.titleize].reject { |n| n.nil? or n.blank?  }.join(' ')
   end
 
   def self.to_csv(pathology_cases, options = {})

@@ -2,9 +2,10 @@ class MetriqRecordSimple < Fixy::Record
   include Fixy::Formatter::Alphanumeric
   set_record_length 499
 
-  def initialize(patient_last_name, patient_first_name, primary_site_icd_o_3, primary_histology_icd_o_3, medical_record_number, social_security_number, addr_no_and_street, city, state, zip_code, telephone, birth_date, sex)
+  def initialize(patient_last_name, patient_first_name, patient_middle_name, primary_site_icd_o_3, primary_histology_icd_o_3, medical_record_number, social_security_number, addr_no_and_street, city, state, zip_code, telephone, birth_date, sex, collection_date)
     @patient_last_name = patient_last_name
     @patient_first_name = patient_first_name
+    @patient_middle_name = patient_middle_name.nil? ? '' : patient_middle_name.first
     @primary_site_icd_o_3 = primary_site_icd_o_3.blank? ? nil : primary_site_icd_o_3.gsub('.','')
     @medical_record_number = itegerify(medical_record_number)
     @social_security_number = itegerify(social_security_number)
@@ -15,6 +16,7 @@ class MetriqRecordSimple < Fixy::Record
     @telephone = itegerify(telephone)
     @birth_date = birth_date.blank? ? nil : birth_date.to_s.gsub('-', '/')
     @sex = map_sex(sex)
+    @collection_date = collection_date.blank? ? nil : collection_date.to_s(:short_date).gsub('-', '/')
   end
 
   def itegerify(token)
@@ -96,13 +98,13 @@ class MetriqRecordSimple < Fixy::Record
   field_value :hospital_id                                      , ''
   field_value :patient_last_name                                , -> { @patient_last_name }
   field_value :patient_first_name                               , -> { @patient_first_name }
-  field_value :patient_middle_initial                           , ''
+  field_value :patient_middle_initial                           , -> { @patient_middle_name }
   field_value :medical_record_number                            , -> { @medical_record_number }
   field_value :social_security_number                           , -> { @social_security_number }
   field_value :birth_date                                       , -> { @birth_date }
   field_value :primary_site_icd_o_3                             , -> { @primary_site_icd_o_3 }
   field_value :icd_9_cm                                         , ''
-  field_value :date_of_last_contact_death                       , ''
+  field_value :date_of_last_contact_death                       , -> { @collection_date }
   field_value :county                                           , ''
   field_value :addr_no_and_street                               , -> { @addr_no_and_street }
   field_value :city                                             , -> { @city }
