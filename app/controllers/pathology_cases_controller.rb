@@ -65,10 +65,10 @@ class PathologyCasesController < ApplicationController
   end
 
   def edit
-    unless params[:last_case]
-      session[:last_pathology_case] ||= []
+    unless params[:previous_case]
+      session[:previous_pathology_case] ||= []
       if session[:current_pathology_case]
-        session[:last_pathology_case] << session[:current_pathology_case]
+        session[:previous_pathology_case] << session[:current_pathology_case]
       end
       session[:current_pathology_case] = params[:id]
     end
@@ -99,10 +99,10 @@ class PathologyCasesController < ApplicationController
     end
   end
 
-  def last_pathology_case
+  def previous_pathology_case
     authorize PathologyCase.new
-    if session[:last_pathology_case].any?
-      redirect_to edit_pathology_case_url(session[:last_pathology_case].pop, last_case: true) and return
+    if session[:previous_pathology_case].any?
+      redirect_to edit_pathology_case_url(session[:previous_pathology_case].pop, previous_case: true) and return
     else
       redirect_to pathology_cases_url and return
     end

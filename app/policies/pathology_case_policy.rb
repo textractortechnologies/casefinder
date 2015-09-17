@@ -19,7 +19,7 @@ class PathologyCasePolicy < ApplicationPolicy
     user.role?
   end
 
-  def last_pathology_case?
+  def previous_pathology_case?
     user.role?
   end
 
