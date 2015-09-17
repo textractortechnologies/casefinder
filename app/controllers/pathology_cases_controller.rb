@@ -37,7 +37,8 @@ class PathologyCasesController < ApplicationController
 
     if params[:next_case]
       index = params[:index].to_i
-      pathology_cases = @pathology_cases.select("DISTINCT #{sort_column}, pathology_cases.id").map(&:id)
+      mapped_column = map_abstractor_column(sort_column)
+      pathology_cases = @pathology_cases.select("DISTINCT #{mapped_column}, pathology_cases.id").map(&:id)
       record_history
       if pathology_cases.any?
         if pathology_cases.size > (index + 1)
@@ -116,6 +117,15 @@ class PathologyCasesController < ApplicationController
   end
 
   private
+    def map_abstractor_column(column)
+      mapped_column = case column
+      when 'suggested_histologies', 'suggested_sites'
+        'suggested_value'
+      else
+        column
+      end
+    end
+
     def sort_column
       PathologyCase.column_names.concat(['suggested_sites', 'suggested_histologies']).include?(params[:sort]) ? params[:sort] : "collection_date"
     end

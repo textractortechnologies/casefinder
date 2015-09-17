@@ -41,14 +41,21 @@ class PathologyCase < ActiveRecord::Base
     s
   end
 
-  def self.prepare_joins_and_select_clauses(sort_column, sort_direction)
-    joins_clause = nil
-    predicate = case sort_column
+  def self.map_abstractor_column(column)
+    mapped_column = case column
     when 'suggested_histologies'
       'has_cancer_histology'
     when 'suggested_sites'
       'has_cancer_site'
+    else
+      nil
     end
+    mapped_column
+  end
+
+  def self.prepare_joins_and_select_clauses(sort_column, sort_direction)
+    joins_clause = nil
+    predicate = PathologyCase.map_abstractor_column(sort_column)
 
     if sort_direction == 'ASC'
       aggregrate = 'MIN'
