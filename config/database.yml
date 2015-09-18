@@ -28,7 +28,9 @@ staging:
 
 production:
   adapter: sqlserver
-  host: localhost
+  dataserver: WIN-EQP4I9E7UC9\SQLEXPRESS
+#  host: 10.5.50.138
+#  port: 1433
   database: casefinder
   username: casefinder
   password: casefinder
