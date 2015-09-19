@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150907124846) do
+ActiveRecord::Schema.define(version: 20150918113905) do
 
   create_table "abstractor_abstraction_group_members", force: :cascade do |t|
     t.integer  "abstractor_abstraction_group_id", limit: 4
@@ -36,6 +36,14 @@ ActiveRecord::Schema.define(version: 20150907124846) do
   end
 
   add_index "abstractor_abstraction_groups", ["about_id", "about_type", "deleted_at"], name: "index_about_id_about_type_deleted_at", using: :btree
+
+  create_table "abstractor_abstraction_object_values", force: :cascade do |t|
+    t.integer  "abstractor_abstraction_id",  limit: 4
+    t.integer  "abstractor_object_value_id", limit: 4
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "abstractor_abstraction_schema_object_values", force: :cascade do |t|
     t.integer  "abstractor_abstraction_schema_id", limit: 4
