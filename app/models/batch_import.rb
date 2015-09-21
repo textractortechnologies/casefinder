@@ -7,48 +7,119 @@ class BatchImport < ActiveRecord::Base
     self.imported_at = DateTime.now
   end
 
-  def open_spreadsheet
+  def process_file
     case File.extname(import_file_identifier)
-    when ".xlsx" then Roo::Excelx.new(import_file.current_path, nil, :ignore)
+    when ".xlsx"
+      excel_file = Roo::Excelx.new(import_file.current_path, nil, :ignore)
+      import_excel(excel_file)
+    when ".txt"
+      file = File.read(import_file.current_path)
+      message = HL7::Message.new(file)
+      import_hl7(message)
     else raise "Unknown file type: #{file.original_filename}"
     end
   end
 
   def import
-    spreadsheet = nil
-    spreadsheet = open_spreadsheet
-    header = spreadsheet.row(1)
+    process_file
+  end
+
+  def set_pathology_case_from_file(pathology_case_file, pathology_case)
+    if pathology_case_file && pathology_case
+      pathology_case.attributes = pathology_case_file.attributes.except('id', 'created_at', 'updated_at')
+    end
+  end
+
+  def import_hl7(message)
+    pathology_case_file = nil
     pathology_case = nil
-    saved_pathology_cases = []
     note = ''
-    (2..spreadsheet.last_row).each do |i|
-      if spreadsheet.row(i).compact.size > 3
+    message.each do |segment|
+      if segment.is_a?(HL7::Message::Segment::MSH)
+        set_pathology_case_from_file(pathology_case_file, pathology_case)
+        save_pathology_case(pathology_case, note)
+        pathology_case_file = PathologyCase.new
+        pathology_case = nil
+        note = ''
+      end
+      if segment.is_a?(HL7::Message::Segment::PID)
+        patient_last_name, patient_first_name = segment.patient_name.split(segment.item_delim)
+        pathology_case_file.patient_last_name = patient_last_name
+        pathology_case_file.patient_first_name = patient_first_name
+        pathology_case_file.birth_date = DateTime.parse(segment.e7.to_s.strip).to_date unless segment.e7.blank?
+        pathology_case_file.sex = segment.e8
+        pathology_case_file.race = segment.e10
+        patient_address = segment.e11.split(segment.item_delim)
+        pathology_case_file.street1 = patient_address[0]
+        pathology_case_file.street2 = patient_address[1]
+        pathology_case_file.city = patient_address[2]
+        pathology_case_file.state = patient_address[3]
+        pathology_case_file.zip_code = patient_address[4]
+        pathology_case_file.country = patient_address[5]
+        pathology_case_file.home_phone = segment.e13
+        pathology_case_file.mrn = segment.e18
+        pathology_case_file.ssn =  segment.e19
+      end
+
+      if segment.is_a?(HL7::Message::Segment::PV1)
+        if !segment.e7.blank?
+          attending = segment.e7.split(segment.item_delim)
+          pathology_case_file.attending = [attending[1], attending[6]].delete_if(&:empty?).join(' ') + ', ' + attending[2]
+        end
+
+        if !segment.e8.blank?
+          surgeon = segment.e8.split(segment.item_delim)
+          pathology_case_file.surgeon = [surgeon[1], surgeon[6]].delete_if(&:empty?).join(' ')  + ', ' + surgeon[2]
+        end
+      end
+
+      if segment.is_a?(HL7::Message::Segment::OBR)
+        pathology_case_file.accession_number = segment.e3
+        pathology_case_file.collection_date = DateTime.parse(segment.e7.to_s.strip).to_date
+        pathology_case = PathologyCase.where(accession_number: pathology_case_file.accession_number).first_or_initialize
+      end
+
+      if segment.is_a?(HL7::Message::Segment::OBX)
+        note += segment.e5 + " \r\n"
+      end
+    end
+
+    set_pathology_case_from_file(pathology_case_file, pathology_case)
+    save_pathology_case(pathology_case, note)
+  end
+
+  def import_excel(excel_file)
+    header = excel_file.row(1)
+    pathology_case = nil
+    note = ''
+    (2..excel_file.last_row).each do |i|
+      if excel_file.row(i).compact.size > 3
         save_pathology_case(pathology_case, note)
         note = ''
-        accession_num = spreadsheet.row(i)[5].is_a?(Float) ? spreadsheet.row(i)[5].to_i.to_s : spreadsheet.row(i)[5]
+        accession_num = excel_file.row(i)[5].is_a?(Float) ? excel_file.row(i)[5].to_i.to_s : excel_file.row(i)[5]
         pathology_case = PathologyCase.where(accession_number: accession_num).first_or_initialize
-        pathology_case.collection_date       = DateTime.parse(spreadsheet.row(i)[13].to_s.strip).to_date
-        patient_last_name, patient_first_name = spreadsheet.row(i)[1].split(',')
+        pathology_case.collection_date       = DateTime.parse(excel_file.row(i)[13].to_s.strip).to_date
+        patient_last_name, patient_first_name = excel_file.row(i)[1].split(',')
         pathology_case.patient_last_name          = patient_last_name.strip
         pathology_case.patient_first_name          = patient_first_name.strip
-        mrn = spreadsheet.row(i)[3].is_a?(Float) ? spreadsheet.row(i)[3].to_i.to_s : spreadsheet.row(i)[3]
+        mrn = excel_file.row(i)[3].is_a?(Float) ? excel_file.row(i)[3].to_i.to_s : excel_file.row(i)[3]
         pathology_case.mrn                  = mrn
-        pathology_case.ssn                  = spreadsheet.row(i)[15]
-        pathology_case.birth_date           = DateTime.parse(spreadsheet.row(i)[7].to_s.strip).to_date unless spreadsheet.row(i)[7].blank?
-        pathology_case.street1              = spreadsheet.row(i)[17]
-        pathology_case.street2              = spreadsheet.row(i)[19]
-        pathology_case.city                 = spreadsheet.row(i)[21]
-        pathology_case.state                = spreadsheet.row(i)[23]
-        zip_code = spreadsheet.row(i)[25].is_a?(Float) ? spreadsheet.row(i)[25].to_i.to_s : spreadsheet.row(i)[25]
+        pathology_case.ssn                  = excel_file.row(i)[15]
+        pathology_case.birth_date           = DateTime.parse(excel_file.row(i)[7].to_s.strip).to_date unless excel_file.row(i)[7].blank?
+        pathology_case.street1              = excel_file.row(i)[17]
+        pathology_case.street2              = excel_file.row(i)[19]
+        pathology_case.city                 = excel_file.row(i)[21]
+        pathology_case.state                = excel_file.row(i)[23]
+        zip_code = excel_file.row(i)[25].is_a?(Float) ? excel_file.row(i)[25].to_i.to_s : excel_file.row(i)[25]
         pathology_case.zip_code             = zip_code
-        pathology_case.country              = spreadsheet.row(i)[27]
-        pathology_case.home_phone           = spreadsheet.row(i)[29]
-        pathology_case.sex                  = spreadsheet.row(i)[9]
-        pathology_case.race                 = spreadsheet.row(i)[11]
-        pathology_case.attending            = spreadsheet.row(i)[31]
-        pathology_case.surgeon              = spreadsheet.row(i)[33].blank? ? spreadsheet.row(i)[31] :  spreadsheet.row(i)[31]
+        pathology_case.country              = excel_file.row(i)[27]
+        pathology_case.home_phone           = excel_file.row(i)[29]
+        pathology_case.sex                  = excel_file.row(i)[9]
+        pathology_case.race                 = excel_file.row(i)[11]
+        pathology_case.attending            = excel_file.row(i)[31]
+        pathology_case.surgeon              = excel_file.row(i)[33].blank? ? excel_file.row(i)[31] :  excel_file.row(i)[31]
       else
-        note += spreadsheet.row(i).compact.join(' ') +  "\r\n"
+        note += excel_file.row(i).compact.join(' ') +  "\r\n"
       end
     end
     save_pathology_case(pathology_case, note)
