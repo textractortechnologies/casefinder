@@ -8,5 +8,6 @@
         New Import
   .batch_import_detail
     = form_for @batch_import, { multipart: true } do |f|
+      = render 'shared/errors', { object: @batch_import }
       = f.file_field :import_file
       = submit_tag 'Import', class: 'create_batch_import_button'

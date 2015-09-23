@@ -1,5 +1,6 @@
 class BatchImport < ActiveRecord::Base
-  mount_uploader :import_file, BatchImportUploader
+  mount_uploader :import_file, BatchImportUploader, :on => :file_name
+  validates_presence_of :import_file
 
   after_initialize :default_values
 
