@@ -6,7 +6,7 @@ class PathologyCasesController < ApplicationController
     authorize PathologyCase.new
     session[:index_history] = request.url unless params[:next_case]
     @filter_statuses = Abstractor::Enum::ABSTRACTION_WORKFLOW_STATUSES
-    @filter_by = PathologyCase.workflow_status_whodunnit_list.all.map(&:workflow_status_whodunnit).sort
+    @filter_by = PathologyCase.workflow_status_whodunnit_list
     @flag_statuses = { "flagged" => Abstractor::Enum::ABSTRACTION_SUGGESTION_TYPE_SUGGESTED, "not flagged" => Abstractor::Enum::ABSTRACTION_SUGGESTION_TYPE_UNKNOWN }
     @abstraction_schema_site = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
     @abstraction_schema_histology = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_histology').first
