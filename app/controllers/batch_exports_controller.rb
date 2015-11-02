@@ -36,7 +36,9 @@ class BatchExportsController < ApplicationController
   end
 
   def show
-    session[:index_history] = request.url
+    unless params[:export] || params[:format] == 'text'
+      session[:index_history] = request.url
+    end
     options = {}
     options[:sort_column] = sort_column
     options[:sort_direction] = sort_direction
