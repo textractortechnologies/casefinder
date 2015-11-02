@@ -23,26 +23,6 @@
 
     .banner {
       vertical-align: middle;
-
-      .countdown {
-        @include grid-column(
-         $columns: 16
-        );
-
-        .progress_label {
-          display: inline-block;
-        }
-
-        .progress {
-          width: 50%;
-          display: inline-block;
-          margin-bottom: 0rem;
-          .meter {
-            text-align: center;
-            font-size: 80%;
-          }
-        }
-      }
     }
 
     #search_pathology_cases_form {

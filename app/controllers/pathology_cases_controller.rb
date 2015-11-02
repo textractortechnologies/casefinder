@@ -107,14 +107,6 @@ class PathologyCasesController < ApplicationController
     end
   end
 
-  def countdown
-    @countdown = PathologyCase.countdown
-
-    respond_to do |format|
-      format.json { render json: { countdown: @countdown } }
-    end
-  end
-
   private
     def map_abstractor_column(column)
       mapped_column = case column

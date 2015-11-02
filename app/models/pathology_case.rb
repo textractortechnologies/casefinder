@@ -114,8 +114,4 @@ class PathologyCase < ActiveRecord::Base
   def addr_no_and_street
     [street1, street2].reject { |n| n.nil? or n.blank? }.join(' ')
   end
-
-  def self.countdown
-    Delayed::Job.where(delayed_reference_type: self.to_s).count
-  end
 end

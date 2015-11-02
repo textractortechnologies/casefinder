@@ -12,7 +12,6 @@ Rails.application.routes.draw do
   resources :pathology_cases do
     collection { get :next_pathology_case }
     collection { get :previous_pathology_case }
-    collection { get :countdown }
   end
 
   root 'curate#index'
