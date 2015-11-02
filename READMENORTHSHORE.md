@@ -1,3 +1,22 @@
+data = File.read("./lib/setup/data/hl7/CF_20150903053001.txt")
+message = HL7::Message.new(data)
+message.each do |segment|
+  if segment.is_a?(HL7::Message::Segment::MSH)
+    puts 'hello from little my'
+  elsif segment.is_a?(HL7::Message::Segment::PID)
+    puts 'hello from moomin'
+    puts segment.patient_name
+  end
+end
+
+  puts 'different'
+  puts segment.class
+  puts segment.size
+
+
+  puts segment.class
+
+
 * get latest source for casefinder and abstractor
 **  cd \
     cd \intepub\wwwroot\casefinder
@@ -20,13 +39,9 @@
 
 ** bundle exec rake abstractor:setup:system
 
-** bundle exec rake setup:abstractor_schemas_new
+** bundle exec rake setup:abstractor_schemas
 
 ** bundle exec rake setup:roles
-
-** Add users to lib/setup/data/users.csv
-
-** bundle exec rake setup:users
 
 ** bundle exec rake assets:precompile
 

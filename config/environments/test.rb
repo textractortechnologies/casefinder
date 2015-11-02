@@ -1,4 +1,19 @@
 Rails.application.configure do
+  Abstractor::Engine.routes.default_url_options[:host] = 'http://casefinder.dev'
+
+  StanfordCoreNLP.use :english
+  StanfordCoreNLP.model_files = {}
+  StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-core-nlp/"
+  StanfordCoreNLP.model_path = "#{Rails.root}/lib/stanford-core-nlp/"
+  StanfordCoreNLP.jvm_args = ['-Xms1024M', '-Xmx2048M']
+  StanfordCoreNLP.default_jars = [
+    "joda-time.jar",
+    "xom.jar",
+    "stanford-corenlp-3.5.2.jar",
+    "stanford-corenlp-3.5.2-models.jar",
+    "jollyday.jar",
+    "bridge.jar"
+  ]
   # Settings specified here will take precedence over those in config/application.rb.
 
   # The test environment is used exclusively to run your application's

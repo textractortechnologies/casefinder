@@ -29,23 +29,23 @@
             Surgeon
       %tbody
         %tr
-          %td
+          %td.collection_date
             = @pathology_case.collection_date.to_s(:date)
-          %td
+          %td.accession_number
             = @pathology_case.accession_number
-          %td
+          %td.patient_full_name
             = @pathology_case.patient_full_name
-          %td
+          %td.mrn
             = @pathology_case.mrn
-          %td
+          %td.ssn
             = @pathology_case.ssn
-          %td
+          %td.birth_date
             = @pathology_case.birth_date.to_s(:date) unless @pathology_case.birth_date.blank?
-          %td
+          %td.sex
             = @pathology_case.sex
-          %td
+          %td.attending
             = @pathology_case.attending
-          %td
+          %td.surgeon
             = @pathology_case.surgeon
   .pathology_case_abstractions
     .pathology_case_header_actions

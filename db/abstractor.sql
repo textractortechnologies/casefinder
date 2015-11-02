@@ -26,7 +26,7 @@ from abstractor_object_values aov join abstractor_abstraction_schema_object_valu
 order by aasov.abstractor_abstraction_schema_id, aov.value, aovv.value
 
 --List sugestions and sources
-select sug.*, source.*
+select aa.*, sug.*, source.*
 from abstractor_abstractions aa join abstractor_suggestions sug on aa.id = sug.abstractor_abstraction_id
                                 join abstractor_suggestion_sources source on sug.id = source.abstractor_suggestion_id
 where aa.about_id = 10
@@ -52,7 +52,7 @@ FROM pathology_cases LEFT JOIN
                                     FROM abstractor_abstractions aa JOIN abstractor_subjects asb ON aa.abstractor_subject_id = asb.id
                                                                     JOIN abstractor_abstraction_schemas aas ON asb.abstractor_abstraction_schema_id = aas.id
                                                                     JOIN abstractor_abstraction_group_members aagm  ON aa.id = aagm.abstractor_abstraction_id
-                                                                    JOIN abstractor_abstraction_groups aag ON aagm.abstractor_abstraction_group_id= aag.id
+                                                                    JOIN abstractor_abstraction_groups aag ON aagm.abstractor_abstraction_group_id= aag.id AND aag.deleted_at IS NULL
                                     WHERE asb.subject_type = 'PathologyCase'
                                     AND aag.abstractor_subject_group_id = 1) data join pathology_cases ON  data.about_id = pathology_cases.id
                                     GROUP BY pathology_cases.id, abstractor_abstraction_group_id

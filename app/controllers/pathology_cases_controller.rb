@@ -60,7 +60,6 @@ class PathologyCasesController < ApplicationController
     respond_to do |format|
       format.html { @pathology_cases = @pathology_cases.paginate(per_page: 10, page: params[:page]); record_history }
       format.csv { send_data PathologyCase.to_csv(@pathology_cases), filename: "metriq_#{DateTime.now}.csv" }
-      format.text { send_data PathologyCase.to_metriq(@pathology_cases), filename: "metriq_#{DateTime.now}.txt" }
     end
   end
 

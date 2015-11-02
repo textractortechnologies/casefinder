@@ -24,24 +24,24 @@
             Refresh page for new cases
     = form_tag pathology_cases_path(), :method => 'get', :id => 'search_pathology_cases_form'  do
       .search
-        = label_tag :filter, 'Search'
+        = label_tag :search, 'Search'
         = text_field_tag :search, (params[:search].nil? ? '' : params[:search]), type: 'search'
       .filter
         = label_tag :filter, 'Reviewed?'
         = select_tag :filter, options_for_select(['all'].concat(@filter_statuses), selected = params[:filter])
       .filter_by
-        = label_tag :filter, 'By'
+        = label_tag :filter_by, 'By'
         = select_tag :filter_by, options_for_select(@filter_by, selected = params[:filter_by]), include_blank: true
       .flagged_filter
-        = label_tag :filter, 'Flagged?'
+        = label_tag :suggestion_filter, 'Flagged?'
         = select_tag :suggestion_filter, options_for_select(['all'].concat(@flag_statuses.keys), selected = params[:suggestion_filter])
       .date_filter
         .date_filter_components
           .date_filter_toggle
-            = radio_button_tag :date_filter_type, 'collected', (params[:date_filter_type] == 'collected' ? true : false)
+            = radio_button_tag :date_filter_type, PathologyCase::COLLECTION_DATE_DATE_TYPE, (params[:date_filter_type] == PathologyCase::COLLECTION_DATE_DATE_TYPE ? true : false)
             = label_tag 'Collected', 'Collected',  for: 'date_filter_type_collected'
             %br
-            = radio_button_tag :date_filter_type, 'imported', (params[:date_filter_type] == 'imported' ? true : false)
+            = radio_button_tag :date_filter_type, PathologyCase::IMPORTED_DATE_DATE_TYPE, (params[:date_filter_type] == PathologyCase::IMPORTED_DATE_DATE_TYPE ? true : false)
             = label_tag 'Imported', 'Imported',  for: 'date_filter_type_imported'
           .date_filter_range
             .date_filter_range_components
@@ -77,7 +77,7 @@
             %td.pathology_case_accession_number
               = pathology_case.accession_number
             %td.pathology_case_collection_date
-              = pathology_case.collection_date
+              = pathology_case.collection_date.to_s(:date)
             %td.suggested_histologies
               - pathology_case.suggested_histologies.each do |histology|
                 = histology

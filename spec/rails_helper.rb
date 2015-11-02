@@ -3,7 +3,8 @@ ENV["RAILS_ENV"] ||= 'test'
 require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-# require 'capybara/rails'
+require 'capybara/rails'
+require './lib/case_finder/setup/'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -62,4 +63,37 @@ RSpec.configure do |config|
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
+end
+
+def ldap_root
+  File.expand_path('ldap', File.dirname(__FILE__))
+end
+
+def ldap_connect_string
+  if ENV["LDAP_SSL"]
+    "-x -H ldaps://localhost:3389 -D 'cn=admin,dc=test,dc=com' -w secret"
+  else
+    "-x -h localhost -p 3389 -D 'cn=admin,dc=test,dc=com' -w secret"
+  end
+end
+
+def reset_ldap_server!
+  if ENV["LDAP_SSL"]
+    `ldapmodify #{ldap_connect_string} -f #{File.join(ldap_root, 'clear.ldif')}`
+    `ldapadd #{ldap_connect_string} -f #{File.join(ldap_root, 'base.ldif')}`
+  else
+    `ldapmodify #{ldap_connect_string} -f #{File.join(ldap_root, 'clear.ldif')}`
+    `ldapadd #{ldap_connect_string} -f #{File.join(ldap_root, 'base.ldif')}`
+  end
+end
+
+def default_devise_settings!
+  ::Devise.ldap_logger = true
+  ::Devise.ldap_create_user = false
+  ::Devise.ldap_update_password = true
+  ::Devise.ldap_config = "#{Rails.root}/config/#{"ssl_" if ENV["LDAP_SSL"]}ldap.yml"
+  ::Devise.ldap_check_group_membership = false
+  ::Devise.ldap_check_attributes = false
+  ::Devise.ldap_auth_username_builder = Proc.new() {|attribute, login, ldap| "#{attribute}=#{login},#{ldap.base}" }
+  ::Devise.authentication_keys = [:email]
 end

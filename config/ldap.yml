@@ -55,8 +55,8 @@ test:
   attribute: cn
   base: ou=people,dc=test,dc=com
   admin_user: cn=admin,dc=test,dc=com
-  admin_password: admin_password
-  ssl: simple_tls
+  admin_password: secret
+  ssl: false
   # <<: *AUTHORIZATIONS
 
 production:
