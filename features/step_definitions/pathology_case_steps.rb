@@ -34,15 +34,16 @@ Given /^pathology cases with the following information exist$/ do |table|
   end
 end
 
-When(/^I visit the pathology cases index page$/) do
-  visit(pathology_cases_path())
-end
-
-When(/^click "(.*?)" for accession number "(.*?)"$/) do |link, accession_number|
+When(/^I click "(.*?)" for accession number "(.*?)"$/) do |link, accession_number|
   pathology_case = PathologyCase.where(accession_number: accession_number).first
   within("#pathology_case_#{pathology_case.id}") do
     click_link("Review")
   end
+end
+
+When(/^I visit the review page for accession number "(.*?)"$/) do |accession_number|
+  pathology_case = PathologyCase.where(accession_number: accession_number).first
+  visit(edit_pathology_case_path(pathology_case))
 end
 
 Then(/^I should see pathology cases with the following information( in order)?$/) do |in_order, table|

@@ -2,6 +2,30 @@ Given(/^roles are setup$/) do
   CaseFinder::Setup.setup_roles
 end
 
+Given(/^"(.*?)" is authorized$/) do |username|
+  allow(User).to receive(:determine_roles).and_return(Role.all)
+end
+
+Given(/^"(.*?)" is not authorized$/) do |username|
+  allow(User).to receive(:determine_roles).and_return([])
+end
+
+When(/^I visit the pathology cases index page$/) do
+  visit(pathology_cases_path())
+end
+
+When(/^I visit the new import page$/) do
+  visit(new_batch_import_path())
+end
+
+When(/^I visit the new export page$/) do
+  visit(new_batch_export_path())
+end
+
+When(/^I log out$/) do
+  visit(destroy_user_session_url())
+end
+
 When /^I wait (\d+) seconds$/ do |wait_seconds|
   sleep(wait_seconds.to_i)
 end
@@ -79,12 +103,36 @@ Then(/^the "(.*?)" button should( not)? be disabled$/) do |locator, negate|
   end
 end
 
-
 Then "the downloaded file content should be:" do |content|
   #Next 2 lines are a hack to get around how Cucumber handles doc string arugments.  It strips trailing spaces.
   content.gsub!("\\n", "\n" )
   content.gsub!('&nbsp;', ' ')
   download_content.should == content
+end
+
+Then(/^I should be on the sign in page$/) do
+  match_path(new_user_session_path())
+end
+
+Then(/^I should be on the home page$/) do
+  match_path(root_path())
+end
+
+Then(/^I should be on the new import page$/) do
+  match_path(new_batch_import_path())
+end
+
+Then(/^I should be on the new export page$/) do
+  match_path(new_batch_export_path())
+end
+
+Then(/^I should be on the pathology cases index page$/) do
+  match_path(pathology_cases_path())
+end
+
+def match_path(path)
+  current_path = URI.parse(current_url).path
+  expect(current_path).to eq(path)
 end
 
 def within_scope(locator)

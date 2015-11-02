@@ -12,6 +12,7 @@ Feature: Viewing a new batch export
       | 123              | 01/01/2015         | Looks like carcinoma of of the external lip to me.  But maybe large cell carcinoma of the base of tongue.   |
       | 124              | 02/01/2015         | Base of tounge looks all good to me.                                                                        |
       | 125              | 03/01/2015         | Pleomorphic carcinoma of the lower gum is the likley culprit.                                               |
+  And "example.user@test.com" is authorized
   When "example.user@test.com" logs in with password "secret"
   And I wait 1 seconds
   And I visit the new batch export page
@@ -27,6 +28,7 @@ Feature: Viewing a new batch export
       | 123              | 01/01/2015         | Looks like carcinoma of of the external lip to me.  But maybe large cell carcinoma of the base of tongue.   | Harold Baines   | 999   | 666 | 01/01/1970 | M   | Jones, Bob   |  Smith, Barry |
       | 124              | 02/01/2015         | Base of tounge looks all good to me.                                                                        | Paul Konerko    | 888   | 555 | 01/01/1980 | M   | Jones, Mary  |  Smith, Norm  |
       | 125              | 03/01/2015         | Pleomorphic carcinoma of the lower gum is the likley culprit.                                               | Minnie Minoso   | 777   | 444 | 01/01/1960 | M   | Jones, Sam   |  Smith, Nancy |
+    And "example.user@test.com" is authorized
     When "example.user@test.com" logs in with password "secret"
     And I wait 1 seconds
     And I visit the pathology cases index page
@@ -34,7 +36,7 @@ Feature: Viewing a new batch export
       | Accession Number | Collection Date  | Suggested Histologies   | Suggested Sites |
       | 123              | 01/01/2015       | carcinoma, nos (8010/3)&large cell carcinoma, nos (8012/3) | base of tongue, nos (c01.9)&external lip, nos (c00.2)&lip, nos (c00.9)&tongue, nos (c02.9) |
       | 125              | 03/01/2015       | carcinoma, nos (8010/3)&pleomorphic carcinoma (8022/3)     | gum, nos (c03.9)&lower gum (c03.1)                                                         |
-    When click "Review" for accession number "123"
+    When I click "Review" for accession number "123"
     And I wait 1 seconds
     And I check "carcinoma, nos (8010/3)" within ".has_cancer_histology"
     And I check "base of tongue, nos (c01.9)" within ".has_cancer_site"
@@ -79,13 +81,13 @@ Feature: Viewing a new batch export
       """
 
   @javascript
-  @wip
   Scenario: Exporting the full format
     Given pathology cases with the following information exist
       | Accession Number | Collection Date    | Note                                                                                                        | Patient         | MRN   | SSN | Birth Date | Sex | Attending    |  Surgeon      |
       | 123              | 01/01/2015         | Looks like carcinoma of of the external lip to me.  But maybe large cell carcinoma of the base of tongue.   | Harold Baines   | 999   | 666 | 01/01/1970 | M   | Jones, Bob   |  Smith, Barry |
       | 124              | 02/01/2015         | Base of tounge looks all good to me.                                                                        | Paul Konerko    | 888   | 555 | 01/01/1980 | M   | Jones, Mary  |  Smith, Norm  |
       | 125              | 03/01/2015         | Pleomorphic carcinoma of the lower gum is the likley culprit.                                               | Minnie Minoso   | 777   | 444 | 01/01/1960 | M   | Jones, Sam   |  Smith, Nancy |
+    And "example.user@test.com" is authorized
     When "example.user@test.com" logs in with password "secret"
     And I wait 1 seconds
     And I visit the pathology cases index page
@@ -93,7 +95,7 @@ Feature: Viewing a new batch export
       | Accession Number | Collection Date  | Suggested Histologies   | Suggested Sites |
       | 123              | 01/01/2015       | carcinoma, nos (8010/3)&large cell carcinoma, nos (8012/3) | base of tongue, nos (c01.9)&external lip, nos (c00.2)&lip, nos (c00.9)&tongue, nos (c02.9) |
       | 125              | 03/01/2015       | carcinoma, nos (8010/3)&pleomorphic carcinoma (8022/3)     | gum, nos (c03.9)&lower gum (c03.1)                                                         |
-    When click "Review" for accession number "123"
+    When I click "Review" for accession number "123"
     And I wait 1 seconds
     And I check "carcinoma, nos (8010/3)" within ".has_cancer_histology"
     And I check "base of tongue, nos (c01.9)" within ".has_cancer_site"

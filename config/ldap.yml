@@ -57,7 +57,6 @@ test:
   admin_user: cn=admin,dc=test,dc=com
   admin_password: secret
   ssl: false
-  # <<: *AUTHORIZATIONS
 
 production:
   host: ldap.forumsys.com
