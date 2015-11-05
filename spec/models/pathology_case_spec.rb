@@ -7,6 +7,7 @@ RSpec.describe PathologyCase, :type => :model do
     lightweight = true
     CaseFinder::Setup.setup_abstractor_schemas(source_type_nlp_suggestion, lightweight)
   end
+
   it 'concatenates an address', focus: false do
     pathology_case = FactoryGirl.create(:pathology_case, street1: '123 Moomin St.', street2: 'Apt 1')
     expect(pathology_case.addr_no_and_street).to eq('123 Moomin St. Apt 1')

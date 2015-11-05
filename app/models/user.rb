@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   devise :ldap_authenticatable, :trackable, :timeoutable
 
   def self.determine_roles(groups)
-    if Rails.env == 'development'
+    if Rails.env.development?
       Role.all
     else
       Role.where(external_identifier: groups)
