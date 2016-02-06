@@ -39,15 +39,24 @@ authorizations: &AUTHORIZATIONS
 #     objectClass: inetOrgPerson
 #     authorizationRole: postsAdmin
 
+# development:
+#   host: ldap.forumsys.com
+#   port: 389
+#   attribute: sn
+#   base: dc=example,dc=com
+#   admin_user: cn=read-only-admin,dc=example,dc=com
+#   admin_password: password
+#   ssl: false
+#   <<: *AUTHORIZATIONS
+
 development:
-  host: ldap.forumsys.com
-  port: 389
-  attribute: sn
-  base: dc=example,dc=com
-  admin_user: cn=read-only-admin,dc=example,dc=com
-  admin_password: password
+  host: localhost
+  port: 3389
+  attribute: cn
+  base: ou=people,dc=test,dc=com
+  admin_user: cn=admin,dc=test,dc=com
+  admin_password: secret
   ssl: false
-  <<: *AUTHORIZATIONS
 
 test:
   host: localhost
