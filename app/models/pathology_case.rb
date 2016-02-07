@@ -25,6 +25,9 @@ class PathologyCase < ActiveRecord::Base
   end
 
   scope :search_across_fields, ->(search_token, options={}) do
+    if search_token
+      search_token.downcase!
+    end
     options = { abstractor_abstraction_schemas: abstractor_abstraction_schemas, sort_column: 'collection_date', sort_direction: 'asc' }.merge(options)
 
     if search_token
