@@ -158,7 +158,7 @@ GEM
     ffi (1.9.10)
     fixy (0.0.8)
       rake
-    foundation-rails (6.1.2.0)
+    foundation-rails (5.5.2.1)
       railties (>= 3.1.0)
       sass (>= 3.3.0, < 3.5)
     gherkin (3.2.0)
@@ -348,7 +348,7 @@ DEPENDENCIES
   exception_notification
   factory_girl_rails
   fixy
-  foundation-rails
+  foundation-rails (~> 5)
   haml
   jbuilder (~> 2.0)
   jquery-rails
