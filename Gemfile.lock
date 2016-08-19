@@ -64,7 +64,6 @@ GEM
     bind-it (0.2.7)
       rjb (~> 1.4.3)
     builder (3.2.2)
-    byebug (8.2.2)
     capistrano (3.4.0)
       i18n
       rake (>= 10.0.0)
@@ -321,7 +320,6 @@ DEPENDENCIES
   activerecord-session_store
   activerecord-sqlserver-adapter
   american_date
-  byebug
   capistrano
   capistrano-passenger
   capistrano-rails
