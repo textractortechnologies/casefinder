@@ -75,4 +75,4 @@ production:
   admin_user: cn=read-only-admin,dc=example,dc=com
   admin_password: password
   ssl: false
-  <<: *AUTHORIZATIONS
+  # <<: *AUTHORIZATIONS
