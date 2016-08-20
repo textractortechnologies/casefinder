@@ -25,8 +25,9 @@ staging:
   password: cf_staging
 
 production:
-  adapter: sqlserver
-  dataserver: WIN-EQP4I9E7UC9\SQLEXPRESS
+  <<: *default
+#  adapter: sqlserver
+#  dataserver: WIN-EQP4I9E7UC9\SQLEXPRESS
 #  host: 10.5.50.138
 #  port: 1433
   database: casefinder
