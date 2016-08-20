@@ -30,7 +30,8 @@ class User < ActiveRecord::Base
   end
 
   def after_ldap_authentication
-    groups = Devise::LDAP::Adapter.get_ldap_param(self.username, 'memberOf')
+    # groups = Devise::LDAP::Adapter.get_ldap_param(self.username, 'memberOf')
+    groups = []
     roles = User.determine_roles(groups)
     delete_absent_role_assignments(roles)
     build_present_role_assignments(roles)
