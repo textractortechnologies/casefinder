@@ -1,8 +1,8 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5.1'
+gem 'rails', '4.2.7.1'
 # gem 'pg'
 gem 'mysql2'
 gem 'tiny_tds'
