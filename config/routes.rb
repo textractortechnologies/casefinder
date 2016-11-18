@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { sessions: 'users/sessions' }
   mount Abstractor::Engine, :at => "/"
   get "/uploads/batch_import/import_file/:id/:basename.:extension", :controller => "batch_imports", :action => "download", :conditions => { :method => :get }
 

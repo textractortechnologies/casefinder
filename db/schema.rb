@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150918113905) do
+ActiveRecord::Schema.define(version: 20161118032920) do
 
   create_table "abstractor_abstraction_group_members", force: :cascade do |t|
     t.integer  "abstractor_abstraction_group_id", limit: 4
@@ -284,6 +284,14 @@ ActiveRecord::Schema.define(version: 20150918113905) do
   end
 
   add_index "abstractor_suggestions", ["abstractor_abstraction_id"], name: "index_abstractor_abstraction_id_2", using: :btree
+
+  create_table "access_audits", force: :cascade do |t|
+    t.string   "username",    limit: 255
+    t.string   "action",      limit: 255,   null: false
+    t.text     "description", limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
 
   create_table "batch_export_details", force: :cascade do |t|
     t.integer  "batch_export_id",                 limit: 4, null: false

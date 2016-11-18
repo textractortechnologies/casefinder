@@ -51,8 +51,15 @@ class ApplicationController < ActionController::Base
 
   private
 
-    def user_not_authorized
+    def user_not_authorized(exception)
       flash[:alert] = "You are not authorized to perform this action."
+
+      username =  current_user.username if current_user
+      AccessAudit.create!(
+        username: username, 
+        action: AccessAudit.unauthorized_access_attempt,
+        description: "#{exception.policy.class.to_s.underscore}.#{exception.query}"
+      ) 
       redirect_to(request.referrer || root_path)
     end
 end
