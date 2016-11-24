@@ -1,7 +1,8 @@
 class BatchImport < ActiveRecord::Base
   mount_uploader :import_file, BatchImportUploader, :on => :file_name
+  has_paper_trail 
+  
   validates_presence_of :import_file
-
   after_initialize :default_values
 
   def import
