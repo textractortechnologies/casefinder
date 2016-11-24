@@ -86,4 +86,5 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'capybara'
   gem 'database_cleaner'
+  gem 'shoulda-matchers'
 end

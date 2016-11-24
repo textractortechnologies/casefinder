@@ -4,6 +4,7 @@ require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'capybara/rails'
+require 'shoulda/matchers'
 require './lib/case_finder/setup/'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -96,4 +97,11 @@ def default_devise_settings!
   ::Devise.ldap_check_attributes = false
   ::Devise.ldap_auth_username_builder = Proc.new() {|attribute, login, ldap| "#{attribute}=#{login},#{ldap.base}" }
   ::Devise.authentication_keys = [:email]
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
 end

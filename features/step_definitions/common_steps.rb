@@ -152,3 +152,51 @@ def get_scope(position, selector)
   end
   item
 end
+
+# Example usage:
+# Then the "Product" records should match
+#   | name           | description          | date_available           |
+#   | Ruby Book      | Ruby guide           | DATE: Date.today         |
+#   | Rails Book     | A Ruby on Rails text | DATE: Date.today + 1.day |
+ 
+# -----------------------------------------
+# See that the given model has records that
+# exactly match the columns given in the table
+# -----------------------------------------
+Then /^the "([^\"]*)" records should match$/ do |model_name, table|
+  # What model are we dealing with
+  model_class = model_name.constantize
+  
+  # Make sure the number of records matches the number of entries in the
+  # test table
+  "Record Count:#{model_class.count}".should == "Record Count:#{table.hashes.count}"
+  
+  # Sort the records as we search using the field name order
+  field_list_csv = table.hashes.first.collect { |field| field[0].to_s }.join(', ')
+  
+  # Loop through the table given
+  table.hashes.each_with_index do |record, i|
+    # Fetch the record corresponding with the row we are on
+    record_to_test = model_class.limit(1).offset(i).first
+    
+    # Review each input filter
+    record.each_pair do |field_name, raw_expected_value|
+      # See if the filter value uses out magical dynamic date formatting
+      if raw_expected_value.is_a?(String) && 
+        (match_data = raw_expected_value.match(/^DATE: (.+)/) || match_data = raw_expected_value.match(/^VALUE: (.+)/))
+        # Get the portion of the regex that has the executable code
+        ruby_date_code = match_data[1]
+        # run the code and replace the old value
+        expected_value = eval(ruby_date_code)
+      else
+        expected_value = raw_expected_value
+      end
+      
+      # Get the value in the database for the current field
+      value_to_test = record_to_test.read_attribute(field_name)
+      
+      # Verify that the correct value exists
+      "#{field_name}:#{value_to_test.to_s}".should == "#{field_name}:#{expected_value.to_s}"
+    end
+  end
+end
