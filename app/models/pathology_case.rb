@@ -3,6 +3,8 @@ require 'csv'
 require "benchmark"
 class PathologyCase < ActiveRecord::Base
   include Abstractor::Abstractable
+  has_paper_trail 
+  
   COLLECTION_DATE_DATE_TYPE = 'collected'
   IMPORTED_DATE_DATE_TYPE = 'imported'
   DATE_TYPES = [COLLECTION_DATE_DATE_TYPE, IMPORTED_DATE_DATE_TYPE]
