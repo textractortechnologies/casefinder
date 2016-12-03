@@ -155,7 +155,31 @@ Feature: Listing and reviewing pathology cases
       | 123              | 01/01/2015       | carcinoma, nos (8010/3)&large cell carcinoma, nos (8012/3) | base of tongue, nos (c01.9)&external lip, nos (c00.2)&lip, nos (c00.9)&tongue, nos (c02.9) |
       | 125              | 03/01/2015       | carcinoma, nos (8010/3)&pleomorphic carcinoma (8022/3)     | gum, nos (c03.9)&lower gum (c03.1)                                                         |
       | 124              | 02/01/2015       |                         |                 |
-    When I visit the pathology cases index page
+    And the "AccessAudit" records should match
+    | username              | action                                          | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access     | sessions:new                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | sessions:create with params: {"commit"=>"Log in"} |
+    | example.user@test.com | VALUE: AccessAudit.login_success                |                                                   |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | curate:index                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index                             |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"search"=>"", "filter"=>"pending", "filter_by"=>"", "suggestion_filter"=>"not flagged", "date_filter_type"=>"collected", "date_from"=>"", "date_to"=>""}                           |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"search"=>"", "filter"=>"pending", "filter_by"=>"", "suggestion_filter"=>"all", "date_filter_type"=>"collected", "date_from"=>"", "date_to"=>""}                                   |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"search"=>"pleomorphic carcinoma (8022/3)", "filter"=>"pending", "filter_by"=>"", "suggestion_filter"=>"flagged", "date_filter_type"=>"collected", "date_from"=>"", "date_to"=>""} |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"search"=>"external lip, nos (c00.2)", "filter"=>"pending", "filter_by"=>"", "suggestion_filter"=>"flagged", "date_filter_type"=>"collected", "date_from"=>"", "date_to"=>""}      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"search"=>"large", "filter"=>"pending", "filter_by"=>"", "suggestion_filter"=>"flagged", "date_filter_type"=>"collected", "date_from"=>"", "date_to"=>""}                          |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"search"=>"gum", "filter"=>"pending", "filter_by"=>"", "suggestion_filter"=>"flagged", "date_filter_type"=>"collected", "date_from"=>"", "date_to"=>""}                            |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index                             |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"search"=>"", "filter"=>"pending", "filter_by"=>"", "suggestion_filter"=>"all", "date_filter_type"=>"collected", "date_from"=>"2015-01-15", "date_to"=>"2015-04-01"}               |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index                             |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"search"=>"", "filter"=>"pending", "filter_by"=>"", "suggestion_filter"=>"all", "date_filter_type"=>"imported", "date_from"=>"2016-12-02", "date_to"=>"2016-12-03"}                |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"date_filter_type"=>"imported", "date_from"=>"2016-12-02", "date_to"=>"2016-12-03", "direction"=>"asc", "filter"=>"pending", "page"=>"1", "search"=>"", "sort"=>"accession_number", "suggestion_filter"=>"all"}      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"date_filter_type"=>"imported", "date_from"=>"2016-12-02", "date_to"=>"2016-12-03", "direction"=>"desc", "filter"=>"pending", "page"=>"1", "search"=>"", "sort"=>"accession_number", "suggestion_filter"=>"all"}     |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"date_filter_type"=>"imported", "date_from"=>"2016-12-02", "date_to"=>"2016-12-03", "direction"=>"asc", "filter"=>"pending", "page"=>"1", "search"=>"", "sort"=>"collection_date", "suggestion_filter"=>"all"}       |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"date_filter_type"=>"imported", "date_from"=>"2016-12-02", "date_to"=>"2016-12-03", "direction"=>"desc", "filter"=>"pending", "page"=>"1", "search"=>"", "sort"=>"collection_date", "suggestion_filter"=>"all"}      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"date_filter_type"=>"imported", "date_from"=>"2016-12-02", "date_to"=>"2016-12-03", "direction"=>"asc", "filter"=>"pending", "page"=>"1", "search"=>"", "sort"=>"suggested_histologies", "suggestion_filter"=>"all"} |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"date_filter_type"=>"imported", "date_from"=>"2016-12-02", "date_to"=>"2016-12-03", "direction"=>"desc", "filter"=>"pending", "page"=>"1", "search"=>"", "sort"=>"suggested_histologies", "suggestion_filter"=>"all"}|
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"date_filter_type"=>"imported", "date_from"=>"2016-12-02", "date_to"=>"2016-12-03", "direction"=>"asc", "filter"=>"pending", "page"=>"1", "search"=>"", "sort"=>"suggested_sites", "suggestion_filter"=>"all"}       |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"date_filter_type"=>"imported", "date_from"=>"2016-12-02", "date_to"=>"2016-12-03", "direction"=>"desc", "filter"=>"pending", "page"=>"1", "search"=>"", "sort"=>"suggested_sites", "suggestion_filter"=>"all"}      |
 
   @javascript
   Scenario: Listing pathlogy cases after submitting a case to METRIQ
@@ -191,6 +215,21 @@ Feature: Listing and reviewing pathology cases
     Then I should see pathology cases with the following information
       | Accession Number | Collection Date  | Suggested Histologies   | Suggested Sites |
       | 123              | 01/01/2015       | carcinoma, nos (8010/3)&large cell carcinoma, nos (8012/3) | base of tongue, nos (c01.9)&external lip, nos (c00.2)&lip, nos (c00.9)&tongue, nos (c02.9) |
+    And the "AccessAudit" records should match
+    | username              | action                                          | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access     | sessions:new                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | sessions:create with params: {"commit"=>"Log in"} |
+    | example.user@test.com | VALUE: AccessAudit.login_success                |                                                   |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | curate:index                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index                             |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:edit with params: {"index"=>"0", "previous_pathology_case_id"=>"1", "id"=>"1"}            |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:next_pathology_case with params: {"index"=>"0", "previous_pathology_case_id"=>"1"}        |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"next_case"=>"true", "index"=>"0", "previous_pathology_case_id"=>"1"} |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:edit with params: {"index"=>"0", "id"=>"3"}             |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:previous_pathology_case                                 |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:edit with params: {"previous_case"=>"true", "id"=>"1"}  |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index                             |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index with params: {"search"=>"", "filter"=>"submitted", "filter_by"=>"", "suggestion_filter"=>"flagged", "date_filter_type"=>"collected", "date_from"=>"", "date_to"=>""} |
 
   @javascript
   Scenario: Listing pathlogy cases after discarding a case

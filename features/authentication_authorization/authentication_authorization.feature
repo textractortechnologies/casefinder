@@ -16,17 +16,54 @@ Feature: Authenticating and authorizing access
     When "example.user@test.com" logs in with password "secret"
     And I wait 1 seconds
     Then the "AccessAudit" records should match
-    | username              | action                           |
-    | example.user@test.com | VALUE: AccessAudit.login_success |
+    | username              | action                                      | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | sessions:create with params: {"commit"=>"Log in"} |
+    | example.user@test.com | VALUE: AccessAudit.login_success            |                                                   |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | curate:index                                      |
     When I visit the pathology cases index page
     Then I should be on the pathology cases index page
+    And the "AccessAudit" records should match
+    | username              | action                                      | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | sessions:create with params: {"commit"=>"Log in"} |
+    | example.user@test.com | VALUE: AccessAudit.login_success            |                                                   |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | curate:index                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | pathology_cases:index                             |
     When I visit the review page for accession number "123"
     And I wait 1 seconds
     Then I should be on the edit page of accession number "123"
+    And the "AccessAudit" records should match
+    | username              | action                                      | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | sessions:create with params: {"commit"=>"Log in"} |
+    | example.user@test.com | VALUE: AccessAudit.login_success            |                                                   |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | curate:index                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | pathology_cases:index                             |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | pathology_cases:edit with params: {"id"=>"1"}     |
     When I visit the new import page
     Then I should be on the new import page
+    And the "AccessAudit" records should match
+    | username              | action                                      | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | sessions:create with params: {"commit"=>"Log in"} |
+    | example.user@test.com | VALUE: AccessAudit.login_success            |                                                   |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | curate:index                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | pathology_cases:index                             |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | pathology_cases:edit with params: {"id"=>"1"}     |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | batch_imports:new                                 |
     When I visit the new export page
     Then I should be on the new export page
+    And the "AccessAudit" records should match
+    | username              | action                                      | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | sessions:create with params: {"commit"=>"Log in"} |
+    | example.user@test.com | VALUE: AccessAudit.login_success            |                                                   |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | curate:index                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | pathology_cases:index                             |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | pathology_cases:edit with params: {"id"=>"1"}     |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | batch_imports:new                                 |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | batch_exports:new                                 |
 
   @javascript
   Scenario: Visiting pages because not authenticated
@@ -40,18 +77,51 @@ Feature: Authenticating and authorizing access
     And I wait 1 seconds
     Then I should be on the sign in page
     And the "AccessAudit" records should match
-    | username              | action                           |
-    | example.user@test.com | VALUE: AccessAudit.login_failure |
+    | username              | action                                      | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:create with params: {"commit"=>"Log in"} |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new with params: {"commit"=>"Log in"}    |
+    | example.user@test.com | VALUE: AccessAudit.login_failure            |                                                   |
     And I should see "Invalid username or password." within "#alert"
     When I visit the pathology cases index page
     Then I should be on the sign in page
+    And the "AccessAudit" records should match
+    | username              | action                                      | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:create with params: {"commit"=>"Log in"} |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new with params: {"commit"=>"Log in"}    |
+    | example.user@test.com | VALUE: AccessAudit.login_failure            |                                                   |
+    | unknown               | VALUE: AccessAudit.controller_action_access | pathology_cases:index                             |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
     And I should see "You need to sign in or sign up before continuing." within "#alert"
     When I visit the new import page
     Then I should be on the sign in page
     And I should see "You need to sign in or sign up before continuing." within "#alert"
+    And the "AccessAudit" records should match
+    | username              | action                                      | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:create with params: {"commit"=>"Log in"} |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new with params: {"commit"=>"Log in"}    |
+    | example.user@test.com | VALUE: AccessAudit.login_failure            |                                                   |
+    | unknown               | VALUE: AccessAudit.controller_action_access | pathology_cases:index                             |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
+    | unknown               | VALUE: AccessAudit.controller_action_access | batch_imports:new                                 |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
     When I visit the new export page
     Then I should be on the sign in page
     And I should see "You need to sign in or sign up before continuing." within "#alert"
+    And the "AccessAudit" records should match
+    | username              | action                                      | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:create with params: {"commit"=>"Log in"} |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new with params: {"commit"=>"Log in"}    |
+    | example.user@test.com | VALUE: AccessAudit.login_failure            |                                                   |
+    | unknown               | VALUE: AccessAudit.controller_action_access | pathology_cases:index                             |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
+    | unknown               | VALUE: AccessAudit.controller_action_access | batch_imports:new                                 |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
+    | unknown               | VALUE: AccessAudit.controller_action_access | batch_exports:new                                 |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
 
   @javascript
   Scenario: Visiting pages authenticated but not authorized
@@ -66,32 +136,54 @@ Feature: Authenticating and authorizing access
     Then I should be on the home page
     And I should see "Signed in successfully." within "#notice"
     And the "AccessAudit" records should match
-    | username              | action                           |
-    | example.user@test.com | VALUE: AccessAudit.login_success |
+    | username              | action                                      | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | sessions:create with params: {"commit"=>"Log in"} |
+    | example.user@test.com | VALUE: AccessAudit.login_success            |                                                   |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access | curate:index                                      |
     When I visit the pathology cases index page
     And I wait 1 seconds
     Then I should be on the home page
-    And the "AccessAudit" records should match
-    | username              | action                                         | description                  |
-    | example.user@test.com | VALUE: AccessAudit.login_success               |                              |
-    | example.user@test.com | VALUE: AccessAudit.unauthorized_access_attempt | pathology_case_policy.index? |
     And I should see "You are not authorized to perform this action." within "#alert"
+    And the "AccessAudit" records should match
+    | username              | action                                          | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access     | sessions:new                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | sessions:create with params: {"commit"=>"Log in"} |
+    | example.user@test.com | VALUE: AccessAudit.login_success                |                                                   |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | curate:index                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index                             |
+    | example.user@test.com | VALUE: AccessAudit.unauthorized_access_attempt  | pathology_case_policy.index?                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | curate:index                                      |
     When I visit the new import page
     Then I should be on the home page
     And I should see "You are not authorized to perform this action." within "#alert"
     And the "AccessAudit" records should match
-    | username              | action                                         | description                  |
-    | example.user@test.com | VALUE: AccessAudit.login_success               |                              |
-    | example.user@test.com | VALUE: AccessAudit.unauthorized_access_attempt | pathology_case_policy.index? |
-    | example.user@test.com | VALUE: AccessAudit.unauthorized_access_attempt | batch_import_policy.new?     |
+    | username              | action                                          | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access     | sessions:new                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | sessions:create with params: {"commit"=>"Log in"} |
+    | example.user@test.com | VALUE: AccessAudit.login_success                |                                                   |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | curate:index                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index                             |
+    | example.user@test.com | VALUE: AccessAudit.unauthorized_access_attempt  | pathology_case_policy.index?                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | curate:index                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | batch_imports:new                                 |
+    | example.user@test.com | VALUE: AccessAudit.unauthorized_access_attempt  | batch_import_policy.new?                          |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | curate:index                                      |
     When I visit the new export page
     Then I should be on the home page
     And I should see "You are not authorized to perform this action." within "#alert"
     And the "AccessAudit" records should match
-    | username              | action                                         | description                  |
-    | example.user@test.com | VALUE: AccessAudit.login_success               |                              |
-    | example.user@test.com | VALUE: AccessAudit.unauthorized_access_attempt | pathology_case_policy.index? |
-    | example.user@test.com | VALUE: AccessAudit.unauthorized_access_attempt | batch_import_policy.new?     |
-    | example.user@test.com | VALUE: AccessAudit.unauthorized_access_attempt | batch_export_policy.new?     |
-
-
+    | username              | action                                          | description                                       |
+    | unknown               | VALUE: AccessAudit.controller_action_access     | sessions:new                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | sessions:create with params: {"commit"=>"Log in"} |
+    | example.user@test.com | VALUE: AccessAudit.login_success                |                                                   |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | curate:index                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | pathology_cases:index                             |
+    | example.user@test.com | VALUE: AccessAudit.unauthorized_access_attempt  | pathology_case_policy.index?                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | curate:index                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | batch_imports:new                                 |
+    | example.user@test.com | VALUE: AccessAudit.unauthorized_access_attempt  | batch_import_policy.new?                          |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | curate:index                                      |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | batch_exports:new                                 |
+    | example.user@test.com | VALUE: AccessAudit.unauthorized_access_attempt  | batch_export_policy.new?                          |
+    | example.user@test.com | VALUE: AccessAudit.controller_action_access     | curate:index                                      |

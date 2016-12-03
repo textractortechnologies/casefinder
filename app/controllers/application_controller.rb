@@ -1,14 +1,16 @@
 class ApplicationController < ActionController::Base
+  include WithAccessAudit
   include Pundit
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   rescue_from DeviseLdapAuthenticatable::LdapException do |exception|
     render :text => exception, :status => 500
   end
-
+  
   def abstractor_user
     current_user.username if defined?(current_user)
   end
+
   helper_method :abstractor_user
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -50,16 +52,12 @@ class ApplicationController < ActionController::Base
     end
 
   private
-
     def user_not_authorized(exception)
       flash[:alert] = "You are not authorized to perform this action."
-
-      username =  current_user.username if current_user
-      AccessAudit.create!(
-        username: username, 
-        action: AccessAudit.unauthorized_access_attempt,
-        description: "#{exception.policy.class.to_s.underscore}.#{exception.query}"
-      ) 
+      audit_activity(
+        action:       AccessAudit.unauthorized_access_attempt,
+        description:  "#{exception.policy.class.to_s.underscore}.#{exception.query}" 
+      )
       redirect_to(request.referrer || root_path)
     end
 end
