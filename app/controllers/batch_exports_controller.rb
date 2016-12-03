@@ -1,6 +1,6 @@
 class BatchExportsController < ApplicationController
   helper_method :sort_column, :sort_direction
-  before_action :authenticate_user!
+  before_action :audit_activity, :authenticate_user!
 
   def new
     authorize BatchExport.new

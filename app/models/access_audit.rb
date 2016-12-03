@@ -14,8 +14,16 @@ class AccessAudit < ActiveRecord::Base
     'unauthorized access attempt'
   end
 
+  def self.controller_action_access
+    'controller action access'
+  end
+
   def self.allowed_actions
-    [self.login_success, self.login_failure, self.unauthorized_access_attempt]
+    [ self.login_success, 
+      self.login_failure, 
+      self.unauthorized_access_attempt, 
+      self.controller_action_access
+    ]
   end
 
   def allowed_actions
