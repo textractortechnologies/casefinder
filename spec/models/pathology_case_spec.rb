@@ -70,7 +70,7 @@ RSpec.describe PathologyCase, :type => :model do
     expect(PathologyCase.search_across_fields('moomin')).to match_array([pathology_case_1])
   end
 
-  it 'can search accross fields (by accession number) case insensitively', focus: true do
+  it 'can search accross fields (by accession number) case insensitively', focus: false do
     pathology_case_1 = FactoryGirl.create(:pathology_case, accession_number: '123Moomin')
     pathology_case_1.abstract
     pathology_case_2 = FactoryGirl.create(:pathology_case, accession_number: '123TheGroke')

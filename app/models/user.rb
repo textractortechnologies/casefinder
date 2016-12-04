@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   acts_as_token_authenticatable
   has_many :role_assignments
+   has_many :roles, through: :role_assignments
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable, :validatable, :registerable
   devise :ldap_authenticatable, :trackable, :timeoutable

@@ -1,15 +1,53 @@
 class BatchImport < ActiveRecord::Base
-  mount_uploader :import_file, BatchImportUploader, :on => :file_name
-  validates_presence_of :import_file
+  HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT = 'AA'
+  HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION = 'AR'
+  HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ERROR = 'AE'
+  HL7_MESSAGE_TYPE = 'ORU^R01'
+  HL7_MESSAGE_TYPE_ERROR = 'Unsupported message type'
+  HL7_VERSION_ID = '2.2'
+  HL7_VERSION_ID_ERROR = 'Unsupported version id'
+  HL7_PROCESSING_ID_TEST = 'T'
+  HL7_PROCESSING_ID_PRODUCTION = 'P'
+  HL7_PROCESSING_ID_ERROR = 'Unsupported processing id'
+
+  mount_uploader :import_file, BatchImportUploader, on: :file_name
 
   after_initialize :default_values
 
+  def hl7
+    @hl7 ||= HL7::Message.new(import_body)
+  end
+
+  def validate_hl7
+    errors = []
+    if hl7[:MSH].message_type != HL7_MESSAGE_TYPE
+      errors  << HL7_MESSAGE_TYPE_ERROR
+    end
+
+    if hl7[:MSH].version_id != HL7_VERSION_ID
+      errors << HL7_VERSION_ID_ERROR
+    end
+
+    if ((['development', 'test', 'staging'].include?(Rails.env) && hl7[:MSH].processing_id != HL7_PROCESSING_ID_TEST) || (Rails.env == 'production' && hl7[:MSH].processing_id != HL7_PROCESSING_ID_PRODUCTION))
+      errors << HL7_PROCESSING_ID_ERROR
+    end
+
+    errors
+  end
+
+  def hl7_ack(ack_code, errors=[])
+    build_hl7_ack(ack_code, errors)
+  end
+
   def import
-    process_file
+    if import_body
+      process_body
+    elsif import_file
+      process_file
+    end
   end
 
   private
-
     def default_values
       self.imported_at = DateTime.now
     end
@@ -27,10 +65,52 @@ class BatchImport < ActiveRecord::Base
       end
     end
 
+    def process_body
+      message = HL7::Message.new(import_body)
+      import_hl7(message)
+    end
+
     def set_pathology_case_from_file(pathology_case_file, pathology_case)
       if pathology_case_file && pathology_case
         pathology_case.attributes = pathology_case_file.attributes.except('id', 'created_at', 'updated_at')
       end
+    end
+
+    def import_excel(excel_file)
+      header = excel_file.row(1)
+      pathology_case = nil
+      note = ''
+      (2..excel_file.last_row).each do |i|
+        if excel_file.row(i).compact.size > 3
+          save_pathology_case(pathology_case, note)
+          note = ''
+          accession_num = excel_file.row(i)[5].is_a?(Float) ? excel_file.row(i)[5].to_i.to_s : excel_file.row(i)[5]
+          pathology_case = PathologyCase.where(accession_number: accession_num).first_or_initialize
+          pathology_case.collection_date       = DateTime.parse(excel_file.row(i)[13].to_s.strip).to_date
+          patient_last_name, patient_first_name = excel_file.row(i)[1].split(',')
+          pathology_case.patient_last_name          = patient_last_name.strip
+          pathology_case.patient_first_name          = patient_first_name.strip
+          mrn = excel_file.row(i)[3].is_a?(Float) ? excel_file.row(i)[3].to_i.to_s : excel_file.row(i)[3]
+          pathology_case.mrn                  = mrn
+          pathology_case.ssn                  = excel_file.row(i)[15]
+          pathology_case.birth_date           = DateTime.parse(excel_file.row(i)[7].to_s.strip).to_date unless excel_file.row(i)[7].blank?
+          pathology_case.street1              = excel_file.row(i)[17]
+          pathology_case.street2              = excel_file.row(i)[19]
+          pathology_case.city                 = excel_file.row(i)[21]
+          pathology_case.state                = excel_file.row(i)[23]
+          zip_code = excel_file.row(i)[25].is_a?(Float) ? excel_file.row(i)[25].to_i.to_s : excel_file.row(i)[25]
+          pathology_case.zip_code             = zip_code
+          pathology_case.country              = excel_file.row(i)[27]
+          pathology_case.home_phone           = excel_file.row(i)[29]
+          pathology_case.sex                  = excel_file.row(i)[9]
+          pathology_case.race                 = excel_file.row(i)[11]
+          pathology_case.attending            = excel_file.row(i)[31]
+          pathology_case.surgeon              = excel_file.row(i)[33].blank? ? excel_file.row(i)[33] :  excel_file.row(i)[33]
+        else
+          note += excel_file.row(i).compact.join(' ') +  "\r\n"
+        end
+      end
+      save_pathology_case(pathology_case, note)
     end
 
     def import_hl7(message)
@@ -91,43 +171,6 @@ class BatchImport < ActiveRecord::Base
       save_pathology_case(pathology_case, note)
     end
 
-    def import_excel(excel_file)
-      header = excel_file.row(1)
-      pathology_case = nil
-      note = ''
-      (2..excel_file.last_row).each do |i|
-        if excel_file.row(i).compact.size > 3
-          save_pathology_case(pathology_case, note)
-          note = ''
-          accession_num = excel_file.row(i)[5].is_a?(Float) ? excel_file.row(i)[5].to_i.to_s : excel_file.row(i)[5]
-          pathology_case = PathologyCase.where(accession_number: accession_num).first_or_initialize
-          pathology_case.collection_date       = DateTime.parse(excel_file.row(i)[13].to_s.strip).to_date
-          patient_last_name, patient_first_name = excel_file.row(i)[1].split(',')
-          pathology_case.patient_last_name          = patient_last_name.strip
-          pathology_case.patient_first_name          = patient_first_name.strip
-          mrn = excel_file.row(i)[3].is_a?(Float) ? excel_file.row(i)[3].to_i.to_s : excel_file.row(i)[3]
-          pathology_case.mrn                  = mrn
-          pathology_case.ssn                  = excel_file.row(i)[15]
-          pathology_case.birth_date           = DateTime.parse(excel_file.row(i)[7].to_s.strip).to_date unless excel_file.row(i)[7].blank?
-          pathology_case.street1              = excel_file.row(i)[17]
-          pathology_case.street2              = excel_file.row(i)[19]
-          pathology_case.city                 = excel_file.row(i)[21]
-          pathology_case.state                = excel_file.row(i)[23]
-          zip_code = excel_file.row(i)[25].is_a?(Float) ? excel_file.row(i)[25].to_i.to_s : excel_file.row(i)[25]
-          pathology_case.zip_code             = zip_code
-          pathology_case.country              = excel_file.row(i)[27]
-          pathology_case.home_phone           = excel_file.row(i)[29]
-          pathology_case.sex                  = excel_file.row(i)[9]
-          pathology_case.race                 = excel_file.row(i)[11]
-          pathology_case.attending            = excel_file.row(i)[31]
-          pathology_case.surgeon              = excel_file.row(i)[33].blank? ? excel_file.row(i)[33] :  excel_file.row(i)[33]
-        else
-          note += excel_file.row(i).compact.join(' ') +  "\r\n"
-        end
-      end
-      save_pathology_case(pathology_case, note)
-    end
-
     def save_pathology_case(pathology_case, note)
       if !pathology_case.nil? && pathology_case.is_a?(PathologyCase)
         note.gsub!('_x000D_', '')
@@ -136,5 +179,25 @@ class BatchImport < ActiveRecord::Base
         pathology_case.abstract
       end
       pathology_case
+    end
+
+    def build_hl7_ack(ack_code, errors=[])
+      ack = HL7::Message.new()
+      ack << hl7[:MSH]
+
+      sending_app = ack[:MSH].sending_app
+      ack[:MSH].sending_app = ack[:MSH].recv_app
+      ack[:MSH].sending_app = sending_app
+
+      message_type = ack[:MSH].message_type
+      message_type.sub!('ORU','ACK')
+
+      msa = HL7::Message::Segment::MSA.new
+      msa.ack_code = ack_code
+      msa.control_id = ack[:MSH].message_control_id
+      msa.text = errors.join(' ')
+
+      ack << msa
+      ack
     end
 end
