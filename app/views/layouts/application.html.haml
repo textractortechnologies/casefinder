@@ -22,3 +22,9 @@
           %div{ class: "alert-box #{message_type == 'notice' ? 'success' : 'warning'}", id: message_type }
             = h(message)
     = yield
+    #inactivity_warning.reveal-modal{ data: { reveal: true }}
+      #inactivity_message
+        You will be logged out in 5 minutes due to inactivity. 
+      %a.close-reveal-modal.inactivity_ok
+        &#215;
+    %input#user_logged_in{ type: 'hidden', value: "#{ 'true' if @current_user.present? }" }
