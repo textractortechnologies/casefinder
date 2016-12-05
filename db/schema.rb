@@ -10,7 +10,9 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-ActiveRecord::Schema.define(version: 20161118032920) do
+
+ActiveRecord::Schema.define(version: 20161129125409) do
+
   create_table "abstractor_abstraction_group_members", force: :cascade do |t|
     t.integer  "abstractor_abstraction_group_id", limit: 4
     t.integer  "abstractor_abstraction_id",       limit: 4
@@ -369,7 +371,7 @@ ActiveRecord::Schema.define(version: 20161118032920) do
 
   create_table "roles", force: :cascade do |t|
     t.string   "name",                limit: 255, null: false
-    t.string   "external_identifier", limit: 255, null: false
+    t.string   "external_identifier", limit: 255
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
