@@ -1,6 +1,6 @@
 class BatchImportsController < ApplicationController
-  before_action :authenticate_user!
-  before_filter :load_batch_import, only: [:download]
+  before_action :audit_activity, :authenticate_user!
+  before_action :load_batch_import, only: [:download]
 
   def new
     @batch_import = BatchImport.new

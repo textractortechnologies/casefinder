@@ -1,4 +1,6 @@
 class BatchExport < ActiveRecord::Base
+  has_paper_trail
+  
   has_many :batch_export_details
 
   EXPORT_TYPE_SIMPLE = 'simple'
