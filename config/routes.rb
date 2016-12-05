@@ -14,6 +14,12 @@ Rails.application.routes.draw do
     collection { get :previous_pathology_case }
   end
 
+  namespace :api do
+    namespace :v1 do
+      resources :pathology_cases, only: :create
+    end
+  end
+
   root 'curate#index'
 
   # The priority is based upon order of creation: first created -> highest priority.

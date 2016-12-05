@@ -19,19 +19,26 @@ test: &test
   password: casefinder_test
 
 staging:
-  <<: *default
-  database: casefinder_staging
-  username: cf_staging
-  password: cf_staging
-
-production:
-  <<: *default
-#  adapter: sqlserver
-#  dataserver: WIN-EQP4I9E7UC9\SQLEXPRESS
-#  host: 10.5.50.138
-#  port: 1433
+  adapter: sqlserver
+  dataserver: WIN-J8TCRMKGKHM
+  host: localhost
+  port: 1433
   database: casefinder
   username: casefinder
   password: casefinder
+  # <<: *default
+  # database: casefinder_staging
+  # username: cf_staging
+  # password: cf_staging
+
+production:
+  adapter: sqlserver
+  dataserver: WIN-J8TCRMKGKHM
+  host: localhost
+  port: 1433
+  database: casefinder
+  username: casefinder
+  password: casefinder
+
 cucumber:
   <<: *test

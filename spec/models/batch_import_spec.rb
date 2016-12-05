@@ -8,6 +8,46 @@ RSpec.describe BatchImport, :type => :model do
     CaseFinder::Setup.setup_abstractor_schemas(source_type_nlp_suggestion, lightweight)
   end
 
+  it 'creates an instance of an hl7 file', focus: false do
+    batch_import = FactoryGirl.create(:hl7_batch_import_body)
+    expect(batch_import.hl7.instance_of?(HL7::Message)).to be_truthy
+  end
+
+  it 'validates an hl7 body', focus: false do
+    batch_import = FactoryGirl.create(:hl7_batch_import_body)
+    expect(batch_import.validate_hl7).to be_empty
+  end
+
+  it 'validates the message type of an hl7 body', focus: false do
+    batch_import = FactoryGirl.create(:hl7_batch_import_body)
+    batch_import.hl7[:MSH].message_type = 'moomin'
+    expect(batch_import.validate_hl7).to eq([BatchImport::HL7_MESSAGE_TYPE_ERROR])
+  end
+
+  it 'validates the version id of an hl7 body', focus: false do
+    batch_import = FactoryGirl.create(:hl7_batch_import_body)
+    batch_import.hl7[:MSH].version_id = 'moomin'
+    expect(batch_import.validate_hl7).to eq([BatchImport::HL7_VERSION_ID_ERROR])
+  end
+
+  it 'validates the processing id of an hl7 body', focus: false do
+    batch_import = FactoryGirl.create(:hl7_batch_import_body)
+    batch_import.hl7[:MSH].processing_id = 'moomin'
+    expect(batch_import.validate_hl7).to eq([BatchImport::HL7_PROCESSING_ID_ERROR])
+  end
+
+  it 'can create an HL7 ack', focus: false do
+    batch_import = FactoryGirl.create(:hl7_batch_import_body)
+    ack = batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT)
+    expect(ack[:MSA]).to_not be_blank
+    expect(ack[:MSA].ack_code).to eq(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT)
+    expect(ack[:MSA].control_id).to eq(batch_import.hl7[:MSH].message_control_id)
+    expect(ack[:MSH].message_type.scan('ACK')).to_not be_blank
+    ack = batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION, ['moomin', 'little my'])
+    expect(ack[:MSA].ack_code).to eq(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION)
+    expect(ack[:MSA].text).to eq('moomin little my')
+  end
+
   it 'imports and abstracts pathology cases from Excel', focus: false do
     expect(PathologyCase.count).to eq(0)
     batch_import = FactoryGirl.create(:excel_batch_import)
@@ -58,9 +98,9 @@ RSpec.describe BatchImport, :type => :model do
     expect(pathology_case.abstractor_abstractions.size).to eq(2)
   end
 
-  it 'imports and abstracts pathology cases from HL7', focus: false do
+  it 'imports and abstracts pathology cases from HL7 file', focus: false do
     expect(PathologyCase.count).to eq(0)
-    batch_import = FactoryGirl.create(:hl7_batch_import)
+    batch_import = FactoryGirl.create(:hl7_batch_import_file)
     batch_import.import
     expect(PathologyCase.count).to eq(2)
     pathology_case = PathologyCase.where(accession_number: 'GHS1506001').first
@@ -105,6 +145,34 @@ RSpec.describe BatchImport, :type => :model do
     expect(pathology_case.attending).to eq('DOCTOR2 JR MD, FAKE')
     expect(pathology_case.surgeon).to eq('DOCTOR2 JR MD, FAKE')
     expect(pathology_case.note).to eq("CASE: GHS-15-06002 \r\nPATIENT: POWERPATH2 TEST2 \r\nPre-Op Diagnosis:   Two lipomas, Right upper arm \r\nPost-Op Diagnosis:  None Given \r\nClinical History:   None Given \r\n \r\n \r\n \r\n \r\n \r\nFINAL DIAGNOSIS: \r\n \r\nA) Right upper arm biceps mass, excision: \r\n- Portions of mature adipose tissue (lipoma). \r\nB) Right upper arm triceps mass, excision: \r\n- Portions of mature adipose tissue (lipoma). \r\n \r\nGROSS: \r\n \r\nA) The specimen is received in formalin labeled with the patient's \r\nname and designated \"right upper arm biceps\" and consists of 2 \r\nyellow-tan portions of fibrofatty tissue which measure 2.0 x 1.5 x \r\n1.3 and 1.1 x 0.4 x 0.3 cm. The larger portion is encapsulated and \r\nis inked.  The larger portion is serially sectioned. On section, the \r\ncut surface is yellow tan and homogenous. Representative sections \r\nare submitted in a single cassette. \r\nB) The specimen is received in formalin labeled with the patient's \r\nname and designated \"right upper arm triceps\" and consists of 2 \r\nyellow-tan portions of fibrofatty tissue which measure 3.0 x 2.8 x \r\n1.3 and 0.8 x 0.7 x 0.4 cm. The larger portion is encapsulated and \r\nis inked.  The larger portion is serially sectioned. On section, the \r\ncut surface is yellow tan and homogenous. Representative sections \r\nare submitted in 2 cassettes. \r\nDV 9/1/2015 \r\n \r\nMICROSCOPIC: \r\n \r\nMicroscopic examination was performed. See diagnosis. \r\n \r\n \r\nThe electronic signature indicates that the named Attending \r\nPathologist has evaluated the specimen referred to in the signed \r\nsection of the report and formulated the diagnosis therein. \r\n \r\n \r\n \r\nWayne H Wirtz, MD \r\nPathologist \r\nElectronically signed 9/3/2015 8:21:58AM \r\n \r\n \r\n")
+    expect(pathology_case.abstractor_abstractions.size).to eq(2)
+  end
+
+  it 'imports and abstracts pathology cases from HL7 body', focus: false do
+    expect(PathologyCase.count).to eq(0)
+    batch_import = FactoryGirl.create(:hl7_batch_import_body)
+    batch_import.import
+    expect(PathologyCase.count).to eq(1)
+    pathology_case = PathologyCase.where(accession_number: 'GHS1506001').first
+    expect(pathology_case).to_not be_nil
+    expect(pathology_case.collection_date).to eq(Date.parse('09/01/2015'))
+    expect(pathology_case.patient_last_name).to eq('TEST1')
+    expect(pathology_case.patient_first_name).to eq('POWERPATH')
+    expect(pathology_case.mrn).to eq('011111111')
+    expect(pathology_case.ssn).to eq('111111111')
+    expect(pathology_case.birth_date).to eq(Date.parse('01/01/1981'))
+    expect(pathology_case.street1).to eq('111 MAIN STREET')
+    expect(pathology_case.street2).to eq('APT 1')
+    expect(pathology_case.city).to eq('ANYWHERE1')
+    expect(pathology_case.state).to eq('IL')
+    expect(pathology_case.zip_code).to eq('11111')
+    expect(pathology_case.country).to eq('US')
+    expect(pathology_case.home_phone).to eq('(111)111-1111')
+    expect(pathology_case.sex).to eq('M')
+    expect(pathology_case.race).to eq('W')
+    expect(pathology_case.attending).to eq('DOCTOR JR MD, FAKE')
+    expect(pathology_case.surgeon).to eq('DOCTOR JR MD, FAKE')
+    expect(pathology_case.note).to eq("CASE: GHS-15-06001 \r\nPATIENT: POWERPATH TEST1 \r\nPre-Op Diagnosis:   Two lipomas, Right upper arm \r\nPost-Op Diagnosis:  None Given \r\nClinical History:   None Given \r\n \r\n \r\n \r\n \r\n \r\nFINAL DIAGNOSIS: \r\n \r\nA) Right upper arm biceps mass, excision: \r\n- Portions of mature adipose tissue (lipoma). \r\nB) Right upper arm triceps mass, excision: \r\n- Portions of mature adipose tissue (lipoma). \r\n \r\nGROSS: \r\n \r\nA) The specimen is received in formalin labeled with the patient's \r\nname and designated \"right upper arm biceps\" and consists of 2 \r\nyellow-tan portions of fibrofatty tissue which measure 2.0 x 1.5 x \r\n1.3 and 1.1 x 0.4 x 0.3 cm. The larger portion is encapsulated and \r\nis inked.  The larger portion is serially sectioned. On section, the \r\ncut surface is yellow tan and homogenous. Representative sections \r\nare submitted in a single cassette. \r\nB) The specimen is received in formalin labeled with the patient's \r\nname and designated \"right upper arm triceps\" and consists of 2 \r\nyellow-tan portions of fibrofatty tissue which measure 3.0 x 2.8 x \r\n1.3 and 0.8 x 0.7 x 0.4 cm. The larger portion is encapsulated and \r\nis inked.  The larger portion is serially sectioned. On section, the \r\ncut surface is yellow tan and homogenous. Representative sections \r\nare submitted in 2 cassettes. \r\nDV 9/1/2015 \r\n \r\nMICROSCOPIC: \r\n \r\nMicroscopic examination was performed. See diagnosis. \r\n \r\n \r\nThe electronic signature indicates that the named Attending \r\nPathologist has evaluated the specimen referred to in the signed \r\nsection of the report and formulated the diagnosis therein. \r\n \r\n \r\n \r\nWayne H Wirtz, MD \r\nPathologist \r\nElectronically signed 9/3/2015 8:21:58AM \r\n \r\n \r\n")
     expect(pathology_case.abstractor_abstractions.size).to eq(2)
   end
 end
