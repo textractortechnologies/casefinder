@@ -17,8 +17,10 @@ class Api::V1::PathologyCasesController < ApiController
           render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT).to_hl7,  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
         end
       rescue Exception => e
-        render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT).to_hl7,  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
+        render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ERROR).to_hl7,  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
       end
     end
   end
 end
+
+
