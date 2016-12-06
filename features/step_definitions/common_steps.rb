@@ -183,15 +183,25 @@ Then /^the "([^\"]*)" records should match$/ do |model_name, table|
     record.each_pair do |field_name, raw_expected_value|
       # See if the filter value uses out magical dynamic date formatting
       if raw_expected_value.is_a?(String) && 
-        (match_data = raw_expected_value.match(/^DATE: (.+)/) || match_data = raw_expected_value.match(/^VALUE: (.+)/))
+        (match_data = raw_expected_value.match(/^DATE: (.+?)$/) || match_data = raw_expected_value.match(/^VALUE: (.+?)$/))
         # Get the portion of the regex that has the executable code
         ruby_date_code = match_data[1]
+
         # run the code and replace the old value
         expected_value = eval(ruby_date_code)
+      elsif raw_expected_value.is_a?(String) && (raw_expected_value.scan(/"(DATE: (.+?))"/).any? || raw_expected_value.scan(/"VALUE: (.+?)"/).any?)
+        expected_value = raw_expected_value
+
+        expected_value.scan(/"(DATE: (.+?))"/).each do |match_data|
+          expected_value.gsub!(match_data[0], eval(match_data[1]).to_s)
+        end
+
+        expected_value.scan(/"(VALUE: (.+?))"/).each do |match_data|
+          expected_value = expected_value.gsub!(match_data[0], eval(match_data[1]).to_s)
+        end
       else
         expected_value = raw_expected_value
       end
-      
       # Get the value in the database for the current field
       value_to_test = record_to_test.read_attribute(field_name)
       
