@@ -69,6 +69,7 @@ gem 'carrierwave'
 gem 'activerecord-session_store'
 gem 'pundit'
 gem 'ruby-hl7'
+gem 'bcrypt'
 
 # Access an IRB console on exception pages or by using <%= console %> in views
 # gem 'web-console', '~> 2.0', group: :development

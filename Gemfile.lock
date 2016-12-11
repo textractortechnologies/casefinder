@@ -326,6 +326,7 @@ DEPENDENCIES
   activerecord-session_store
   activerecord-sqlserver-adapter
   american_date
+  bcrypt
   capistrano
   capistrano-passenger
   capistrano-rails

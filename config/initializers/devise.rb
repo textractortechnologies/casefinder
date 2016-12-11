@@ -1,11 +1,18 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
+  ldap_config = Proc.new do
+    ldap_config = YAML.load(ERB.new(File.read("#{Rails.root}/config/ldap.yml")).result)[Rails.env]
+    ldap_config['admin_password'] = BCrypt::Password.new(ldap_config['admin_password'])
+    ldap_config
+  end
+
   # ==> LDAP Configuration
   config.ldap_logger = true
   config.ldap_create_user = true
   # config.ldap_update_password = true
-  config.ldap_config = "#{Rails.root}/config/ldap.yml"
+  # config.ldap_config = "#{Rails.root}/config/ldap.yml"
+  config.ldap_config = ldap_config
   config.ldap_check_group_membership = false
   # config.ldap_check_group_membership_without_admin = false
   config.ldap_check_attributes = false
