@@ -3,7 +3,7 @@
 Devise.setup do |config|
   ldap_config = Proc.new do
     ldap_config = YAML.load(ERB.new(File.read("#{Rails.root}/config/ldap.yml")).result)[Rails.env]
-    ldap_config['admin_password'] = BCrypt::Password.new(ldap_config['admin_password'])
+    ldap_config['admin_password'] = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base).decrypt_and_verify(ldap_config['admin_password'])
     ldap_config
   end
 
@@ -11,7 +11,6 @@ Devise.setup do |config|
   config.ldap_logger = true
   config.ldap_create_user = true
   # config.ldap_update_password = true
-  # config.ldap_config = "#{Rails.root}/config/ldap.yml"
   config.ldap_config = ldap_config
   config.ldap_check_group_membership = false
   # config.ldap_check_group_membership_without_admin = false
