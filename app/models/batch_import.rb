@@ -18,6 +18,7 @@ class BatchImport < ActiveRecord::Base
 
   def clean_hl7(hl7_message)
     clean_hl7_message = hl7_message.gsub("\r\n", "\r")
+    clean_hl7_message = clean_hl7_message.gsub("\n", "\r")
     if clean_hl7_message.last == "\r"
       clean_hl7_message = clean_hl7_message.chop
     end
