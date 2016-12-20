@@ -16,8 +16,17 @@ class BatchImport < ActiveRecord::Base
 
   after_initialize :default_values
 
+  def clean_hl7(hl7_message)
+    clean_hl7_message = hl7_message.gsub("\r\n", "\r")
+    if clean_hl7_message.last == "\r"
+      clean_hl7_message = clean_hl7_message.chop
+    end
+    clean_hl7_message
+  end
+
   def hl7
-    @hl7 ||= HL7::Message.new(import_body)
+    message = clean_hl7(import_body)
+    @hl7 ||= HL7::Message.new(message)
   end
 
   def validate_hl7
@@ -61,15 +70,14 @@ class BatchImport < ActiveRecord::Base
         import_excel(excel_file)
       when ".txt"
         file = File.read(import_file.current_path)
-        message = HL7::Message.new(file)
+        message = HL7::Message.new(clean_hl7(file))
         import_hl7(message)
       else raise "Unknown file type: #{file.original_filename}"
       end
     end
 
     def process_body
-      message = HL7::Message.new(import_body)
-      import_hl7(message)
+      import_hl7(hl7)
     end
 
     def set_pathology_case_from_file(pathology_case_file, pathology_case)
