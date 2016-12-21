@@ -6,7 +6,8 @@ class Api::V1::PathologyCasesController < ApiController
       render plain: "Missing or malformed 'Date' header",  content_type: 'text/plain', status: :bad_request
     else
       begin
-        @batch_import = BatchImport.new(imported_at: DateTime.now, import_body: request.raw_post)
+        import_body = request.raw_post
+        @batch_import = BatchImport.new(imported_at: DateTime.now, import_body: import_body.encode!('UTF-8'))
         @batch_import.save
         errors = @batch_import.validate_hl7
 
@@ -17,10 +18,11 @@ class Api::V1::PathologyCasesController < ApiController
           render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT).to_hl7,  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
         end
       rescue Exception => e
+        Rails.logger.info(e.message)
+        Rails.logger.info(e.class)
+        Rails.logger.info(e.backtrace)
         render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ERROR).to_hl7,  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
       end
     end
   end
 end
-
-
