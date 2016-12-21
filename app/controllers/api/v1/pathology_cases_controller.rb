@@ -1,5 +1,7 @@
 class Api::V1::PathologyCasesController < ApiController
   def create
+    Rails.logger.info("Here is the raw post")
+    Rails.logger.info("#{request.raw_post}")
     if request.headers['Content-Type'] != 'x-application/hl7-v2+er7; charset=utf-8'
       render plain: 'Unsupported Media Type',  content_type: 'text/plain', status: :unsupported_media_type
     elsif request.headers['Date'].blank? || !request.headers['Date'].date?
