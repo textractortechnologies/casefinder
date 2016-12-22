@@ -9,7 +9,7 @@ class Api::V1::PathologyCasesController < ApiController
     else
       begin
         import_body = request.raw_post
-        @batch_import = BatchImport.new(imported_at: DateTime.now, import_body: import_body.encode!('UTF-8'))
+        @batch_import = BatchImport.new(imported_at: DateTime.now, import_body: import_body.encode!('UTF-8', invalid: :replace, undef: :replace))
         @batch_import.save
         errors = @batch_import.validate_hl7
 
