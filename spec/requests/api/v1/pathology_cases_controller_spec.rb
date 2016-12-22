@@ -53,14 +53,14 @@ describe PathologyCasesController, type: :request do
       expect(response.body).to eq("Missing or malformed 'Date' header")
     end
 
-    it 'returns OK HTTP status code and HL7 application rejection ACK if the request fails validaiton', focus: true  do
+    it 'returns OK HTTP status code and HL7 application rejection ACK if the request fails validaiton', focus: false  do
       batch_import = FactoryGirl.create(:hl7_batch_import_body)
       @env['Content-Type'] = 'x-application/hl7-v2+er7; charset=utf-8'
       @env['Date'] = DateTime.now.to_s
       allow_any_instance_of(BatchImport).to receive(:validate_hl7).and_return(['Moomin'])
       post '/api/v1/pathology_cases', @body, @env
       expect(response.status).to eq(200)
-      expect(response.body).to eq(batch_import.hl7_ack(BatchImport::BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION).to_hl7 + 'Moomin')
+      expect(response.body).to eq(batch_import.hl7_ack(BatchImport::BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION, errors: ['Moomin'], raw: true))
     end
 
     it 'returns OK HTTP status code and HL7 application error ACK if the request blows up', focus: false  do
@@ -70,7 +70,7 @@ describe PathologyCasesController, type: :request do
       allow_any_instance_of(BatchImport).to receive(:validate_hl7).and_raise("boom")
       post '/api/v1/pathology_cases', @body, @env
       expect(response.status).to eq(200)
-      expect(response.body).to eq(batch_import.hl7_ack(BatchImport::BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ERROR).to_hl7)
+      expect(response.body).to eq(batch_import.hl7_ack(BatchImport::BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ERROR, raw: true))
     end
 
     it 'returns OK HTTP status code and HL7 application accept ACK if the request has all headers and a valid body', focus: false  do
@@ -79,7 +79,7 @@ describe PathologyCasesController, type: :request do
       @env['Date'] = DateTime.now.to_s
       post '/api/v1/pathology_cases', @body, @env
       expect(response.status).to eq(200)
-      expect(response.body).to eq(batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT).to_hl7)
+      expect(response.body).to eq(batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT, raw: true))
     end
   end
 end

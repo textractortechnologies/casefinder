@@ -47,8 +47,14 @@ class BatchImport < ActiveRecord::Base
     errors
   end
 
-  def hl7_ack(ack_code, errors=[])
-    build_hl7_ack(ack_code, errors)
+  def hl7_ack(ack_code, options = {})
+    options.reverse_merge!({ errors: [], raw: false })
+    ack = build_hl7_ack(ack_code, options[:errors])
+    if options[:raw]
+      ack.to_hl7 + "\r"
+    else
+      ack
+    end
   end
 
   def import

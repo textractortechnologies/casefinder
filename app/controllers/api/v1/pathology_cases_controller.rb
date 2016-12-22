@@ -14,16 +14,16 @@ class Api::V1::PathologyCasesController < ApiController
         errors = @batch_import.validate_hl7
 
         if errors.any?
-          render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION, errors).to_hl7,  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
+          render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION, errors: errors, raw: true),  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
         else
           @batch_import.import
-          render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT).to_hl7,  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
+          render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT, raw: true),  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
         end
       rescue Exception => e
         Rails.logger.info(e.message)
         Rails.logger.info(e.class)
         Rails.logger.info(e.backtrace)
-        render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ERROR).to_hl7,  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
+        render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ERROR, raw: true),  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
       end
     end
   end

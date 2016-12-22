@@ -43,9 +43,17 @@ RSpec.describe BatchImport, :type => :model do
     expect(ack[:MSA].ack_code).to eq(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT)
     expect(ack[:MSA].control_id).to eq(batch_import.hl7[:MSH].message_control_id)
     expect(ack[:MSH].message_type.scan('ACK')).to_not be_blank
-    ack = batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION, ['moomin', 'little my'])
+    ack = batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION, errors: ['moomin', 'little my'])
     expect(ack[:MSA].ack_code).to eq(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION)
     expect(ack[:MSA].text).to eq('moomin little my')
+  end
+
+  it 'can create an HL7 ack in a raw format', focus: false do
+    batch_import = FactoryGirl.create(:hl7_batch_import_body)
+    ack = batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT, raw: true)
+    expect(ack).to eq("MSH|^~\\&|AP SYSTEM|AP SYSTEM|||201509030922||ACK^R01|5554266|T|2.2\rMSA|AA|5554266|\r")
+    ack = batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION, errors: ['moomin', 'little my'], raw: true)
+    expect(ack).to eq("MSH|^~\\&|AP SYSTEM|AP SYSTEM|||201509030922||ACK^R01|5554266|T|2.2\rMSA|AR|5554266|moomin little my\r")
   end
 
   it 'imports and abstracts pathology cases from Excel', focus: false do
