@@ -1,12 +1,12 @@
 require 'stanford-core-nlp'
 Rails.application.configure do
-  ENV['LD_LIBRARY_PATH'] = '/usr/lib/jvm/java-openjdk/bin'
-  ENV['JAVA_HOME'] = '/usr/lib/jvm/java-openjdk'
-
+  #For Windows 2012
+  Abstractor::Engine.routes.default_url_options[:host] = 'http://localhost'
+  config.relative_url_root = "/casefinder"
   StanfordCoreNLP.use :english
   StanfordCoreNLP.model_files = {}
-  StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-corenlp-full/"
-  StanfordCoreNLP.model_path = "#{Rails.root}/lib/stanford-corenlp-full/"
+  StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-core-nlp/"
+  StanfordCoreNLP.model_path = "#{Rails.root}/lib/stanford-core-nlp/"
   StanfordCoreNLP.jvm_args = ['-Xms1024M', '-Xmx2048M']
   StanfordCoreNLP.default_jars = [
     "joda-time.jar",
@@ -16,6 +16,8 @@ Rails.application.configure do
     "jollyday.jar",
     "bridge.jar"
   ]
+
+  config.serve_static_assets=true
 
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -40,7 +42,7 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  # config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
@@ -94,6 +96,18 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+  # config.assets.precompile += %w( vendor/modernizr.js application_split2.css *.eot *.woff *.ttf *.otf *.svg )
 
-  config.assets.precompile += %w( vendor/modernizr.js *.eot *.woff *.ttf *.otf *.svg )
+  config.middleware.use ExceptionNotification::Rack,
+    :email => {
+      :email_prefix => "[CaseFinder] Production",
+      :sender_address => %{"casefinder" <admin@northshore.org>},
+      :exception_recipients => %w{michaeljamesgurley@gmail.com}
+    }
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = { address: 'smtp.enhnet.org', port: 25 }
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
 end
+require './lib/active_record/sqlserver_base'

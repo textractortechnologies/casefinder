@@ -1,0 +1,17 @@
+staging:
+  adapter: sqlserver
+  dataserver: WIN-J8TCRMKGKHM
+  host: localhost
+  port: 1433
+  database: casefinder
+  username: casefinder
+  password: casefinder
+
+production:
+  adapter: sqlserver
+  dataserver: WIN-J8TCRMKGKHM
+  host: localhost
+  port: 1433
+  database: casefinder
+  username: casefinder
+  password: casefinder

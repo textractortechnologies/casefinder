@@ -1,25 +1,6 @@
 require 'stanford-core-nlp'
 Rails.application.configure do
-  #For Linux
-  # Abstractor::Engine.routes.default_url_options[:host] = 'http://casefinder.local'
-  # ENV['LD_LIBRARY_PATH'] = '/usr/lib/jvm/java-openjdk/bin'
-  # ENV['JAVA_HOME'] = '/usr/lib/jvm/java-openjdk'
-  #
-  # StanfordCoreNLP.use :english
-  # StanfordCoreNLP.model_files = {}
-  # StanfordCoreNLP.jar_path = "/usr/local/stanford-core-nlp/"
-  # StanfordCoreNLP.model_path = "/usr/local/stanford-core-nlp/"
-  # StanfordCoreNLP.jvm_args = ['-Xms1024M', '-Xmx2048M']
-  # StanfordCoreNLP.default_jars = [
-  #   "joda-time.jar",
-  #   "xom.jar",
-  #   "stanford-corenlp-3.5.2.jar",
-  #   "stanford-corenlp-3.5.2-models.jar",
-  #   "jollyday.jar",
-  #   "bridge.jar"
-  # ]
-
-  #For Windows 2008
+  #For Windows 2012
   Abstractor::Engine.routes.default_url_options[:host] = 'http://localhost'
   config.relative_url_root = "/casefinder"
   StanfordCoreNLP.use :english
@@ -35,22 +16,6 @@ Rails.application.configure do
     "jollyday.jar",
     "bridge.jar"
   ]
-
-  #For Aptible
-  # Abstractor::Engine.routes.default_url_options[:host] = 'http://casefinder.on-aptible.com/'
-  # StanfordCoreNLP.use :english
-  # StanfordCoreNLP.model_files = {}
-  # StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-core-nlp/"
-  # StanfordCoreNLP.model_path = "#{Rails.root}/lib/stanford-core-nlp/"
-  # StanfordCoreNLP.jvm_args = ['-Xms1024M', '-Xmx2048M']
-  # StanfordCoreNLP.default_jars = [
-  #   "joda-time.jar",
-  #   "xom.jar",
-  #   "stanford-corenlp-3.5.0.jar",
-  #   "stanford-corenlp-3.5.0-models.jar",
-  #   "jollyday.jar",
-  #   "bridge.jar"
-  # ]
 
   config.serve_static_assets=true
 
@@ -145,3 +110,4 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
 end
+require './lib/active_record/sqlserver_base'
