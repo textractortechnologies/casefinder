@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   acts_as_token_authenticatable
-  has_paper_trail 
-  
+  has_paper_trail
+
   has_many :role_assignments
    has_many :roles, through: :role_assignments
   # Include default devise modules. Others available are:
@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   devise :ldap_authenticatable, :trackable, :timeoutable
 
   def self.determine_roles(groups)
-    if Rails.env.development? || Rails.env.production?
+    if Rails.env.development?
       Role.all
     else
       Role.where(external_identifier: groups)
