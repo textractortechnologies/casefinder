@@ -2,7 +2,20 @@
 # Specify the sugestion endpoint per environemnt.
 health_heritage_casefinder_nlp_service:
   suggestion_endpoint:
-      development: http://localhost:8080/suggest
+      development: http://localhost:8080/text-web-service-1.0/suggest
       test: http://localhost:8080/suggest
       staging: http://localhost:8080/suggest
       production: http://localhost:8080/suggest
+  suggestion_endpoint_credentials:
+      development:
+          "username": textractor_casefinder
+          "password":
+      test:
+          "username": textractor_casefinder
+          "password":
+      staging:
+          "username": textractor_casefinder
+          "password":
+      production:
+          "username": textractor_casefinder
+          "password":
