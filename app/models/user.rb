@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   has_paper_trail
 
   has_many :role_assignments
-   has_many :roles, through: :role_assignments
+  has_many :roles, through: :role_assignments
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable, :validatable, :registerable
   devise :ldap_authenticatable, :trackable, :timeoutable

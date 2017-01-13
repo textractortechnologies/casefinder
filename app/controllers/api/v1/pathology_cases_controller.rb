@@ -1,4 +1,5 @@
 class Api::V1::PathologyCasesController < ApiController
+  before_action :audit_activity
   def create
     Rails.logger.info("Here is the raw post")
     Rails.logger.info("#{request.raw_post}")
@@ -14,16 +15,30 @@ class Api::V1::PathologyCasesController < ApiController
         errors = @batch_import.validate_hl7
 
         if errors.any?
-          render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION, errors: errors, raw: true),  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
+          ack = @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION, errors: errors, raw: true)
+          @batch_import.status = ack
+          @batch_import.save!
+          render plain: ack, content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
         else
           @batch_import.import
-          render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT, raw: true),  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
+          ack = @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT, raw: true)
+          @batch_import.status = ack
+          @batch_import.save!
+          render plain: ack, content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
         end
       rescue Exception => e
+        Rails.logger.info("Api::V1::PathologyCasesController unhandled error.  Please fix.")
         Rails.logger.info(e.message)
         Rails.logger.info(e.class)
         Rails.logger.info(e.backtrace)
-        render plain: @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ERROR, raw: true),  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
+        ack = @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ERROR, raw: true)
+        if ack.present?
+          @batch_import.status = ack
+          @batch_import.save
+          render plain: ack,  content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
+        else
+          render plain: "Unrecoverable error.",  content_type: 'text/plain', status: :bad_request
+        end
       end
     end
   end

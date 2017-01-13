@@ -121,7 +121,7 @@ namespace :setup do
       end
     end
 
-    histologies = CSV.new(File.open('lib/setup/data/ICD-O Codes Updated 1.14.15_new.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+    histologies = CSV.new(File.open('lib/setup/data/MASTER ICD-O Codes 7.20.16_modified_mgurley.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
     histologies.each do |histology|
       if histology.to_hash['Curated?'].blank? || histology.to_hash['Curated?'] == 'yes'
         abstractor_object_value = Abstractor::AbstractorObjectValue.where(value: "#{histology.to_hash['Term'].downcase} (#{histology.to_hash['Code']})".downcase, vocabulary_code: histology.to_hash['Code'], vocabulary: 'ICD-O-3', vocabulary_version: '2011 Updates to ICD-O-3', properties: { type: histology.to_hash['Type'], select_for: histology.to_hash['Select for']}.to_json, deleted_at: nil).first_or_create
@@ -158,5 +158,84 @@ namespace :setup do
   desc "Setup roles"
   task(roles: :environment) do  |t, args|
     CaseFinder::Setup.setup_roles
+  end
+
+  desc "Compare histologies"
+  task(compare_histologies: :environment) do  |t, args|
+    new_guys = []
+    updates = []
+    # histologies = CSV.new(File.open('lib/setup/data/ICD-O Codes Updated 1.14.15_new.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+    new_histologies = CSV.new(File.open('lib/setup/data/MASTER ICD-O Codes 7.20.16_modified_mgurley.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+    puts 'hello moomin'
+    # puts histologies.to_a.size
+    # puts new_histologies.to_a.size
+
+    matches = []
+    misses = []
+    replacements = []
+    new_histologies.each do |new_histology|
+      if new_histology['Curated?'].try(:strip) != 'replace'
+        # puts new_histology['Code']
+        # puts new_histology ['Term']
+        match = nil
+        histologies = CSV.new(File.open('lib/setup/data/ICD-O Codes Updated 1.14.15_new.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+        histologies.each do |histology|
+          # puts histology['Code']
+          # puts histology ['Term']
+          if histology.to_hash['Curated?'].try(:strip) != 'replace' && new_histology.to_hash['Code'].try(:strip) == histology.to_hash['Code'].try(:strip)  && new_histology.to_hash['Term'].try(:strip) == histology.to_hash['Term'].try(:strip)
+            match = histology
+          end
+        end
+
+        if match.present?
+          if match.to_hash['Curated?'].try(:strip) == 'replace'
+            replacements << new_histology
+          end
+            matches << new_histology
+        else
+          misses << new_histology
+        end
+
+        if match.size > 1
+          puts 'we have a problem'
+          match.each do |m|
+            puts m
+          end
+        end
+      end
+    end
+
+    old_misses = []
+    histologies = CSV.new(File.open('lib/setup/data/ICD-O Codes Updated 1.14.15_new.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+    histologies.each do |histology|
+      if histology.to_hash['Curated?'].try(:strip) != 'replace'
+        new_histologies = CSV.new(File.open('lib/setup/data/MASTER ICD-O Codes 7.20.16.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+        match = []
+        match = new_histologies.select do |new_histology|
+          new_histology.to_hash['Curated?'].try(:strip) != 'replace' && new_histology.to_hash['Code'].try(:strip) == histology.to_hash['Code'].try(:strip)  && new_histology.to_hash['Term'].try(:strip) == histology.to_hash['Term'].try(:strip)
+        end
+        if match.empty?
+          old_misses << histology
+        end
+      end
+    end
+
+    puts "How many old misses #{old_misses.size}"
+    puts "How many matches: #{matches.size}"
+    puts "How many misses: #{misses.size}"
+    puts "How many replacements: #{replacements.size}"
+
+    puts 'here are the misses'
+    misses.each do |miss|
+      puts 'begin miss'
+      puts miss.to_hash['Code']
+      puts miss.to_hash['Term']
+      puts 'end miss'
+    end
+
+    puts 'here are the replacements'
+    replacements.each do |replacement|
+      puts replacement
+    end
   end
 end

@@ -6,7 +6,7 @@ module WithAccessAudit
 
     parameters_string   = " with params: #{filtered_parameters.inspect}" if filtered_parameters.keys.any?
     unless options[:username].present?
-      options.merge!({ username: current_user ? current_user.username : 'unknown' }) 
+      options.merge!({ username: current_user ? current_user.username : 'unknown' })
     end
 
     unless options[:action].present?
@@ -18,7 +18,7 @@ module WithAccessAudit
     end
 
     AccessAudit.create!(
-      username:     options[:username], 
+      username:     options[:username],
       action:       options[:action],
       description:  options[:description]
     )

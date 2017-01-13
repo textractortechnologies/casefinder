@@ -1,4 +1,5 @@
 class ApiController < ActionController::Base
+  include WithAccessAudit
   protect_from_forgery with: :null_session
   before_action :http_basic_authenticate
 

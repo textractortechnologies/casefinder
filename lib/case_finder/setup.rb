@@ -32,7 +32,7 @@ module CaseFinder
       if lightweight
         histologies = CSV.new(File.open('lib/setup/data/ICD-O Codes Updated 1.14.15_new_lightweight.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
       else
-        histologies = CSV.new(File.open('lib/setup/data/ICD-O Codes Updated 1.14.15_new.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+        histologies = CSV.new(File.open('lib/setup/data/MASTER ICD-O Codes 7.20.16_modified_mgurley.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
       end
       histologies.each do |histology|
         if histology.to_hash['Curated?'].blank? || histology.to_hash['Curated?'] == 'yes'

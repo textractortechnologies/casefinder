@@ -48,13 +48,17 @@ class BatchImport < ActiveRecord::Base
   end
 
   def hl7_ack(ack_code, options = {})
-    options.reverse_merge!({ errors: [], raw: false })
-    ack = build_hl7_ack(ack_code, options[:errors])
-    if options[:raw]
-      ack.to_hl7 + "\r"
-    else
-      ack
+    ack = nil
+    begin
+      options.reverse_merge!({ errors: [], raw: false })
+      ack = build_hl7_ack(ack_code, options[:errors])
+      if options[:raw]
+        ack = ack.to_hl7 + "\r"
+      end
+    rescue Exception => e
+      ack = nil
     end
+    ack
   end
 
   def import
@@ -164,19 +168,28 @@ class BatchImport < ActiveRecord::Base
         if segment.is_a?(HL7::Message::Segment::PV1)
           if !segment.e7.blank?
             attending = segment.e7.split(segment.item_delim)
-            pathology_case_file.attending = [attending[1], attending[6]].delete_if(&:empty?).join(' ') + ', ' + attending[2]
+            if attending.size == 7
+              pathology_case_file.attending = [attending[1], attending[6]].delete_if(&:empty?).join(' ') + ', ' + attending[2]
+            else
+              pathology_case_file.attending = attending[1] + ', ' + attending[2]
+            end
+
           end
 
           if !segment.e8.blank?
             surgeon = segment.e8.split(segment.item_delim)
-            pathology_case_file.surgeon = [surgeon[1], surgeon[6]].delete_if(&:empty?).join(' ')  + ', ' + surgeon[2]
+            if surgeon.size == 7
+              pathology_case_file.surgeon = [surgeon[1], surgeon[6]].delete_if(&:empty?).join(' ')  + ', ' + surgeon[2]
+            else
+              pathology_case_file.surgeon = surgeon[1] + ', ' + surgeon[2]
+            end
           end
         end
 
         if segment.is_a?(HL7::Message::Segment::OBR)
           pathology_case_file.accession_number = segment.e3
           pathology_case_file.collection_date = DateTime.parse(segment.e7.to_s.strip).to_date
-          pathology_case = PathologyCase.where(accession_number: pathology_case_file.accession_number).first_or_initialize
+          pathology_case = PathologyCase.new(accession_number: pathology_case_file.accession_number)
         end
 
         if segment.is_a?(HL7::Message::Segment::OBX)
@@ -194,6 +207,8 @@ class BatchImport < ActiveRecord::Base
         pathology_case.note = note
         pathology_case.save!
         pathology_case.abstract
+        self.pathology_case_id = pathology_case.id
+        save!
       end
       pathology_case
     end
