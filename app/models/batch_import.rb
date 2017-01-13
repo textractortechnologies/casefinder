@@ -1,6 +1,5 @@
 class BatchImport < ActiveRecord::Base
   has_paper_trail
-  has_paper_trail
   HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT = 'AA'
   HL7_ACKNOWLEDGMENT_CODE_APPLICATION_REJECTION = 'AR'
   HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ERROR = 'AE'
@@ -161,7 +160,11 @@ class BatchImport < ActiveRecord::Base
           pathology_case_file.zip_code = patient_address[4]
           pathology_case_file.country = patient_address[5]
           pathology_case_file.home_phone = segment.e13
-          pathology_case_file.mrn = segment.e18
+          mrn = segment.e3.split(segment.item_delim)
+          if mrn.any?
+            mrn = mrn.first
+            pathology_case_file.mrn = mrn
+          end
           pathology_case_file.ssn =  segment.e19
         end
 
