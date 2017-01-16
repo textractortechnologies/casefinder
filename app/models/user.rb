@@ -9,11 +9,13 @@ class User < ActiveRecord::Base
   devise :ldap_authenticatable, :trackable, :timeoutable
 
   def self.determine_roles(groups)
+    r = []
     if Rails.env.development?
-      Role.all
-    else
-      Role.where(external_identifier: groups)
+      r = Role.all
+    elsif groups.present?
+      r = Role.where(external_identifier: groups)
     end
+    r
   end
 
   def delete_absent_role_assignments(roles)
