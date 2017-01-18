@@ -1,6 +1,8 @@
-.icon-bar.six-up
-  = link_to root_path, class: 'item ' do
+.icon-bar.six-up{ class: "case-finder-#{Rails.env}-navigation" }
+  = link_to root_path, class: 'item case-finder-logo-container' do
     = image_tag 'case_finder.png', border: 0, alt: 'Case Finder', class: 'case-finder-logo'
+    - unless Rails.env.production?
+      = Rails.env.titleize    
   = link_to root_path, class: 'item' do
     %i{ class: "fi-home" }
     %label Home

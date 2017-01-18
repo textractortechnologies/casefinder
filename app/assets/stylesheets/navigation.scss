@@ -1,9 +1,20 @@
 .icon-bar .item {
   display: block;
 }
-
+.case-finder-logo-container {
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+}
 .case-finder-logo {
   width: auto !important;
   display: block;
   height: 4.35rem !important;
+}
+.case-finder-staging-navigation,
+.case-finder-development-navigation {
+	background: $smoke;
+	border-bottom: 1px solid $steel;
+	i, label {
+		color: $steel;
+	}
 }
