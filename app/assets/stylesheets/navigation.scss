@@ -1,6 +1,9 @@
 .icon-bar .item {
   display: block;
 }
+.icon-bar span {
+	color: $white;
+}
 .case-finder-logo-container {
 	padding-top: 0.5rem;
 	padding-bottom: 0.5rem;
@@ -14,7 +17,10 @@
 .case-finder-development-navigation {
 	background: $smoke;
 	border-bottom: 1px solid $steel;
-	i, label {
+	i, label, span {
 		color: $steel;
+	}
+	a:hover span {
+		color: $white;
 	}
 }
