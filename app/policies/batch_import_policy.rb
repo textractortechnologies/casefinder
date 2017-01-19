@@ -1,9 +1,9 @@
 class BatchImportPolicy < ApplicationPolicy
   def new?
-    user.role?
+    false # user.role?
   end
 
   def create?
-    user.role?
+    false # user.role?
   end
 end
