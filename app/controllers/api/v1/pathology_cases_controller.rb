@@ -27,6 +27,7 @@ class Api::V1::PathologyCasesController < ApiController
           render plain: ack, content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
         end
       rescue Exception => e
+        ExceptionNotifier.notify_exception(e, :env => request.env)
         Rails.logger.info("Api::V1::PathologyCasesController unhandled error.  Please fix.")
         Rails.logger.info(e.message)
         Rails.logger.info(e.class)
