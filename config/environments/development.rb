@@ -62,8 +62,9 @@ Rails.application.configure do
   config.middleware.use ExceptionNotification::Rack,
     :email => {
       :email_prefix => "[CaseFinder] Development",
-      :sender_address => %{"casefinder" <admin@northshore.org>},
-      :exception_recipients => %w{michaeljamesgurley@gmail.com}
+      :sender_address => %{"casefinder" <textractortechnologies@gmail.com>},
+      :exception_recipients => %w{michaeljamesgurley@gmail.com },
+      :verbose_subject => false
     }
 
   config.action_mailer.delivery_method = :smtp
