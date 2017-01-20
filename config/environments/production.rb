@@ -1,7 +1,7 @@
 require 'stanford-core-nlp'
 Rails.application.configure do
   #For Windows 2012
-  Abstractor::Engine.routes.default_url_options[:host] = 'http://localhost'
+  Abstractor::Engine.routes.default_url_options[:host] = 'http://CASEFNDR01'
   config.relative_url_root = "/casefinder"
   StanfordCoreNLP.use :english
   StanfordCoreNLP.model_files = {}
@@ -106,7 +106,7 @@ Rails.application.configure do
     }
 
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { address: 'smtp.enhnet.org', port: 25 }
+  config.action_mailer.smtp_settings = { address: 'smtp.enhnet.org', port: 25, return_response: true, openssl_verify_mode: 'none' }
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
 end
