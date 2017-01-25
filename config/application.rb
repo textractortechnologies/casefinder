@@ -25,3 +25,10 @@ module Casefinder
     config.active_job.queue_adapter = :delayed_job
   end
 end
+
+case_finder_config = File.join(Rails.root, 'config', 'case_finder_config.yml')
+if File.exists?(case_finder_config)
+  CASE_FINDER_CONFIG = ActiveSupport::HashWithIndifferentAccess.new(YAML.load(File.open(case_finder_config)))
+else
+  Rails.logger.info("Warning: Case Finder config file is missing. (#{case_finder_config})")
+end

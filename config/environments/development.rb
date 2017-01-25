@@ -1,7 +1,6 @@
 require 'stanford-core-nlp'
 Rails.application.configure do
-  Abstractor::Engine.routes.default_url_options[:host] = 'http://casefinder.dev'
-
+  Abstractor::Engine.routes.default_url_options[:host] = CASE_FINDER_CONFIG[:abstractor_engine_routes_default_url_options]
   StanfordCoreNLP.use :english
   StanfordCoreNLP.model_files = {}
   StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-core-nlp/"
@@ -62,13 +61,12 @@ Rails.application.configure do
   config.middleware.use ExceptionNotification::Rack,
     :email => {
       :email_prefix => "[CaseFinder] Development",
-      :sender_address => %{"casefinder" <textractortechnologies@gmail.com>},
-      :exception_recipients => %w{michaeljamesgurley@gmail.com },
+      sender_address: CASE_FINDER_CONFIG[:support][:sender_address],
+      exception_recipients: CASE_FINDER_CONFIG[:support][:recipients],
       :verbose_subject => false
     }
-
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { address: 'smtp.gmail.com', port: 587,  authentication: 'plain', user_name: 'michaeljamesgurley@gmail.com', password: '?' }
+  config.action_mailer.smtp_settings = { address: 'smtp.gmail.com', port: 587,  authentication: 'plain', user_name: 'michaeljamesgurley@gmail.com', password: 'Booch1972' }
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
 end

@@ -1,0 +1,12 @@
+support:
+  recipients:
+    - michaeljamesgurley@gmail.com
+    - will.k.t@gmail.com
+    - m-gurley@northwestern.edu
+    - y.bushmanova@gmail.com
+    - bcerf@northshore.org
+    - kcimarusti@northshore.org
+    - spena@northshore.org
+    - jpalmar@northshore.org
+  sender_address: textractortechnologies@gmail.com
+abstractor_engine_routes_default_url_options: http://casefinder.dev

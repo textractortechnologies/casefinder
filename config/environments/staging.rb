@@ -1,7 +1,8 @@
 require 'stanford-core-nlp'
 Rails.application.configure do
   #For Windows 2012
-  Abstractor::Engine.routes.default_url_options[:host] = 'http://CASEFNDRTST01'
+  # Abstractor::Engine.routes.default_url_options[:host] = 'http://CASEFNDRTST01'
+  Abstractor::Engine.routes.default_url_options[:host] = CASE_FINDER_CONFIG[:abstractor_engine_routes_default_url_options]
   config.relative_url_root = "/casefinder"
   StanfordCoreNLP.use :english
   StanfordCoreNLP.model_files = {}
@@ -101,8 +102,8 @@ Rails.application.configure do
   config.middleware.use ExceptionNotification::Rack,
     :email => {
       :email_prefix => "[CaseFinder] Staging ",
-      :sender_address => %{"casefinder" <textractortechnologies@gmail.com>},
-      :exception_recipients => %w{michaeljamesgurley@gmail.com will.k.t@gmail.com y.bushmanova@gmail.com bcerf@northshore.org kcimarusti@northshore.org spena@northshore.org jpalmar@northshore.org},
+      sender_address: CASE_FINDER_CONFIG[:support][:sender_address],
+      exception_recipients: CASE_FINDER_CONFIG[:support][:recipients],
       :verbose_subject => false
     }
 

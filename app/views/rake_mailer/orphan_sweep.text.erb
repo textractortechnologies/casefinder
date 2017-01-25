@@ -1,0 +1,9 @@
+Case Finder Orphan Sweep Report:
+
+<% if @orphan_pathology_case_ids.any?  %>
+The system found <%= @orphan_pathology_case_ids.size %> orphans!
+
+After the sweep, <%= @reminaing_orphan_pathology_case_ids.size %> remain!
+<% else %>
+The system found no orphans!
+<% end %>

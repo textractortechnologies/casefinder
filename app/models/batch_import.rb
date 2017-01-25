@@ -105,7 +105,7 @@ class BatchImport < ActiveRecord::Base
           save_pathology_case(pathology_case, note)
           note = ''
           accession_num = excel_file.row(i)[5].is_a?(Float) ? excel_file.row(i)[5].to_i.to_s : excel_file.row(i)[5]
-          pathology_case = PathologyCase.where(accession_number: accession_num).first_or_initialize
+          pathology_case = PathologyCase.new(accession_number: accession_num)
           pathology_case.collection_date       = DateTime.parse(excel_file.row(i)[13].to_s.strip).to_date
           patient_last_name, patient_first_name = excel_file.row(i)[1].split(',')
           pathology_case.patient_last_name          = patient_last_name.strip
