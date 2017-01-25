@@ -209,8 +209,8 @@ class BatchImport < ActiveRecord::Base
         note.gsub!('_x000D_', '')
         pathology_case.note = note
         pathology_case.save!
-        pathology_case.abstract
         self.pathology_case_id = pathology_case.id
+        pathology_case.abstract
         save!
       end
       pathology_case
