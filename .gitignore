@@ -39,3 +39,5 @@ config/secrets.yml
 /vendor/assets/bower_components
 *.bowerrc
 bower.json
+/config/case_finder_config.yml
+/config/abstractor/custom_nlp_providers.yml

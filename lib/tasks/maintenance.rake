@@ -18,7 +18,7 @@ namespace :maintenance do
   desc "Integrity check"
   task(integrity_check: :environment) do  |t, args|
     successful_batch_import_count = BatchImport.where('created_at >= ? AND pathology_case_id IS NOT NULL', Date.today-3).count
-    failed_batch_import_count = BatchImport.where('pathology_case_id IS NULL', Date.today-3).count
+    failed_batch_import_count = BatchImport.where('pathology_case_id IS NULL AND created_at >=?', Date.today-3).count
     pathology_case_count = PathologyCase.where('created_at >= ?', Date.today-3).count
     orphan_pathology_case_count = unabstracted_pathology_cases_ids(0).size
     RakeMailer.integrity_check(successful_batch_import_count, pathology_case_count, failed_batch_import_count, orphan_pathology_case_count).deliver_now
