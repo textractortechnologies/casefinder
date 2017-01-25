@@ -210,8 +210,8 @@ class BatchImport < ActiveRecord::Base
         pathology_case.note = note
         pathology_case.save!
         self.pathology_case_id = pathology_case.id
-        pathology_case.abstract
         save!
+        pathology_case.abstract
       end
       pathology_case
     end
