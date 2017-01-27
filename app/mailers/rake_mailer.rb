@@ -1,6 +1,6 @@
 class RakeMailer < ApplicationMailer
-  default from: CASE_FINDER_CONFIG[:support][:sender_address]
-  default to: CASE_FINDER_CONFIG[:support][:recipients]
+  default from: Rails.configuration.case_finder_config[:sender_address]
+  default to:   Rails.configuration.case_finder_config[:exception_recipients]
 
    def orphan_sweep(orphan_pathology_case_ids, reminaing_orphan_pathology_case_ids)
      @orphan_pathology_case_ids = orphan_pathology_case_ids

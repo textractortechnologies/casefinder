@@ -1,22 +1,5 @@
-require 'stanford-core-nlp'
 Rails.application.configure do
-  #For Windows 2012
-  # Abstractor::Engine.routes.default_url_options[:host] = 'http://CASEFNDRTST01'
-  Abstractor::Engine.routes.default_url_options[:host] = CASE_FINDER_CONFIG[:abstractor_engine_routes_default_url_options]
   config.relative_url_root = "/casefinder"
-  StanfordCoreNLP.use :english
-  StanfordCoreNLP.model_files = {}
-  StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-core-nlp/"
-  StanfordCoreNLP.model_path = "#{Rails.root}/lib/stanford-core-nlp/"
-  StanfordCoreNLP.jvm_args = ['-Xms1024M', '-Xmx2048M']
-  StanfordCoreNLP.default_jars = [
-    "joda-time.jar",
-    "xom.jar",
-    "stanford-corenlp-3.5.1.jar",
-    "stanford-corenlp-3.5.1-models.jar",
-    "jollyday.jar",
-    "bridge.jar"
-  ]
 
   config.serve_static_assets=true
 
@@ -98,18 +81,5 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   # config.assets.precompile += %w( vendor/modernizr.js application_split2.css *.eot *.woff *.ttf *.otf *.svg )
-
-  config.middleware.use ExceptionNotification::Rack,
-    :email => {
-      :email_prefix => "[CaseFinder] Staging ",
-      sender_address: CASE_FINDER_CONFIG[:support][:sender_address],
-      exception_recipients: CASE_FINDER_CONFIG[:support][:recipients],
-      :verbose_subject => false
-    }
-
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { address: 'smtp.enhnet.org', port: 25, openssl_verify_mode: 'none' }
-  config.action_mailer.perform_deliveries = true
-  config.action_mailer.raise_delivery_errors = true
 end
 require './lib/active_record/sqlserver_base'

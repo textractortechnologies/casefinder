@@ -1,0 +1,8 @@
+staging:
+  host: ldap.forumsys.com
+  port: 389
+  attribute: sn
+  base: dc=example,dc=com
+  admin_user: cn=read-only-admin,dc=example,dc=com
+  admin_password: < password encoded with applicaiton secret key >
+  ssl: false

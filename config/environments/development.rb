@@ -1,20 +1,4 @@
-require 'stanford-core-nlp'
 Rails.application.configure do
-  Abstractor::Engine.routes.default_url_options[:host] = CASE_FINDER_CONFIG[:abstractor_engine_routes_default_url_options]
-  StanfordCoreNLP.use :english
-  StanfordCoreNLP.model_files = {}
-  StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-core-nlp/"
-  StanfordCoreNLP.model_path = "#{Rails.root}/lib/stanford-core-nlp/"
-  StanfordCoreNLP.jvm_args = ['-Xms1024M', '-Xmx2048M']
-  StanfordCoreNLP.default_jars = [
-    "joda-time.jar",
-    "xom.jar",
-    "stanford-corenlp-3.5.2.jar",
-    "stanford-corenlp-3.5.2-models.jar",
-    "jollyday.jar",
-    "bridge.jar"
-  ]
-
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -57,16 +41,4 @@ Rails.application.configure do
   # config.assets.precompile += %w( vendor/modernizr.js application_split2.css *.eot *.woff *.ttf *.otf *.svg )
   config.action_mailer.default_url_options = { host: 'casefinder.dev' }
   # config.serve_static_assets=true
-
-  config.middleware.use ExceptionNotification::Rack,
-    :email => {
-      :email_prefix => "[CaseFinder] Development",
-      sender_address: CASE_FINDER_CONFIG[:support][:sender_address],
-      exception_recipients: CASE_FINDER_CONFIG[:support][:recipients],
-      :verbose_subject => false
-    }
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { address: 'smtp.gmail.com', port: 587,  authentication: 'plain', user_name: 'michaeljamesgurley@gmail.com', password: 'Booch1972' }
-  config.action_mailer.perform_deliveries = true
-  config.action_mailer.raise_delivery_errors = true
 end

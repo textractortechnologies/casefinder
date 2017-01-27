@@ -1,6 +1,7 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require 'stanford-core-nlp'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -23,12 +24,35 @@ module Casefinder
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
     config.active_job.queue_adapter = :delayed_job
-  end
-end
+    config.case_finder_config = config_for(:case_finder_config)
+    
+    Abstractor::Engine.routes.default_url_options[:host] = Rails.configuration.case_finder_config[:host]
 
-case_finder_config = File.join(Rails.root, 'config', 'case_finder_config.yml')
-if File.exists?(case_finder_config)
-  CASE_FINDER_CONFIG = ActiveSupport::HashWithIndifferentAccess.new(YAML.load(File.open(case_finder_config)))
-else
-  Rails.logger.info("Warning: Case Finder config file is missing. (#{case_finder_config})")
+    StanfordCoreNLP.use :english
+    StanfordCoreNLP.model_files = {}
+    StanfordCoreNLP.jar_path = "#{Rails.root}/lib/stanford-core-nlp/"
+    StanfordCoreNLP.model_path = "#{Rails.root}/lib/stanford-core-nlp/"
+    StanfordCoreNLP.jvm_args = ['-Xms1024M', '-Xmx2048M']
+    StanfordCoreNLP.default_jars = [
+      "joda-time.jar",
+      "xom.jar",
+      "stanford-corenlp-3.5.2.jar",
+      "stanford-corenlp-3.5.2-models.jar",
+      "jollyday.jar",
+      "bridge.jar"
+    ]
+
+    config.middleware.use ExceptionNotification::Rack,
+    :email => {
+      :email_prefix         => "[CaseFinder] #{Rails.env.titleize}",
+      :sender_address       => Rails.configuration.case_finder_config[:sender_address],
+      :exception_recipients => Rails.configuration.case_finder_config[:exception_recipients],
+      :verbose_subject      => false
+    }
+
+    config.action_mailer.delivery_method        = :smtp
+    config.action_mailer.smtp_settings          = Rails.configuration.case_finder_config[:smtp_settings]
+    config.action_mailer.perform_deliveries     = true
+    config.action_mailer.raise_delivery_errors  = true
+  end
 end

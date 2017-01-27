@@ -1,12 +1,27 @@
-support:
-  recipients:
-    - michaeljamesgurley@gmail.com
-    - will.k.t@gmail.com
-    - m-gurley@northwestern.edu
-    - y.bushmanova@gmail.com
-    - bcerf@northshore.org
-    - kcimarusti@northshore.org
-    - spena@northshore.org
-    - jpalmar@northshore.org
-  sender_address: textractortechnologies@gmail.com
-abstractor_engine_routes_default_url_options: http://casefinder.dev
+production:
+  :exception_recipients: 
+    - myemail@someserver.com 
+  :smtp_settings: 
+    :address: 'smtp.someserver.org'
+    :port: 25
+    :return_response: true
+    :openssl_verify_mode: 'none'
+  :host: 'http://app'
+staging:
+  :exception_recipients: 
+    - myemail@someserver.com 
+  :smtp_settings: 
+    :address: 'smtp.someserver.org'
+    :port: 25
+    :return_response: true
+    :openssl_verify_mode: 'none'
+  :host: 'http://app'
+development:
+  :exception_recipients: 
+    - myemail@someserver.com 
+  :smtp_settings: 
+    :address: 'smtp.someserver.org'
+    :port: 25
+    :return_response: true
+    :openssl_verify_mode: 'none'
+  :host: 'http://app'
