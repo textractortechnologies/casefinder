@@ -41,17 +41,6 @@ Feature: Authenticating and authorizing access
     | example.user@test.com | VALUE: AccessAudit.controller_action_access | curate:index                                      |
     | example.user@test.com | VALUE: AccessAudit.controller_action_access | pathology_cases:index                             |
     | example.user@test.com | VALUE: AccessAudit.controller_action_access | pathology_cases:edit with params: {"id"=>"1"}     |
-    When I visit the new import page
-    Then I should be on the new import page
-    And the "AccessAudit" records should match
-    | username              | action                                      | description                                       |
-    | unknown               | VALUE: AccessAudit.controller_action_access | sessions:new                                      |
-    | example.user@test.com | VALUE: AccessAudit.controller_action_access | sessions:create with params: {"commit"=>"Log in"} |
-    | example.user@test.com | VALUE: AccessAudit.login_success            |                                                   |
-    | example.user@test.com | VALUE: AccessAudit.controller_action_access | curate:index                                      |
-    | example.user@test.com | VALUE: AccessAudit.controller_action_access | pathology_cases:index                             |
-    | example.user@test.com | VALUE: AccessAudit.controller_action_access | pathology_cases:edit with params: {"id"=>"1"}     |
-    | example.user@test.com | VALUE: AccessAudit.controller_action_access | batch_imports:new                                 |
     When I visit the new export page
     Then I should be on the new export page
     And the "AccessAudit" records should match
@@ -62,7 +51,6 @@ Feature: Authenticating and authorizing access
     | example.user@test.com | VALUE: AccessAudit.controller_action_access | curate:index                                      |
     | example.user@test.com | VALUE: AccessAudit.controller_action_access | pathology_cases:index                             |
     | example.user@test.com | VALUE: AccessAudit.controller_action_access | pathology_cases:edit with params: {"id"=>"1"}     |
-    | example.user@test.com | VALUE: AccessAudit.controller_action_access | batch_imports:new                                 |
     | example.user@test.com | VALUE: AccessAudit.controller_action_access | batch_exports:new                                 |
 
   @javascript
