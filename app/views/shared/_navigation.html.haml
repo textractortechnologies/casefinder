@@ -1,25 +1,28 @@
-.icon-bar.five-up{ class: "case-finder-#{Rails.env}-navigation" }
-  = link_to root_path, class: 'item case-finder-logo-container' do
+.icon-bar.six-up{ class: "case-finder-#{Rails.env}-navigation" }
+  = link_to main_app.root_path, class: 'item case-finder-logo-container' do
     = image_tag 'case_finder.png', border: 0, alt: 'Case Finder', class: 'case-finder-logo'
     - unless Rails.env.production?
       = Rails.env.titleize
-  = link_to root_path, class: 'item' do
+  = link_to main_app.root_path, class: 'item' do
     %i{ class: "fi-home" }
     %span Home
   / = link_to new_batch_import_path(), class: 'item' do
   /   %i{ class: "fi-upload" }
   /   %span Import
-  = link_to pathology_cases_path(), class: 'item' do
+  = link_to main_app.pathology_cases_path(), class: 'item' do
     %i{ class: "fi-page-multiple" }
     %span Pathology Cases
-  = link_to new_batch_export_path(), class: 'item' do
+  = link_to main_app.new_batch_export_path(), class: 'item' do
     %i{ class: "fi-download" }
     %span Export
+  = link_to Abstractor::UserInterface.abstractor_relative_path(abstractor.abstractor_abstraction_schemas_path), class: 'item' do
+    %i{ class: "fi-list-thumbnails" }
+    %span Dictionaries  
   - if user_signed_in?
-    = link_to destroy_user_session_path(), method: 'delete', class: 'item' do
+    = link_to main_app.destroy_user_session_path(), method: 'delete', class: 'item' do
       %i{ class: "fi-unlock" }
       %span Log out
   - else
-    = link_to new_user_session_path(), class: 'item' do
+    = link_to main_app.new_user_session_path(), class: 'item' do
       %i{ class: "fi-lock" }
       %span Log in

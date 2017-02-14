@@ -1,3 +1,84 @@
 .abstractor_footer {
   top: 35%;
 }
+#abstractor_abstraction_schemas {
+  @include grid-column($columns: 24);
+  .abstractor_abstraction_schemas_header {
+    h2 {
+      b {
+        display: none;
+      }
+      &::before {
+        content: "Dictionaries";
+        font-weight: bold;
+        font-size: $h2-font-size;
+        line-height: $header-line-height;
+        @include grid-column($columns: 24);
+      }
+    }
+  }
+  .abstractor_abstraction_schemas_list table{
+    @include grid-column($columns: 24);
+  }
+}
+#abstractor_object_values {
+  @include grid-column($columns: 24);
+  .abstractor_object_values_header {
+    form#search_abstractor_object_values_form {
+      label {
+        font-weight: bold;
+        margin-bottom: .5rem;
+        padding-left: .25rem;
+      }
+      .abstractor_search {
+        @include grid-column($columns: 20);
+      }
+      .abstractor_navigation {
+        @include grid-column($columns: 4);
+        margin-top: 2rem;
+      }
+    }
+  }
+  .abstractor_object_values_list {
+    .pagination {
+      @include grid-column($columns: 24);
+    }
+    
+    table {
+      @include grid-column($columns: 24);
+    }
+  }
+  .new_abstractor_abstraction_schema_abstractor_object_value_link {
+    @include button($button-tny, $radius: false);
+  }
+}
+#abstractor_object_value {
+  @include grid-column($columns: 24);
+  label {
+    font-weight: bold;
+    margin-bottom: .5rem;
+    padding-left: .25rem;
+  }
+  br {
+    display: none;
+  }
+  .abstractor_object_value_variant_value {
+    @include grid-column($columns: 22);
+  }
+  .abstractor_object_value_variant_remove {
+    @include grid-column($columns: 2);
+    .abstractor_object_value_variant_delete_link {
+      @include button($button-tny, $alert-color, $radius: false);
+      margin-top: 2rem;
+    }
+  }
+  .links {
+     @include grid-column($columns: 24);
+     .abstractor_object_value_variant_add_link {
+        @include button($button-tny, $radius: false);
+     }
+  }
+  input[type="submit"] {
+    @include button($button-tny, $radius: false);
+  }
+}
