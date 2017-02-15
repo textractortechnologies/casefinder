@@ -1,24 +1,25 @@
 namespace :maintenance do
   desc "Orphan Sweep"
   task(orphan_sweep: :environment) do  |t, args|
-    orphan_pathology_case_ids = unabstracted_pathology_cases_ids(1800)
-    pathology_cases = PathologyCase.where(id: orphan_pathology_case_ids)
-    pathology_cases.each do |pathology_case|
-      begin
+    begin
+      seconds_ago = 1800
+      orphan_pathology_case_ids = unabstracted_pathology_cases_ids(seconds_ago)
+      pathology_cases = PathologyCase.where(id: orphan_pathology_case_ids)
+      pathology_cases.each do |pathology_case|
         pathology_case.abstract
         sleep(5)
-      rescue Exception => e
-        Rails.logger.info('maintenance:orphan_sweep rake task unhandled error.  Please fix.')
-        Rails.logger.info(e.message)
-        Rails.logger.info(e.class)
-        Rails.logger.info(e.backtrace)
-        RakeMailer.rake_exception(e).deliver_now
       end
-    end
-    reminaing_orphan_pathology_case_ids = unabstracted_pathology_cases_ids(1800)
+      reminaing_orphan_pathology_case_ids = unabstracted_pathology_cases_ids(seconds_ago)
 
-    if @orphan_pathology_case_ids.any?
-      RakeMailer.orphan_sweep(orphan_pathology_case_ids, reminaing_orphan_pathology_case_ids).deliver_now
+      if orphan_pathology_case_ids.any?
+        RakeMailer.orphan_sweep(orphan_pathology_case_ids, reminaing_orphan_pathology_case_ids).deliver_now
+      end
+    rescue Exception => e
+      Rails.logger.info('maintenance:orphan_sweep rake task unhandled error.  Please fix.')
+      Rails.logger.info(e.message)
+      Rails.logger.info(e.class)
+      Rails.logger.info(e.backtrace)
+      RakeMailer.rake_exception(e).deliver_now
     end
   end
 
