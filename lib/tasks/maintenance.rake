@@ -8,20 +8,35 @@ namespace :maintenance do
         pathology_case.abstract
         sleep(5)
       rescue Exception => e
-        RakeMailer.orphan_sweep_exception(e).deliver_now
+        Rails.logger.info('maintenance:orphan_sweep rake task unhandled error.  Please fix.')
+        Rails.logger.info(e.message)
+        Rails.logger.info(e.class)
+        Rails.logger.info(e.backtrace)
+        RakeMailer.rake_exception(e).deliver_now
       end
     end
     reminaing_orphan_pathology_case_ids = unabstracted_pathology_cases_ids(1800)
-    RakeMailer.orphan_sweep(orphan_pathology_case_ids, reminaing_orphan_pathology_case_ids).deliver_now
+
+    if @orphan_pathology_case_ids.any?
+      RakeMailer.orphan_sweep(orphan_pathology_case_ids, reminaing_orphan_pathology_case_ids).deliver_now
+    end
   end
 
   desc "Integrity check"
   task(integrity_check: :environment) do  |t, args|
-    successful_batch_import_count = BatchImport.where('created_at >= ? AND pathology_case_id IS NOT NULL', Date.today-3).count
-    failed_batch_import_count = BatchImport.where('pathology_case_id IS NULL AND created_at >=?', Date.today-3).count
-    pathology_case_count = PathologyCase.where('created_at >= ?', Date.today-3).count
-    orphan_pathology_case_count = unabstracted_pathology_cases_ids(0).size
-    RakeMailer.integrity_check(successful_batch_import_count, pathology_case_count, failed_batch_import_count, orphan_pathology_case_count).deliver_now
+    begin
+      successful_batch_import_count = BatchImport.where('created_at >= ? AND pathology_case_id IS NOT NULL', Date.today-3).count
+      failed_batch_import_count = BatchImport.where('pathology_case_id IS NULL AND created_at >=?', Date.today-3).count
+      pathology_case_count = PathologyCase.where('created_at >= ?', Date.today-3).count
+      orphan_pathology_case_count = unabstracted_pathology_cases_ids(0).size
+      RakeMailer.integrity_check(successful_batch_import_count, pathology_case_count, failed_batch_import_count, orphan_pathology_case_count).deliver_now
+    rescue Exception => e
+      Rails.logger.info('maintenance:integrity_check rake task unhandled error.  Please fix.')
+      Rails.logger.info(e.message)
+      Rails.logger.info(e.class)
+      Rails.logger.info(e.backtrace)
+      RakeMailer.rake_exception(e).deliver_now
+    end
   end
 end
 

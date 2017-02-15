@@ -8,10 +8,10 @@ class RakeMailer < ApplicationMailer
      mail(subject: "[#{Rails.env}] Case Finder Orphan Sweep Report")
    end
 
-   def orphan_sweep_exception(error)
+   def rake_exception(error)
      @error = error.message
      @backtrace = error.backtrace.join("\n")
-     mail(subject: "[#{Rails.env}] Case Finder Orphan Sweep Exception")
+     mail(subject: "[#{Rails.env}] Rake task Exception")
    end
 
    def integrity_check(successful_batch_import_count, pathology_case_count, failed_batch_import_count, orphan_pathology_case_count)
