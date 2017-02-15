@@ -69,8 +69,17 @@ class BatchImport < ActiveRecord::Base
   end
 
   private
+    def map_cpi_to_mrn(cpi)
+      mrn = nil
+      patient = Patient.where(cpi: cpi).first
+      if patient
+        mrn = patient.mrn
+      end
+      mrn
+    end
+
     def default_values
-      self.imported_at = DateTime.now
+      self.imported_at = DateTime.now if self.new_record?
     end
 
     def process_file
@@ -160,10 +169,15 @@ class BatchImport < ActiveRecord::Base
           pathology_case_file.zip_code = patient_address[4]
           pathology_case_file.country = patient_address[5]
           pathology_case_file.home_phone = segment.e13
-          mrn = segment.e3.split(segment.item_delim)
-          if mrn.any?
-            mrn = mrn.first
-            pathology_case_file.mrn = mrn
+          identifiers = segment.e3.split(segment.item_delim)
+          if identifiers.any?
+            cpi = identifiers.first
+            mrn = map_cpi_to_mrn(cpi)
+            if mrn
+              pathology_case_file.mrn = mrn
+            else
+              pathology_case_file.mrn = cpi
+            end
           end
           pathology_case_file.ssn =  segment.e19
         end
