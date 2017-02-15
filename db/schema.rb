@@ -373,7 +373,6 @@ ActiveRecord::Schema.define(version: 20170213025240) do
   end
 
   create_table "patients", force: :cascade do |t|
-    t.string   "patient_id", limit: 255
     t.string   "mrn",        limit: 255
     t.string   "cpi",        limit: 255
     t.datetime "created_at"
