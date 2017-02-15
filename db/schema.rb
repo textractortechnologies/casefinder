@@ -12,7 +12,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170313114817) do
-
   create_table "abstractor_abstraction_group_members", force: :cascade do |t|
     t.integer  "abstractor_abstraction_group_id", limit: 4
     t.integer  "abstractor_abstraction_id",       limit: 4
