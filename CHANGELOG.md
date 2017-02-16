@@ -4,6 +4,9 @@
 ## 1.1.0
 Released on Feburary 16, 2017
 
+* https://github.com/textractortechnologies/casefinder/issues/207
+Add checks for integrity or order messages to maintenance:integrity_check rake task.
+
 * https://github.com/textractortechnologies/casefinder/issues/206
 Don't send the orphan sweep email if no orphans were found.
 
