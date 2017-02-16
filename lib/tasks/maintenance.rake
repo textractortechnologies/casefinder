@@ -26,11 +26,14 @@ namespace :maintenance do
   desc "Integrity check"
   task(integrity_check: :environment) do  |t, args|
     begin
-      successful_batch_import_count = BatchImport.where('created_at >= ? AND pathology_case_id IS NOT NULL', Date.today-3).count
-      failed_batch_import_count = BatchImport.where('pathology_case_id IS NULL AND created_at >=?', Date.today-3).count
-      pathology_case_count = PathologyCase.where('created_at >= ?', Date.today-3).count
+      days_ago = 3
+      successful_batch_import_count = BatchImport.where('created_at >= ? AND pathology_case_id IS NOT NULL', Date.today-days_ago).count
+      failed_batch_import_count = BatchImport.where('pathology_case_id IS NULL AND created_at >=?', Date.today-days_ago).count
+      pathology_case_count = PathologyCase.where('created_at >= ?', Date.today-days_ago).count
       orphan_pathology_case_count = unabstracted_pathology_cases_ids(0).size
-      RakeMailer.integrity_check(successful_batch_import_count, pathology_case_count, failed_batch_import_count, orphan_pathology_case_count).deliver_now
+      successful_batch_import_order_count = BatchImportOrder.where('created_at >= ? AND patient_id IS NOT NULL', Date.today-days_ago).count
+      failed_batch_import_order_count = BatchImportOrder.where('patient_id IS NULL AND created_at >=?', Date.today-days_ago).count
+      RakeMailer.integrity_check(successful_batch_import_count, pathology_case_count, failed_batch_import_count, orphan_pathology_case_count, successful_batch_import_order_count, failed_batch_import_order_count).deliver_now
     rescue Exception => e
       Rails.logger.info('maintenance:integrity_check rake task unhandled error.  Please fix.')
       Rails.logger.info(e.message)

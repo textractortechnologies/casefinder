@@ -14,11 +14,14 @@ class RakeMailer < ApplicationMailer
      mail(subject: "[#{Rails.env}] Rake task Exception")
    end
 
-   def integrity_check(successful_batch_import_count, pathology_case_count, failed_batch_import_count, orphan_pathology_case_count)
+   def integrity_check(successful_batch_import_count, pathology_case_count, failed_batch_import_count, orphan_pathology_case_count, successful_batch_import_order_count, failed_batch_import_order_count)
      @successful_batch_import_count = successful_batch_import_count
      @pathology_case_count = pathology_case_count
      @failed_batch_import_count = failed_batch_import_count
      @orphan_pathology_case_count = orphan_pathology_case_count
+     @successful_batch_import_order_count = successful_batch_import_order_count
+     @failed_batch_import_order_count = failed_batch_import_order_count
+
      mail(subject: "[#{Rails.env}] Case Finder Integrity Check")
    end
  end
