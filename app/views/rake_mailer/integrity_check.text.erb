@@ -1,9 +1,21 @@
-Case Finder Integrity Check Report:
+Case Finder Integrity Check Report
 
-The system successfully processed <%= @successful_batch_import_count %> HL7 messages in the last 3 days.
+Pathology Case Orders
+----------------------------------
+The system successfully processed <%= @successful_batch_import_order_count %> HL7 pathology case order messages in the last 3 days.
+
+The system failed to process <%= @failed_batch_import_order_count %> HL7 pathology case order messages in the last 3 days.
+
+
+Pathology Case Results
+----------------------------------
+The system successfully processed <%= @successful_batch_import_count %> HL7 pathology case result messages in the last 3 days.
+
+The system failed to process <%= @failed_batch_import_count %> HL7 pathology case result messages in the last 3 days.
 
 The system created <%= @pathology_case_count %> pathology cases in the last 3 days.
 
-The system failed to process <%= @failed_batch_import_count %> HL7 messages in the last 3 days.
 
+Pathology Case Orphans
+----------------------------------
 There are currently <%= @orphan_pathology_case_count %> orphan pathology cases in the system.
