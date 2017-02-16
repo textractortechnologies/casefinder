@@ -1,8 +1,23 @@
-# Case FInder Changelog
+# Case Finder Changelog
 =======
 
+## 1.1.0
+Released on Feburary 16, 2017
+
+* https://github.com/textractortechnologies/casefinder/issues/206
+Don't send the orphan sweep email if no orphans were found.
+
+* Improve error handling in maintenance rake tasks to log/notify if a problem occurs.
+https://github.com/textractortechnologies/casefinder/issues/205
+
+Implement HTTP endpoint to receive pathology cases/reports orders.
+https://github.com/textractortechnologies/casefinder/issues/203
+
+* Deleting site/histology parings is not working.
+https://github.com/textractortechnologies/casefinder/issues/202
+
 ## 1.0.0
-Released on January 19, 2015
+Released on January 19, 2017
 
 * Remove Import link from the top navigation and prevent navigation to import endpoints.
 https://github.com/textractortechnologies/casefinder/issues/197
