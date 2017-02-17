@@ -175,8 +175,6 @@ class BatchImport < ActiveRecord::Base
             mrn = map_cpi_to_mrn(cpi)
             if mrn
               pathology_case_file.mrn = mrn
-            else
-              pathology_case_file.mrn = cpi
             end
           end
           pathology_case_file.ssn =  segment.e19
