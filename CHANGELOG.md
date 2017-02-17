@@ -1,6 +1,15 @@
 # Case Finder Changelog
 =======
 
+## 1.1.1
+Released on Feburary 17, 2017
+
+* If we can't map to the desired patient identifier, then leave mrn null/blank.
+https://github.com/textractortechnologies/casefinder/issues/208
+
+* Add checks for integrity or order messages to maintenance:integrity_check rake task.
+https://github.com/textractortechnologies/casefinder/issues/207
+
 ## 1.1.0
 Released on Feburary 16, 2017
 
