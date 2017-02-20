@@ -1,6 +1,12 @@
 # Case Finder Changelog
 =======
 
+## 1.1.2
+Released on Feburary 20, 2017
+
+* Map from mrn to cpi instead of cpi to mrn.
+https://github.com/textractortechnologies/casefinder/issues/209
+
 ## 1.1.1
 Released on Feburary 17, 2017
 
