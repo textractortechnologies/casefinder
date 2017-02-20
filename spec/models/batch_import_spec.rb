@@ -186,13 +186,13 @@ RSpec.describe BatchImport, :type => :model do
   end
 
   it 'imports from HL7 body and maps a cpi to a mrn', focus: false do
-    mrn = 'moomin'
-    patient = FactoryGirl.create(:patient, cpi: '99999990', mrn: mrn)
+    cpi = 'moomin'
+    patient = FactoryGirl.create(:patient, mrn: '99999990', cpi: cpi)
     expect(PathologyCase.count).to eq(0)
     batch_import = FactoryGirl.create(:hl7_batch_import_body)
     batch_import.import
     expect(PathologyCase.count).to eq(1)
     pathology_case = PathologyCase.where(accession_number: 'GHS1506001').first
-    expect(pathology_case.mrn).to eq(mrn)
+    expect(pathology_case.mrn).to eq(cpi)
   end
 end

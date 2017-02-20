@@ -54,30 +54,30 @@ RSpec.describe BatchImportOrder, :type => :model do
     batch_import_order = FactoryGirl.create(:hl7_batch_import_order_orm)
     batch_import_order.import
     expect(Patient.count).to eq(1)
-    patient = Patient.where(cpi: '99999990').first
+    patient = Patient.where(mrn: '99999990').first
     expect(patient).to_not be_nil
-    expect(patient.cpi).to eq('99999990')
-    expect(patient.mrn).to eq('8888880')
+    expect(patient.mrn).to eq('99999990')
+    expect(patient.cpi).to eq('8888880')
     expect(batch_import_order.reload.patient_id).to eq(patient.id)
   end
 
-  it 'imports an order from an HL7 body for message type ORM^O01 but only updates the mrn of an existing cpi', focus: false do
+  it 'imports an order from an HL7 body for message type ORM^O01 but only updates the cpi of an existing mrn', focus: false do
     expect(Patient.count).to eq(0)
     batch_import_order = FactoryGirl.create(:hl7_batch_import_order_orm)
     batch_import_order.import
     expect(Patient.count).to eq(1)
-    patient = Patient.where(cpi: '99999990').first
+    patient = Patient.where(mrn: '99999990').first
     expect(patient).to_not be_nil
-    expect(patient.cpi).to eq('99999990')
-    expect(patient.mrn).to eq('8888880')
+    expect(patient.mrn).to eq('99999990')
+    expect(patient.cpi).to eq('8888880')
     expect(batch_import_order.reload.patient_id).to eq(patient.id)
     batch_import_order = FactoryGirl.create(:hl7_batch_import_order_orm_update)
     batch_import_order.import
     expect(Patient.count).to eq(1)
-    patient = Patient.where(cpi: '99999990').first
+    patient = Patient.where(mrn: '99999990').first
     expect(patient).to_not be_nil
-    expect(patient.cpi).to eq('99999990')
-    expect(patient.mrn).to eq('66666660')
+    expect(patient.mrn).to eq('99999990')
+    expect(patient.cpi).to eq('66666660')
   end
 
   it 'imports an order from an HL7 body for message type ORR^O02', focus: false do
@@ -85,10 +85,10 @@ RSpec.describe BatchImportOrder, :type => :model do
     batch_import_order = FactoryGirl.create(:hl7_batch_import_order_orr)
     batch_import_order.import
     expect(Patient.count).to eq(1)
-    patient = Patient.where(cpi: '99999990').first
+    patient = Patient.where(mrn: '99999990').first
     expect(patient).to_not be_nil
-    expect(patient.cpi).to eq('99999990')
-    expect(patient.mrn).to eq('77777770')
+    expect(patient.mrn).to eq('99999990')
+    expect(patient.cpi).to eq('77777770')
     expect(batch_import_order.reload.patient_id).to eq(patient.id)
   end
 
@@ -97,9 +97,9 @@ RSpec.describe BatchImportOrder, :type => :model do
     batch_import_order = FactoryGirl.create(:hl7_batch_import_order_orm_no_mrn)
     batch_import_order.import
     expect(Patient.count).to eq(1)
-    patient = Patient.where(cpi: '99999990').first
-    expect(patient.cpi).to eq('99999990')
-    expect(patient.mrn).to be_nil
+    patient = Patient.where(mrn: '99999990').first
+    expect(patient.mrn).to eq('99999990')
+    expect(patient.cpi).to be_nil
     expect(batch_import_order.reload.patient_id).to eq(patient.id)
   end
 end
