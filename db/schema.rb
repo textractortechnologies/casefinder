@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170213025240) do
+ActiveRecord::Schema.define(version: 20170220031115) do
 
   create_table "abstractor_abstraction_group_members", force: :cascade do |t|
     t.integer  "abstractor_abstraction_group_id", limit: 4
@@ -373,13 +373,13 @@ ActiveRecord::Schema.define(version: 20170213025240) do
   end
 
   create_table "patients", force: :cascade do |t|
-    t.string   "mrn",        limit: 255
     t.string   "cpi",        limit: 255
+    t.string   "mrn",        limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "patients", ["cpi"], name: "index_patients__cpi", using: :btree
+  add_index "patients", ["mrn"], name: "index_patients__mrn", using: :btree
 
   create_table "role_assignments", force: :cascade do |t|
     t.integer  "role_id",    limit: 4, null: false

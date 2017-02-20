@@ -79,26 +79,26 @@ class BatchImportOrder < ActiveRecord::Base
 
       message.each do |segment|
         if segment.is_a?(HL7::Message::Segment::PID)
-          cpi = nil
           mrn = nil
+          cpi = nil
           identifiers = segment.e3.split(segment.item_delim)
           if identifiers.any?
-            cpi = identifiers.shift
+            mrn = identifiers.shift
             identifiers.each do |identifier|
               if identifier.include?('MR')
                 identifier = identifier.split('~')
                 if identifier.any?
-                  mrn = identifier.last
+                  cpi = identifier.last
                 end
               end
             end
           end
 
-          if cpi
-            patient = Patient.where(cpi: cpi).first_or_initialize
-          end
           if mrn
-            patient.mrn = mrn
+            patient = Patient.where(mrn: mrn).first_or_initialize
+          end
+          if cpi
+            patient.cpi = cpi
           end
           save_patient(patient)
         end
