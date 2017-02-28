@@ -19,19 +19,19 @@ https://github.com/textractortechnologies/casefinder/issues/207
 ## 1.1.0
 Released on Feburary 16, 2017
 
-* https://github.com/textractortechnologies/casefinder/issues/207
-Add checks for integrity or order messages to maintenance:integrity_check rake task.
+* Don't send the orphan sweep email if no orphans were found.
+https://github.com/textractortechnologies/casefinder/issues/206
 
-* https://github.com/textractortechnologies/casefinder/issues/206
-Don't send the orphan sweep email if no orphans were found.
 
 * Improve error handling in maintenance rake tasks to log/notify if a problem occurs.
 https://github.com/textractortechnologies/casefinder/issues/205
 
-Implement HTTP endpoint to receive pathology cases/reports orders.
+
+* Implement HTTP endpoint to receive pathology cases/reports orders.
 https://github.com/textractortechnologies/casefinder/issues/203
 
-* Deleting site/histology parings is not working.
+
+* Deleting site/histology parings is not working.  Change IIS settings.
 https://github.com/textractortechnologies/casefinder/issues/202
 
 ## 1.0.0
