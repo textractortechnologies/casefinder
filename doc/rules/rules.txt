@@ -1,0 +1,56 @@
+histologies: lib/setup/data/MASTER ICD-O Codes 7.20.16_modified_mgurley.csv
+sites: lib/setup/data/icdo3_sites.csv
+
+
+https://seer.cancer.gov/icd-o-3/
+http://www.naaccr.org/StandardsandRegistryOperations/ImplementationGuidelines.aspx
+
+* Deb Questions:
+
+** Handling ALL?  Would making it case sensitive solve most problems?  Is the matching not respecting word bondaries?
+
+** Handling c44._ and 8000-8111?
+
+*** If h=8000-8111 & s=c44._ and only s=c44._, discard h=8000-8111
+
+
+{"if" : [
+          { "and" : [
+            {"in" : [ { "var" : "histology" }, ['8000/0'','8000/0','8000/0','8000/1','8000/1','8000/1','8000/1','8000/1','8000/3','8000/3','8000/3','8000/3','8000/3','8000/3','8000/6','8000/6','8000/6','8000/6','8000/6','8000/9','8000/9','8001/0','8001/1','8001/1','8001/3','8002/3','8003/3','8004/3','8004/3','8005/0','8005/3','8010/0',] ]},
+            {"subset" : [ { "var" : "sites" }, ['C44','C44.0','C44.1','C44.2','C44.3','C44.4','C44.5','C44.6','C44.7','C44.8','C44.9'] ] },
+          ] },
+          { verb: "discard", "var": "histology" }
+          { verb: "replace", "var": "histology", "replacement": "8880/3" }
+]}
+
+
+
+{ "and" : [
+  {"in" : [ { "var" : "histology" }, ['8000/0'','8000/0','8000/0','8000/1','8000/1','8000/1','8000/1','8000/1','8000/3','8000/3','8000/3','8000/3','8000/3','8000/3','8000/6','8000/6','8000/6','8000/6','8000/6','8000/9','8000/9','8001/0','8001/1','8001/1','8001/3','8002/3','8003/3','8004/3','8004/3','8005/0','8005/3','8010/0',] ]},
+  {"subset" : [ { "var" : "sites" }, ['C44','C44.0','C44.1','C44.2','C44.3','C44.4','C44.5','C44.6','C44.7','C44.8','C44.9'] ] },
+] }
+
+
+
+** If h=8550/3 & s=prostate and only s=prostate, replace h=8550/3 with 8140/3
+** Need more infomation: Even though this is a peripheral blood study, the primary site for leukemias is always C42.1.  C42.0, blood, is the primary site for Waldenstrom’s macroglobulinemia 9761/3 only.
+** If h=XXXX/6, then replace with h=XXXX/3
+
+** If h=XXXX/9, then replace with h=XXXX/3, add suggestion for make s=C80.9, discard s=X
+** If h=8050/3 & s=C73.9 and only s=C73.9, replace h=8550/3 with 8260/3
+** Adjectives – colonic, cecal, gynecologic, cervical, uterine, etc. Consider whether it would be useful for them to suggest sites.
+** Primary CNS
+
+*** If h=? & no s=pcns, discard h=?
+*** If h=? & s=pcns, keep h=?
+
+
+* Action Items
+
+** Add case sensitive attribute to abstractor_object_values and abstractor_object_value_variants
+
+** Change posting of note and schema to note and schemas
+
+** Change schema sever to include rules about schema (that may include values in other schemas)
+
+** Make the highlighting as smart as Will.
