@@ -1,0 +1,11 @@
+{
+   "abstractor_abstraction_schema_id":2,
+   "abstractor_abstraction_schema_uri":"http://casefinder.dev/abstractor_abstraction_schemas/2.json",
+   "abstractor_abstraction_abstractor_suggestions_uri":"http://casefinder.dev/abstractor_abstractions/2/abstractor_suggestions.json",
+   "abstractor_abstraction_id":2,
+   "abstractor_abstraction_source_id":2,
+   "source_id":1,
+   "source_type":"PathologyCase",
+   "source_method":"note",
+   "text":"CASE: GHS-15-06001 \r\nPATIENT: POWERPATH TEST1 \r\nPre-Op Diagnosis:   Two lipomas, Right upper arm \r\nPost-Op Diagnosis:  None Given \r\nClinical History:   None Given \r\n \r\n \r\n \r\n \r\n \r\nFINAL DIAGNOSIS: \r\n \r\nA) Right upper arm biceps mass, excision: \r\n- Portions of mature adipose tissue (lipoma). \r\nB) Right upper arm triceps mass, excision: \r\n- Portions of mature adipose tissue (lipoma). \r\n \r\nGROSS: \r\n \r\nA) The specimen is received in formalin labeled with the patient's \r\nname and designated \"right upper arm biceps\" and consists of 2 \r\nyellow-tan portions of fibrofatty tissue which measure 2.0 x 1.5 x \r\n1.3 and 1.1 x 0.4 x 0.3 cm. The larger portion is encapsulated and \r\nis inked.  The larger portion is serially sectioned. On section, the \r\ncut surface is yellow tan and homogenous. Representative sections \r\nare submitted in a single cassette. \r\nB) The specimen is received in formalin labeled with the patient's \r\nname and designated \"right upper arm triceps\" and consists of 2 \r\nyellow-tan portions of fibrofatty tissue which measure 3.0 x 2.8 x \r\n1.3 and 0.8 x 0.7 x 0.4 cm. The larger portion is encapsulated and \r\nis inked.  The larger portion is serially sectioned. On section, the \r\ncut surface is yellow tan and homogenous. Representative sections \r\nare submitted in 2 cassettes. \r\nDV 9/1/2015 \r\n \r\nMICROSCOPIC: \r\n \r\nMicroscopic examination was performed. See diagnosis. \r\n \r\n \r\nThe electronic signature indicates that the named Attending \r\nPathologist has evaluated the specimen referred to in the signed \r\nsection of the report and formulated the diagnosis therein. \r\n \r\n \r\n \r\nWayne H Wirtz, MD \r\nPathologist \r\nElectronically signed 9/3/2015 8:21:58AM \r\n \r\n \r\n"
+}
