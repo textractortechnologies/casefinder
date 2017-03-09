@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170220031115) do
+ActiveRecord::Schema.define(version: 20170309114656) do
 
   create_table "abstractor_abstraction_group_members", force: :cascade do |t|
     t.integer  "abstractor_abstraction_group_id", limit: 4
@@ -142,6 +142,7 @@ ActiveRecord::Schema.define(version: 20170220031115) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "case_sensitive",                         default: false
   end
 
   create_table "abstractor_object_values", force: :cascade do |t|
@@ -153,6 +154,7 @@ ActiveRecord::Schema.define(version: 20170220031115) do
     t.string   "vocabulary_code",    limit: 255
     t.string   "vocabulary",         limit: 255
     t.string   "vocabulary_version", limit: 255
+    t.boolean  "case_sensitive",                   default: false
   end
 
   create_table "abstractor_relation_types", force: :cascade do |t|
