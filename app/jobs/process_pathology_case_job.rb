@@ -15,6 +15,6 @@ class ProcessPathologyCaseJob < Struct.new(:pathology_case_id)
 
   def perform
     pathology_case = PathologyCase.find(pathology_case_id)
-    pathology_case.abstract
+    pathology_case.abstract_multiple
   end
 end

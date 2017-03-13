@@ -6,7 +6,7 @@ namespace :maintenance do
       orphan_pathology_case_ids = unabstracted_pathology_cases_ids(seconds_ago)
       pathology_cases = PathologyCase.where(id: orphan_pathology_case_ids)
       pathology_cases.each do |pathology_case|
-        pathology_case.abstract
+        pathology_case.abstract_multiple
         sleep(5)
       end
       reminaing_orphan_pathology_case_ids = unabstracted_pathology_cases_ids(seconds_ago)

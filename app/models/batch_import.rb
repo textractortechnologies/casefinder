@@ -60,11 +60,12 @@ class BatchImport < ActiveRecord::Base
     ack
   end
 
-  def import
+  def import(options = {})
+    options.reverse_merge!(abstract_multiple: false)
     if import_body
-      process_body
+      process_body(options)
     elsif import_file
-      process_file
+      process_file(options)
     end
   end
 
@@ -82,21 +83,21 @@ class BatchImport < ActiveRecord::Base
       self.imported_at = DateTime.now if self.new_record?
     end
 
-    def process_file
+    def process_file(options)
       case File.extname(import_file_identifier)
       when ".xlsx"
         excel_file = Roo::Excelx.new(import_file.current_path, nil, :ignore)
-        import_excel(excel_file)
+        import_excel(excel_file, options)
       when ".txt"
         file = File.read(import_file.current_path)
         message = HL7::Message.new(clean_hl7(file))
-        import_hl7(message)
+        import_hl7(message, options)
       else raise "Unknown file type: #{file.original_filename}"
       end
     end
 
-    def process_body
-      import_hl7(hl7)
+    def process_body(options)
+      import_hl7(hl7, options)
     end
 
     def set_pathology_case_from_file(pathology_case_file, pathology_case)
@@ -105,13 +106,13 @@ class BatchImport < ActiveRecord::Base
       end
     end
 
-    def import_excel(excel_file)
+    def import_excel(excel_file, options)
       header = excel_file.row(1)
       pathology_case = nil
       note = ''
       (2..excel_file.last_row).each do |i|
         if excel_file.row(i).compact.size > 3
-          save_pathology_case(pathology_case, note)
+          save_pathology_case(pathology_case, note, options)
           note = ''
           accession_num = excel_file.row(i)[5].is_a?(Float) ? excel_file.row(i)[5].to_i.to_s : excel_file.row(i)[5]
           pathology_case = PathologyCase.new(accession_number: accession_num)
@@ -139,17 +140,17 @@ class BatchImport < ActiveRecord::Base
           note += excel_file.row(i).compact.join(' ') +  "\r\n"
         end
       end
-      save_pathology_case(pathology_case, note)
+      save_pathology_case(pathology_case, note, options)
     end
 
-    def import_hl7(message)
+    def import_hl7(message, options)
       pathology_case_file = nil
       pathology_case = nil
       note = ''
       message.each do |segment|
         if segment.is_a?(HL7::Message::Segment::MSH)
           set_pathology_case_from_file(pathology_case_file, pathology_case)
-          save_pathology_case(pathology_case, note)
+          save_pathology_case(pathology_case, note, options)
           pathology_case_file = PathologyCase.new
           pathology_case = nil
           note = ''
@@ -213,17 +214,21 @@ class BatchImport < ActiveRecord::Base
       end
 
       set_pathology_case_from_file(pathology_case_file, pathology_case)
-      save_pathology_case(pathology_case, note)
+      save_pathology_case(pathology_case, note, options)
     end
 
-    def save_pathology_case(pathology_case, note)
+    def save_pathology_case(pathology_case, note, options)
       if !pathology_case.nil? && pathology_case.is_a?(PathologyCase)
         note.gsub!('_x000D_', '')
         pathology_case.note = note
         pathology_case.save!
         self.pathology_case_id = pathology_case.id
         save!
-        pathology_case.abstract
+        if options[:abstract_multiple]  && !Rails.env.test?
+          pathology_case.abstract_multiple
+        else
+          pathology_case.abstract
+        end
       end
       pathology_case
     end

@@ -73,7 +73,7 @@ describe Api::V1::PathologyCasesController, type: :request do
       expect(response.body).to eq(batch_import.hl7_ack(BatchImport::BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ERROR, raw: true))
     end
 
-    it 'returns OK HTTP status code and HL7 application accept ACK if the request has all headers and a valid body', focus: false  do
+    it 'returns OK HTTP status code and HL7 application accept ACK if the request has all headers and a valid body', focus: false do
       batch_import = FactoryGirl.create(:hl7_batch_import_body)
       @env['Content-Type'] = 'x-application/hl7-v2+er7; charset=utf-8'
       @env['Date'] = DateTime.now.to_s

@@ -20,7 +20,7 @@ class Api::V1::PathologyCasesController < ApiController
           @batch_import.save!
           render plain: ack, content_type: 'x-application/hl7-v2+er7; charset=utf-8', status: :ok
         else
-          @batch_import.import
+          @batch_import.import(abstract_multiple: true)
           ack = @batch_import.hl7_ack(BatchImport::HL7_ACKNOWLEDGMENT_CODE_APPLICATION_ACCEPT, raw: true)
           @batch_import.status = ack
           @batch_import.save!
