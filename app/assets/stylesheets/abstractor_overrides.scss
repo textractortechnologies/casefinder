@@ -1,3 +1,27 @@
+.abstractor_abstraction_schema_controls {
+  text-align: center;
+}
+.abstractor_abstraction_schema_values_index_link {
+  @include button($button-tny, $radius: false);
+
+}
+
+.edit_abstractor_abstraction_schema_abstractor_object_value_link {
+  @include button($button-tny, $radius: false);
+}
+
+.delete_abstractor_abstraction_schema_abstractor_object_value_link {
+  @include button($button-tny, $alert-color, $radius: false);
+}
+
+#abstractor_object_value .navigation {
+  @include grid-row();
+  @include grid-column(
+   $columns: 3,
+   $push: 21
+  );
+}
+
 .abstractor_footer {
   top: 35%;
 }
@@ -43,7 +67,7 @@
     .pagination {
       @include grid-column($columns: 24);
     }
-    
+
     table {
       @include grid-column($columns: 24);
     }

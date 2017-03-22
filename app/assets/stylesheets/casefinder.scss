@@ -4,3 +4,20 @@
    $columns: 24
   );
 }
+
+.field_with_errors {
+  border-style: solid;
+  border-color: red;
+
+  input {
+    margin-bottom: 0rem !important;
+  }
+
+  select {
+    margin-bottom: 0rem !important;
+  }
+}
+
+.error {
+  display: inline;
+}

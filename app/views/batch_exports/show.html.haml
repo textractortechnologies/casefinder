@@ -32,8 +32,8 @@
           %th.site{ width: 300 }
             = sortable 'site'
           %th.review{ width: 100 }
-      - @abstractor_abstraction_groups.each do |abstractor_abstraction_group|
-        %tbody
+      %tbody
+        - @abstractor_abstraction_groups.each do |abstractor_abstraction_group|
           = content_tag_for(:tr, abstractor_abstraction_group ) do
             %td.pathology_case_accession_number
               = abstractor_abstraction_group.about.accession_number

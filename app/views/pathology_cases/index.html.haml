@@ -55,9 +55,9 @@
           %th.suggested_sites{ width: 300 }
             = sortable 'suggested_sites'
           %th.review{ width: 100 }
-      - @pathology_cases.each_with_index do |pathology_case, i|
-        - index = generate_index(params[:page], i)
-        %tbody
+      %tbody
+        - @pathology_cases.each_with_index do |pathology_case, i|
+          - index = generate_index(params[:page], i)
           = content_tag_for(:tr, pathology_case ) do
             %td.pathology_case_accession_number
               = pathology_case.accession_number
