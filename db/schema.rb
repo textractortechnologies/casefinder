@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170212033916) do
+ActiveRecord::Schema.define(version: 20170313114817) do
 
   create_table "abstractor_abstraction_group_members", force: :cascade do |t|
     t.integer  "abstractor_abstraction_group_id", limit: 4
@@ -142,6 +142,7 @@ ActiveRecord::Schema.define(version: 20170212033916) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "case_sensitive",                         default: false
   end
 
   create_table "abstractor_object_values", force: :cascade do |t|
@@ -153,6 +154,7 @@ ActiveRecord::Schema.define(version: 20170212033916) do
     t.string   "vocabulary_code",    limit: 255
     t.string   "vocabulary",         limit: 255
     t.string   "vocabulary_version", limit: 255
+    t.boolean  "case_sensitive",                   default: false
     t.text     "comments",           limit: 65535
   end
 
@@ -163,9 +165,24 @@ ActiveRecord::Schema.define(version: 20170212033916) do
     t.datetime "updated_at"
   end
 
+  create_table "abstractor_rule_abstractor_subjects", force: :cascade do |t|
+    t.integer  "abstractor_rule_id",    limit: 4, null: false
+    t.integer  "abstractor_subject_id", limit: 4, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "abstractor_rule_types", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.text     "description", limit: 65535
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "abstractor_rules", force: :cascade do |t|
+    t.text     "rule",       limit: 65535, null: false
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -308,6 +325,15 @@ ActiveRecord::Schema.define(version: 20170212033916) do
     t.datetime "updated_at"
   end
 
+  create_table "batch_import_orders", force: :cascade do |t|
+    t.datetime "imported_at",               null: false
+    t.text     "import_body", limit: 65535, null: false
+    t.text     "status",      limit: 65535
+    t.integer  "patient_id",  limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "batch_imports", force: :cascade do |t|
     t.datetime "imported_at",                     null: false
     t.string   "import_file",       limit: 255
@@ -363,6 +389,15 @@ ActiveRecord::Schema.define(version: 20170212033916) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "patients", force: :cascade do |t|
+    t.string   "cpi",        limit: 255
+    t.string   "mrn",        limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "patients", ["mrn"], name: "index_patients__mrn", using: :btree
 
   create_table "role_assignments", force: :cascade do |t|
     t.integer  "role_id",    limit: 4, null: false

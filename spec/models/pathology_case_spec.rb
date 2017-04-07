@@ -29,6 +29,17 @@ RSpec.describe PathologyCase, :type => :model do
     expect(pathology_case.reload.suggested_histologies).to eq(["carcinoma, nos (8010/3)", "large cell carcinoma, nos (8012/3)"])
   end
 
+  it 'can report suggested histologies ignoring soft deleted rows', focus: false do
+    abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_histology').first
+    abstractor_object_value = abstractor_abstraction_schema.abstractor_object_values.where(value: 'carcinoma, nos (8010/3)').first
+
+    pathology_case = FactoryGirl.create(:pathology_case, note: "Looks like carcinoma to me.  But maybe large cell carcinoma." )
+    pathology_case.abstract
+    expect(pathology_case.reload.suggested_histologies).to match_array([abstractor_object_value.value, "large cell carcinoma, nos (8012/3)"])
+    abstractor_object_value.soft_delete!
+    expect(pathology_case.reload.suggested_histologies).to match_array(["large cell carcinoma, nos (8012/3)"])
+  end
+
   it 'reports no suggested histologies if none exist', focus: false do
     pathology_case = FactoryGirl.create(:pathology_case, note: "Everything looks great!" )
     pathology_case.abstract
@@ -39,6 +50,17 @@ RSpec.describe PathologyCase, :type => :model do
     pathology_case = FactoryGirl.create(:pathology_case, note: "Looks like carcinoma of of the external lip to me.  But maybe large cell carcinoma of the base of tongue." )
     pathology_case.abstract
     expect(pathology_case.reload.suggested_sites).to eq(["base of tongue, nos (c01.9)", "external lip, nos (c00.2)", "lip, nos (c00.9)", "tongue, nos (c02.9)"])
+  end
+
+  it 'can report suggested sites ignoring soft deleted rows', focus: false do
+    abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
+    abstractor_object_value = abstractor_abstraction_schema.abstractor_object_values.where(value: 'base of tongue, nos (c01.9)').first
+
+    pathology_case = FactoryGirl.create(:pathology_case, note: "Looks like carcinoma of of the external lip to me.  But maybe large cell carcinoma of the base of tongue." )
+    pathology_case.abstract
+    expect(pathology_case.reload.suggested_sites).to match_array([abstractor_object_value.value, "external lip, nos (c00.2)", "lip, nos (c00.9)", "tongue, nos (c02.9)"])
+    abstractor_object_value.soft_delete!
+    expect(pathology_case.reload.suggested_sites).to match_array(["external lip, nos (c00.2)", "lip, nos (c00.9)", "tongue, nos (c02.9)"])
   end
 
   it 'reports no suggested sites if none exist', focus: false do
@@ -87,6 +109,21 @@ RSpec.describe PathologyCase, :type => :model do
     expect(PathologyCase.search_across_fields('carcinoma, nos (8010/3)')).to match_array([pathology_case_1])
   end
 
+  it 'can search accross fields (by suggested histology) ignoring soft deleted suggestions', focus: false do
+    abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_histology').first
+    abstractor_object_value = abstractor_abstraction_schema.abstractor_object_values.where(value: 'carcinoma, nos (8010/3)').first
+
+    pathology_case_1 = FactoryGirl.create(:pathology_case, note: "Looks like carcinoma to me.  But maybe large cell carcinoma." )
+    pathology_case_1.abstract
+
+    pathology_case_2 = FactoryGirl.create(:pathology_case, note: "Everything looks great!" )
+    pathology_case_2.abstract
+    expect(PathologyCase.search_across_fields(abstractor_object_value.value)).to match_array([pathology_case_1])
+
+    abstractor_object_value.soft_delete!
+    expect(PathologyCase.search_across_fields(abstractor_object_value.value)).to be_empty
+  end
+
   it 'can search accross fields (by suggested site)', focus: false do
     pathology_case_1 = FactoryGirl.create(:pathology_case, note: "Looks like carcinoma of of the external lip to me.  But maybe large cell carcinoma of the base of tongue." )
     pathology_case_1.abstract
@@ -94,6 +131,20 @@ RSpec.describe PathologyCase, :type => :model do
     pathology_case_2 = FactoryGirl.create(:pathology_case, note: "Everything looks great!" )
     pathology_case_2.abstract
     expect(PathologyCase.search_across_fields('tongue, nos (c02.9)')).to match_array([pathology_case_1])
+  end
+
+  it 'can search accross fields (by suggested site) ignoring soft deleted rows', focus: false do
+    abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
+    abstractor_object_value = abstractor_abstraction_schema.abstractor_object_values.where(value: 'tongue, nos (c02.9)').first
+
+    pathology_case_1 = FactoryGirl.create(:pathology_case, note: "Looks like carcinoma of of the external lip to me.  But maybe large cell carcinoma of the base of tongue." )
+    pathology_case_1.abstract
+
+    pathology_case_2 = FactoryGirl.create(:pathology_case, note: "Everything looks great!" )
+    pathology_case_2.abstract
+    expect(PathologyCase.search_across_fields(abstractor_object_value.value)).to match_array([pathology_case_1])
+    abstractor_object_value.soft_delete!
+    expect(PathologyCase.search_across_fields(abstractor_object_value.value)).to be_empty
   end
 
   it 'can search accross fields (and sort ascending/descending by a passed in column)', focus: false do

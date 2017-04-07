@@ -3,8 +3,8 @@ require 'csv'
 require "benchmark"
 class PathologyCase < ActiveRecord::Base
   include Abstractor::Abstractable
-  has_paper_trail 
-  
+  has_paper_trail
+
   COLLECTION_DATE_DATE_TYPE = 'collected'
   IMPORTED_DATE_DATE_TYPE = 'imported'
   DATE_TYPES = [COLLECTION_DATE_DATE_TYPE, IMPORTED_DATE_DATE_TYPE]
@@ -33,7 +33,7 @@ class PathologyCase < ActiveRecord::Base
     options = { abstractor_abstraction_schemas: abstractor_abstraction_schemas, sort_column: 'collection_date', sort_direction: 'asc' }.merge(options)
 
     if search_token
-      s = where(["lower(accession_number) like ? OR EXISTS (SELECT 1 FROM abstractor_abstractions aa JOIN abstractor_subjects sub ON aa.abstractor_subject_id = sub.id AND sub.abstractor_abstraction_schema_id IN (?) JOIN abstractor_suggestions sug ON aa.id = sug.abstractor_abstraction_id WHERE aa.deleted_at IS NULL AND aa.about_type = '#{self.to_s}' AND #{self.table_name}.id = aa.about_id AND sug.suggested_value like ?)", "%#{search_token}%", options[:abstractor_abstraction_schemas], "%#{search_token}%"])
+      s = where(["lower(accession_number) like ? OR EXISTS (SELECT 1 FROM abstractor_abstractions aa JOIN abstractor_subjects sub ON aa.abstractor_subject_id = sub.id AND sub.abstractor_abstraction_schema_id IN (?) JOIN abstractor_suggestions sug ON aa.id = sug.abstractor_abstraction_id WHERE aa.deleted_at IS NULL AND aa.about_type = '#{self.to_s}' AND #{self.table_name}.id = aa.about_id AND sug.deleted_at IS NULL AND sug.suggested_value like ?)", "%#{search_token}%", options[:abstractor_abstraction_schemas], "%#{search_token}%"])
     end
 
     joins_clause = prepare_joins_and_select_clauses(options[:sort_column], options[:sort_direction])
@@ -103,13 +103,13 @@ class PathologyCase < ActiveRecord::Base
   def suggested_histologies
     histology_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_histology').first
     abstractions = abstractor_abstractions_by_abstraction_schemas(abstractor_abstraction_schema_ids: [histology_abstraction_schema.id])
-    suggestions = abstractions.map { |a| a.abstractor_suggestions }.flatten.select { |s| s.abstractor_suggestion_sources.not_deleted.any? }.map(&:suggested_value).uniq.compact.sort
+    suggestions = abstractions.map { |a| a.abstractor_suggestions.not_deleted }.flatten.select { |s| s.abstractor_suggestion_sources.not_deleted.any? }.map(&:suggested_value).uniq.compact.sort
   end
 
   def suggested_sites
     histology_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
     abstractions = abstractor_abstractions_by_abstraction_schemas(abstractor_abstraction_schema_ids: [histology_abstraction_schema.id])
-    suggestions = abstractions.map { |a| a.abstractor_suggestions }.flatten.select { |s| s.abstractor_suggestion_sources.not_deleted.any? }.map(&:suggested_value).uniq.compact.sort
+    suggestions = abstractions.map { |a| a.abstractor_suggestions.not_deleted }.flatten.select { |s| s.abstractor_suggestion_sources.not_deleted.any? }.map(&:suggested_value).uniq.compact.sort
   end
 
   def patient_full_name
