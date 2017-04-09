@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170313114817) do
+ActiveRecord::Schema.define(version: 20170408021058) do
 
   create_table "abstractor_abstraction_group_members", force: :cascade do |t|
     t.integer  "abstractor_abstraction_group_id", limit: 4
@@ -263,6 +263,14 @@ ActiveRecord::Schema.define(version: 20170313114817) do
 
   add_index "abstractor_subjects", ["namespace_type", "namespace_id"], name: "index_namespace_type_namespace_id", using: :btree
   add_index "abstractor_subjects", ["subject_type"], name: "index_subject_type", using: :btree
+
+  create_table "abstractor_suggestion_object_value_variants", force: :cascade do |t|
+    t.integer  "abstractor_suggestion_id",           limit: 4
+    t.integer  "abstractor_object_value_variant_id", limit: 4
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "abstractor_suggestion_object_values", force: :cascade do |t|
     t.integer  "abstractor_suggestion_id",   limit: 4
