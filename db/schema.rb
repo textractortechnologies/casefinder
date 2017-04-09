@@ -154,11 +154,8 @@ ActiveRecord::Schema.define(version: 20170313114817) do
     t.string   "vocabulary_code",    limit: 255
     t.string   "vocabulary",         limit: 255
     t.string   "vocabulary_version", limit: 255
-    t.boolean  "case_sensitive",                   default: false
-<<<<<<< HEAD
     t.text     "comments",           limit: 65535
-=======
->>>>>>> close #211 Allow dictionary items to be marked as case sensitive.
+    t.boolean  "case_sensitive",                   default: false
   end
 
   create_table "abstractor_relation_types", force: :cascade do |t|
