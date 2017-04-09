@@ -83,12 +83,12 @@
     margin-bottom: .5rem;
     padding-left: .25rem;
   }
-  br {
-    display: none;
+  .abstractor_object_value_variant{
+    .value {
+      @include grid-column($columns: 22);
+    }
   }
-  .abstractor_object_value_variant_value {
-    @include grid-column($columns: 22);
-  }
+
   .abstractor_object_value_variant_remove {
     @include grid-column($columns: 2);
     .abstractor_object_value_variant_delete_link {
