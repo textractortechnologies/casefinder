@@ -85,7 +85,10 @@
   }
   .abstractor_object_value_variant{
     .value {
-      @include grid-column($columns: 22);
+      @include grid-column($columns: 20);
+    }
+    .case_sensitive {
+      @include grid-column($columns: 2);
     }
   }
 
