@@ -1,6 +1,519 @@
 require 'csv'
 require './lib/case_finder/setup/'
 namespace :setup do
+
+  desc "Rules"
+  task(rules: :environment) do  |t, args|
+    abstractor_abstraction_schema_has_cancer_histology = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_histology').first
+    abstractor_abstraction_schema_has_cancer_site = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_site').first
+    abstractor_subject_abstraction_schema_has_cancer_histology = Abstractor::AbstractorSubject.where(subject_type: PathologyCase.to_s, abstractor_abstraction_schema_id: abstractor_abstraction_schema_has_cancer_histology.id).first
+    abstractor_subject_abstraction_schema_has_cancer_site = Abstractor::AbstractorSubject.where(subject_type: PathologyCase.to_s, abstractor_abstraction_schema_id: abstractor_abstraction_schema_has_cancer_site.id).first
+
+    Abstractor::AbstractorRule.destroy_all
+    Abstractor::AbstractorRuleAbstractorSubject.destroy_all
+
+    #Rule 0
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION: Rule 0
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: one of meningioma, nos (9530/0), meningiomatosis, nos (9530/1), ...
+    // and this site does not yet exist: meninges, nos (c70.9)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then add site: meninges, nos (c70.9)
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "0: Add Site C70.9"
+    when
+       $hist : Histology(code in ("9530/0","9530/1","9531/0","9532/0","9533/0","9534/0","9537/0","9538/1","9539/1"))
+       and forall (Site(code != "C70.9"))
+    then
+        suggestions.addNewSite("meninges, nos (c70.9)", $hist.suggestion.getSuggestion_sources());
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+
+    #Rule 1
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Rule Description:
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When a histology code has a */0 or */1 extension, and there are no brain-related sites,
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then delete the histology
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Remove */0 and */1 Histology codes"
+    when
+       $hist : Histology(codeMatches(".+/[0|1]"))
+       and exists Site()
+       and forall (Site (code not in ("C70.0","C70.1","C70.9","C71.0","C71.1","C71.2","C71.3","C71.4",
+                                      "C71.5","C71.6","C71.7","C71.8","C71.9","C72.0","C72.1","C72.2",
+                                      "C72.3","C72.4","C72.5","C72.8","C72.9","C75.1","C75.2","C75.3")))
+    then
+        suggestions.remove($hist.suggestion);
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 2
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When a histology is one of a particular set of histologies, and the only sites are skin-related,
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then delete the histology
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Remove Histology codes when Skin Site"
+    when
+       $hist : Histology(code in ("8000/3","8000/6","8000/9","8001/3","8002/3","8003/3","8004/3","8005/3",
+                                  "8010/2","8010/3","8010/6","8010/9","8011/3","8012/3","8013/3","8014/3",
+                                  "8015/3","8020/3","8021/3","8022/3","8030/3","8031/3","8032/3","8033/3",
+                                  "8034/3","8035/3","8041/3","8042/3","8043/3","8044/3","8045/3","8046/3",
+                                  "8050/2","8050/3","8051/3","8052/2","8052/3","8070/2","8070/3","8070/6",
+                                  "8071/3","8072/3","8073/3","8074/3","8075/3","8076/2","8076/3","8077/2",
+                                  "8078/3","8080/2","8081/2","8082/3","8083/3","8084/3","8090/1","8090/3",
+                                  "8091/3","8092/3","8093/3","8094/3","8095/3","8097/3","8098/3","8102/3",
+                                  "8110/0","8110/3"))
+       and exists(Site())
+       and forall (Site (code in ("C44.0","C44.1","C44.2","C44.3","C44.4","C44.5","C44.6","C44.7","C44.8","C44.9")))
+    then
+        suggestions.remove($hist.suggestion);
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 3
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When a histology is esophageal squamous intraepithelial neoplasia (dysplasia), low grade (8077/2), ...
+    // and all sites are skin or cervix
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then delete the histology
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Remove 8077/2"
+    when
+        $hist : Histology(suggestion.value in
+                                    ("esophageal squamous intraepithelial neoplasia (dysplasia), low grade (8077/2)",
+                                     "squamous intraepithelial neoplasia, high grade (8077/2)",
+                                     "squamous intraepithelial neoplasia, grade iii (8077/2)",
+                                     "cervical intraepithelial neoplasia, grade iii (8077/2)",
+                                     "cin iii with severe dysplasia (8077/2)"))
+        and exists(Site())
+        and forall (Site(code in ("C44.0","C44.1","C44.2","C44.3","C44.4","C44.5","C44.6","C44.7","C44.8","C44.9",
+                                 "C53.0", "C53.1", "C53.8", "C53.9")))
+    then
+        suggestions.remove($hist.suggestion);
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 4
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When a histology is pancreatic endocrine tumor, benign  (8150/0) or pancreatic endocrine tumor, nos (8150/1)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with */3
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Replace with 8150/3"
+    when
+       $hist : Histology(code in ("8150/0", "8150/1"))
+    then
+        $hist.suggestion.setValue("pancreatic endocrine tumor, malignant  (8150/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 5
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When a histology is: insulinoma, nos (8151/0)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with: */3
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Replace with 8151/3"
+    when
+       $hist : Histology(suggestion.value == "insulinoma, nos (8151/0)")
+    then
+        $hist.suggestion.setValue("insulinoma, malignant (8151/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 6
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When a histology is: enteroglucagonoma, nos (8152/1), ...
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with: */3
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Replace with 8152/3"
+    when
+       $hist : Histology(code == "8152/1")
+    then
+        $hist.suggestion.setValue("enteroglucagonoma, malignant (8152/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 7
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When a histology is: gastrinoma, nos (8153/1)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with: */3
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Replace with 8153/3"
+    when
+       $hist : Histology(code == "8153/1")
+    then
+        $hist.suggestion.setValue("gastrinoma, malignant (8153/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 8
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When a histology is: vipoma, nos (8155/1)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with: */3
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Replace with 8155/3"
+    when
+       $hist : Histology(code == "8155/1")
+    then
+        $hist.suggestion.setValue("vipoma, malignant (8155/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 9
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When a histology is: somatostatinoma, nos (8156/1)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with: */3
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Replace with 8156/3"
+    when
+       $hist : Histology(code == "8156/1")
+    then
+        $hist.suggestion.setValue("somatostatinoma, malignant (8156/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 10
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When a histology is: teratoma, benign (9080/0)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with */3
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Replace with 9080/3"
+    when
+       $hist : Histology(code == "9080/0")
+    then
+        $hist.suggestion.setValue("teratoma, malignant, nos (9080/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 11
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: acinar cell carcinoma (8550/3)
+    // and all sites are: prostate gland (c61.9)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with: adenocarcinoma, nos (8140/3)
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Replace with 8140/3"
+    when
+       $hist : Histology(code in ("8550/3"))
+       and exists(Site())
+       and forall(Site(code == "C61.9"))
+    then
+        $hist.suggestion.setValue("adenocarcinoma, nos (8140/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 12
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION: Rule 12
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: acinar cell carcinoma (8550/3)
+    // and one of the sites is: prostate gland (c61.9)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then add the histology with: adenocarcinoma, nos (8140/3)
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "12: Add copy with 8140/3"
+    when
+       $hist : Histology(code in ("8550/3"))
+       and exists(Site(code != "C61.9"))
+       and exists(Site(code == "C61.9"))
+    then
+        suggestions.addNewHist("adenocarcinoma, nos (8140/3)", $hist.suggestion.getSuggestion_sources());
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 13
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: metastatic (8000/6)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with: */3
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "replace 8000/6"
+    when
+        $hist : Histology(code == "8000/6")
+    then
+        $hist.suggestion.setValue("neoplasm, malignant (8000/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 14
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: carcinoma, metastatic, nos (8010/6)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with: */3
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "replace 8010/6"
+    when
+        $hist : Histology(code == "8010/6")
+    then
+        $hist.suggestion.setValue("carcinoma, nos (8010/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 15
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: squamous cell carcinoma, metastatic, nos (8070/6)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with: */3
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "replace 8070/6"
+    when
+        $hist : Histology(code == "8070/6")
+    then
+        $hist.suggestion.setValue("squamous cell carcinoma, nos (8070/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 16
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: adenocarcinoma, metastatic, nos (8140/6)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with: */3
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "replace 8140/6"
+    when
+        $hist : Histology(code == "8140/6")
+    then
+        $hist.suggestion.setValue("adenocarcinoma, nos (8140/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 17
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: pseudomyxoma peritonei (8480/6)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with: */3
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "replace 8480/6"
+    when
+        $hist : Histology(code == "8480/6")
+    then
+        $hist.suggestion.setValue("mucinous adenocarcinoma (8480/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 18
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: slvl (9689/6)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with: */3
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "replace 9689/6"
+    when
+        $hist : Histology(code == "9689/6")
+    then
+        $hist.suggestion.setValue("splenic marginal zone lymphoma (9689/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 19
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: papillary carcinoma, nos (8050/3)
+    // and all sites are: thyroid gland (c73.9)
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then replace the histology with: pancreatic endocrine tumor, malignant  (8150/3)
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Replace with Histology 8150/3"
+    when
+       $hist : Histology(code == "8050/3")
+       and exists(Site())
+       and forall (Site(code == "C73.9"))
+    then
+        $hist.suggestion.setValue("pancreatic endocrine tumor, malignant  (8150/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 20
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: papillary carcinoma, nos (8050/3)
+    // and one site is: thyroid gland (c73.9)
+    // and another site exists that is something else
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then add a new histology with: pancreatic endocrine tumor, malignant  (8150/3)
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Add Histology 8150/3"
+    when
+       $hist : Histology(code == "8050/3")
+       and exists(Site(code != "C73.9"))
+       and exists(Site(code == "C73.9"))
+    then
+        suggestions.addCopy($hist.suggestion, "pancreatic endocrine tumor, malignant  (8150/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+  end
+
   desc "Abstractor schemas new"
   task(abstractor_schemas: :environment) do  |t, args|
     source_type_custom_nlp_suggestion = Abstractor::AbstractorAbstractionSourceType.where(name: 'custom nlp suggestion').first

@@ -6,7 +6,7 @@
   = link_to main_app.root_path, class: 'item' do
     %i{ class: "fi-home" }
     %span Home
-  / = link_to new_batch_import_path(), class: 'item' do
+  / = link_to main_app.new_batch_import_path(), class: 'item' do
   /   %i{ class: "fi-upload" }
   /   %span Import
   = link_to main_app.pathology_cases_path(), class: 'item' do
@@ -17,7 +17,7 @@
     %span Export
   = link_to Abstractor::UserInterface.abstractor_relative_path(abstractor.abstractor_abstraction_schemas_path), class: 'item' do
     %i{ class: "fi-list-thumbnails" }
-    %span Dictionaries  
+    %span Dictionaries
   - if user_signed_in?
     = link_to main_app.destroy_user_session_path(), method: 'delete', class: 'item' do
       %i{ class: "fi-unlock" }
