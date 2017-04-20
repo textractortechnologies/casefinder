@@ -13,7 +13,6 @@ http://www.naaccr.org/StandardsandRegistryOperations/ImplementationGuidelines.as
 
 *** If h=8000-8111 & s=c44._ and only s=c44._, discard h=8000-8111
 
-
 { "if" : [
           { "and" : [
             {"in" : [ { "predicate" : "has_cancer_histology" }, ['8000/0','8000/0','8000/0','8000/1','8000/1','8000/1','8000/1','8000/1','8000/3','8000/3','8000/3','8000/3','8000/3','8000/3','8000/6','8000/6','8000/6','8000/6','8000/6','8000/9','8000/9','8001/0','8001/1','8001/1','8001/3','8002/3','8003/3','8004/3','8004/3','8005/0','8005/3','8010/0',] ]},
@@ -27,7 +26,6 @@ http://www.naaccr.org/StandardsandRegistryOperations/ImplementationGuidelines.as
           {"in" : [ { "predicate" : "has_cancer_histology" }, ['8000/0', '8000/1']]},
           { verb: "replace", "predicate": "has_cancer_histology", "replacement": "8880/3" }
 ]}
-
 
 ** If h=8550/3 & s=prostate and only s=prostate, replace h=8550/3 with 8140/3
 ** Need more infomation: Even though this is a peripheral blood study, the primary site for leukemias is always C42.1.  C42.0, blood, is the primary site for Waldenstrom’s macroglobulinemia 9761/3 only.
