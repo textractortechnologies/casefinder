@@ -1,4 +1,98 @@
+# select DISTINCT pc.accession_number
+#      , pc.collection_date
+#      , sh.predicate
+#      , sug.suggested_value
+#      , sug.unknown
+#      , src.*
+# from pathology_cases pc join abstractor_abstractions aa on pc.id = aa.about_id
+#                         join abstractor_suggestions sug on aa.id = sug.abstractor_abstraction_id
+#                         join abstractor_subjects sub on aa.abstractor_subject_id = sub.id
+#                         join abstractor_abstraction_schemas sh on sub.abstractor_abstraction_schema_id = sh.id
+#                         join abstractor_suggestion_sources src on sug.id = src.abstractor_suggestion_id
+# where pc.created_at >= '4/21/2017'
+# --and pc.accession_number = '?'
+# order by pc.accession_number, sh.predicate, sug.suggested_value
+
+
+# --production
+# select  pc.accession_number
+#      , pc.collection_date
+#      , sh.predicate
+#      , sug.suggested_value
+#      , sug.unknown
+#      , src.*
+# from pathology_cases pc join abstractor_abstractions aa on pc.id = aa.about_id
+#                         join abstractor_suggestions sug on aa.id = sug.abstractor_abstraction_id
+#                         join abstractor_subjects sub on aa.abstractor_subject_id = sub.id
+#                         join abstractor_abstraction_schemas sh on sub.abstractor_abstraction_schema_id = sh.id
+#                         join abstractor_suggestion_sources src on sug.id = src.abstractor_suggestion_id
+# where pc.created_at >= '4/21/2017'
+# and pc.accession_number = '?'
+# order by pc.accession_number, sh.predicate, sug.suggested_value
+
 namespace :maintenance do
+  desc "Compare rule effects"
+  task(compare_rule_effects: :environment) do  |t, args|
+    production_pathology_cases = CSV.new(File.open('lib/setup/data/rules/production_pathology_cases.txt'), :headers => true, :col_sep =>"\t", :return_headers => false)
+    test_pathology_cases = CSV.new(File.open('lib/setup/data/rules/test_pathology_cases.txt'), :headers => true, :col_sep =>"\t", :return_headers => false)
+    # production_pathology_cases = CSV.new(File.open('lib/setup/data/rules/production_pathology_cases.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+    # test_pathology_cases = CSV.new(File.open('lib/setup/data/rules/test_pathology_cases.csv'), headers: true, col_sep: ",", return_headers: false,  quote_char: "\"")
+
+    production_pathology_cases = production_pathology_cases.map { |production_pathology_case| production_pathology_case.to_hash }
+    test_pathology_cases = test_pathology_cases.map { |test_pathology_case| test_pathology_case.to_hash }
+    accession_numbers = production_pathology_cases.map { |production_pathology_case| production_pathology_case.to_hash['accession_number'] }
+    accession_numbers.uniq!
+
+    File.open('C:\Users\gurleym1\Desktop\compare_rule_effects.txt', "w") do |f|
+    # File.open('lib/setup/data/rules/compare_rule_effects.txt', "w") do |f|
+      accession_numbers.each do |accession_number|
+        f.write("BEGIN------------------------------------------------------\n")
+        f.write("Looking at: \n")
+        f.write("#{accession_number}\n")
+        p = production_pathology_cases.select { |production_pathology_case| production_pathology_case['accession_number'] == accession_number }
+        t = test_pathology_cases.select { |test_pathology_case| test_pathology_case['accession_number'] == accession_number }
+
+        if p == t
+          f.write("Same!\n")
+          f.write("Here are the suggestions for both test and production:\n")
+          p.each do |ep|
+           f.write("#{ep}\n")
+          end
+        else
+          f.write("Different!\n")
+          f.write("Here are the suggestions for production:\n")
+          p.each do |ep|
+            f.write("#{ep}\n")
+          end
+          f.write("Here are the suggestions for test:\n")
+          t.each do |et|
+            f.write("#{et}\n")
+          end
+
+          production_extras = p - t
+
+          if production_extras.any?
+            f.write("Here are the suggestions in production not in test:\n")
+            production_extras.each do |production_extra|
+              f.write("#{production_extra}\n")
+            end
+          end
+
+          test_extras = t - p
+
+          if test_extras.any?
+            f.write("Here are the suggestions in test not in production:\n")
+            test_extras.each do |test_extra|
+              f.write("#{test_extra}\n")
+            end
+          end
+        end
+        f.write("END------------------------------------------------------\n")
+        f.write("\n")
+      end
+    end
+  end
+
   desc "Orphan Sweep"
   task(orphan_sweep: :environment) do  |t, args|
     begin

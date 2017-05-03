@@ -12,7 +12,7 @@ namespace :setup do
     Abstractor::AbstractorRule.destroy_all
     Abstractor::AbstractorRuleAbstractorSubject.destroy_all
 
-    #Rule 0
+    #Rule 0 Deb/Addie:Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ namespace :setup do
     abstractor_rule.save!
 
 
-    #Rule 1
+    #Rule 1 Deb/Addie:Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 2
+    #Rule 2 Deb/Addie:Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -95,7 +95,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 3
+    #Rule 3 Deb/Addie:Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -126,7 +126,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 4
+    #Rule 4 Deb/Addie: To verify if always replacing with with "pancreatic endocrine tumor, malignant  (8150/3)" is OK.
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -148,7 +148,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 5
+    #Rule 5 Deb/Addie:Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -170,7 +170,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 6
+    #Rule 6 Deb/Addie: To verify if always replacing with with "enteroglucagonoma, malignant (8152/3)" is OK.
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 7
+    #Rule 7 Deb/Addie: To verify if always replacing with with "gastrinoma, malignant (8153/3)" is OK.
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -214,7 +214,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 8
+    #Rule 8 Deb/Addie: Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -236,7 +236,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 9
+    #Rule 9 Deb/Addie: To verify if always replacing with with "somatostatinoma, malignant (8156/3)" is OK.
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -258,7 +258,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 10
+    #Rule 10 Deb/Addie: Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -280,7 +280,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 11
+    #Rule 11 Deb/Addie: Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -305,7 +305,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 12
+    #Rule 12 Deb/Addie: Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -330,7 +330,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 13
+    #Rule 13 Deb/Addie: Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -352,7 +352,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 14
+    #Rule 14 Deb/Addie: Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -374,7 +374,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 15
+    #Rule 15 Deb/Addie: Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -396,7 +396,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 16
+    #Rule 16 Deb/Addie: Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -418,7 +418,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 17
+    #Rule 17 Deb/Addie: Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -440,7 +440,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 18
+    #Rule 18 Deb/Addie: Yes
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -462,7 +462,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 19
+    #Rule 19 Deb/Addie: Wrong! Replace "pancreatic endocrine tumor, malignant  (8150/3)" with "papillary carcinoma of thyroid (8260/3)".
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -471,7 +471,7 @@ namespace :setup do
     // When histology is: papillary carcinoma, nos (8050/3)
     // and all sites are: thyroid gland (c73.9)
     // ---------------------------------------------------------------------------------------------------------------------
-    // Then replace the histology with: pancreatic endocrine tumor, malignant  (8150/3)
+    // Then replace the histology with: papillary carcinoma of thyroid (8260/3)
     // ---------------------------------------------------------------------------------------------------------------------
     rule "Replace with Histology 8150/3"
     when
@@ -479,7 +479,7 @@ namespace :setup do
        and exists(Site())
        and forall (Site(code == "C73.9"))
     then
-        $hist.suggestion.setValue("pancreatic endocrine tumor, malignant  (8150/3)");
+        $hist.suggestion.setValue("papillary carcinoma of thyroid (8260/3)");
     end
     HEREDOC
 
@@ -487,7 +487,7 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
-    #Rule 20
+    #Rule 20 Wrong! Replace "pancreatic endocrine tumor, malignant  (8150/3)" with "papillary carcinoma of thyroid (8260/3)".
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
     // ---------------------------------------------------------------------------------------------------------------------
@@ -497,7 +497,7 @@ namespace :setup do
     // and one site is: thyroid gland (c73.9)
     // and another site exists that is something else
     // ---------------------------------------------------------------------------------------------------------------------
-    // Then add a new histology with: pancreatic endocrine tumor, malignant  (8150/3)
+    // Then add a new histology with: papillary carcinoma of thyroid (8260/3)
     // ---------------------------------------------------------------------------------------------------------------------
     rule "Add Histology 8150/3"
     when
@@ -505,7 +505,89 @@ namespace :setup do
        and exists(Site(code != "C73.9"))
        and exists(Site(code == "C73.9"))
     then
-        suggestions.addCopy($hist.suggestion, "pancreatic endocrine tumor, malignant  (8150/3)");
+       suggestions.addCopy($hist.suggestion, "papillary carcinoma of thyroid (8260/3)");
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 21
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION: Rule 21
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: one of leukemias
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then add site: bone marrow (c42.1)
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "21: Add Site c42.1"
+    when
+      forall (Site(code != "C42.1"))
+      $hist : Histology(code in ("9742/3", "9800/3", "9801/3", "9806/3", "9807/3", "9808/3", "9809/3", "9811/3",
+      "9812/3", "9813/3", "9814/3", "9815/3", "9816/3", "9817/3", "9818/3", "9820/3",
+      "9823/3", "9826/3", "9827/3", "9831/3", "9832/3", "9833/1", "9833/3", "9834/3",
+      "9837/3", "9840/3", "9860/3", "9861/3", "9863/3", "9865/3", "9866/3", "9867/3",
+      "9869/3", "9870/3", "9871/3", "9872/3", "9873/3", "9874/3", "9875/3", "9876/3",
+      "9880/3", "9891/3", "9895/3", "9896/3", "9897/3", "9898/1", "9898/3", "9910/3",
+      "9911/3", "9940/3", "9945/3", "9946/3", "9948/3", "9950/3", "9961/3", "9962/3",
+      "9963/3", "9964/3", "9965/3", "9966/3", "9967/3", "9971/1", "9971/3", "9975/3",
+      "9980/3", "9982/3", "9983/3", "9985/3", "9986/3", "9989/3"))
+    then
+      suggestions.addNewSite("bone marrow (c42.1)", $hist.suggestion.getSuggestion_sources());
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 22
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION: Rule 22
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: 9761/3
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then add site: blood (c42.0)
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "22: Add Site c42.0"
+    when
+      forall (Site(code != "C42.0"))
+      $hist : Histology(code in ("9761/3"))
+    then
+      suggestions.addNewSite("blood (c42.0)", $hist.suggestion.getSuggestion_sources());
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 99
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When no sites are suggested
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then add a new site with: C80.9
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Rule 99: Add Site C80.9"
+    when
+      forall (Site(suggestion.unknown == 1))
+    then
+      Collection<SuggestionSource> suggestion_sources;
+      suggestion_sources = new ArrayList<>();
+      SuggestionSource source = new SuggestionSource();
+      source.setMatch_value("");
+      source.setSentence_match_value("");
+      suggestion_sources.add(source);
+      suggestions.addNewSite("unknown primary site (c80.9)", suggestion_sources);
     end
     HEREDOC
 

@@ -21,6 +21,7 @@ lib/abstractor
 /design/import/ftp/*
 config/database.yml
 config/ldap.yml
+lib/setup/data/rules
 
 # TODO Comment out these rules if you are OK with secrets being uploaded to the repo
 config/secrets.yml
