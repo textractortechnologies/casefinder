@@ -1,20 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe User, :type => :model do
-  # before(:each) do
-  #   default_devise_settings!
-  #   reset_ldap_server!
-  # end
-  #
-  # describe "look up and ldap user" do
-  #   it "should return true for a user that does exist in LDAP", focus: false do
-  #     assert_equal true, ::Devise::LDAP::Adapter.valid_login?('example.user@test.com')
-  #   end
-  #
-  #   it "should return false for a user that doesn't exist in LDAP", focus: false do
-  #     assert_equal false, ::Devise::LDAP::Adapter.valid_login?('barneystinson')
-  #   end
-  # end
   before(:each) do
     CaseFinder::Setup.setup_roles
   end
@@ -80,5 +66,31 @@ RSpec.describe User, :type => :model do
     roles = Role.all
     groups = roles.map(&:external_identifier)
     expect(User.determine_roles(groups)).to match_array(roles)
+  end
+
+  it 'knows if a user has a role', focus: false do
+    user = FactoryGirl.create(:user)
+    role = Role.where(name: Role::ROLE_CASEFINDER_USER).first
+    user.role_assignments.build(role: role)
+    user.save!
+    expect(user.has_role?(Role::ROLE_CASEFINDER_USER)).to be_truthy
+  end
+
+  it 'knows if a user does not have a role', focus: false do
+    user = FactoryGirl.create(:user)
+    role = Role.where(name: Role::ROLE_CASEFINDER_ADMIN).first
+    user.role_assignments.build(role: role)
+    user.save!
+    expect(user.has_role?(Role::ROLE_CASEFINDER_USER)).to be_falsy
+  end
+
+  it 'knows if a user does not have a role even if it is soft deleted', focus: false do
+    user = FactoryGirl.create(:user)
+    role = Role.where(name: Role::ROLE_CASEFINDER_USER).first
+    user.role_assignments.build(role: role)
+    user.save!
+    expect(user.has_role?(Role::ROLE_CASEFINDER_USER)).to be_truthy
+    user.role_assignments.where(role: role).first.soft_delete!
+    expect(user.reload.has_role?(Role::ROLE_CASEFINDER_USER)).to be_falsy
   end
 end

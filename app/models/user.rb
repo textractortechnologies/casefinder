@@ -45,4 +45,8 @@ class User < ActiveRecord::Base
   def role?
     role_assignments.not_deleted.size > 0
   end
+
+  def has_role?(role_name)
+    role_assignments.not_deleted.select { |role_assignment| role_assignment.role.name == role_name }.any?
+  end
 end

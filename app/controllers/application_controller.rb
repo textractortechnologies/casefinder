@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  UNAUTHORIZED_MESSAGE = 'You are not authorized to perform this action.'
   include WithAccessAudit
   include Pundit
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
@@ -6,7 +7,7 @@ class ApplicationController < ActionController::Base
   rescue_from DeviseLdapAuthenticatable::LdapException do |exception|
     render :text => exception, :status => 500
   end
-  
+
   def abstractor_user
     current_user.username if defined?(current_user)
   end
@@ -53,11 +54,11 @@ class ApplicationController < ActionController::Base
 
   private
     def user_not_authorized(exception)
-      flash[:alert] = "You are not authorized to perform this action."
+      flash[:alert] = UNAUTHORIZED_MESSAGE
       audit_activity(
         action:       AccessAudit.unauthorized_access_attempt,
-        description:  "#{exception.policy.class.to_s.underscore}.#{exception.query}" 
+        description:  "#{exception.policy.class.to_s.underscore}.#{exception.query}"
       )
-      redirect_to(request.referrer || root_path)
+      redirect_to(main_app.root_url)
     end
 end

@@ -1,16 +1,14 @@
 module Abstractor
-  class AbstractorObjectValuesController < Abstractor::ApplicationController
-    include Abstractor::Methods::Controllers::AbstractorObjectValuesController
-  end
-end
-
-module Abstractor
   module AbstractorObjectValuesControllerCustomMethods
   end
 
   class AbstractorObjectValuesController < ApplicationController
     include Abstractor::Methods::Controllers::AbstractorObjectValuesController
     include Abstractor::AbstractorObjectValuesControllerCustomMethods
-    before_action :authenticate_user!
+    before_action :authenticate_user!, :authorize_user!
+
+    def authorize_user!
+      authorize Abstractor::AbstractorObjectValue.new, :all?
+    end
   end
 end

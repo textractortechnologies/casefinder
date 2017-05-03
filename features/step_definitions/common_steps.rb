@@ -6,6 +6,14 @@ Given(/^"(.*?)" is authorized$/) do |username|
   allow(User).to receive(:determine_roles).and_return(Role.all)
 end
 
+Given(/^"([^"]*)" is authorized as an admin$/) do |arg1|
+  allow(User).to receive(:determine_roles).and_return(Role.where(name: Role::ROLE_CASEFINDER_ADMIN))
+end
+
+Given(/^"([^"]*)" is authorized as a user$/) do |arg1|
+  allow(User).to receive(:determine_roles).and_return(Role.where(name: Role::ROLE_CASEFINDER_USER))
+end
+
 Given(/^"(.*?)" is not authorized$/) do |username|
   allow(User).to receive(:determine_roles).and_return([])
 end
@@ -20,6 +28,27 @@ end
 
 When(/^I visit the new export page$/) do
   visit(new_batch_export_path())
+end
+
+When(/^I visit the abstactor abstraction schemas page$/) do
+  visit(abstractor.abstractor_abstraction_schemas_path())
+end
+
+When(/^I visit the index page for the "([^"]*)" abstractor abstraction schema$/) do |predicate|
+  abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: predicate).first
+  visit(abstractor.abstractor_abstraction_schema_abstractor_object_values_path(abstractor_abstraction_schema))
+end
+
+When(/^I visit the new abstractor object value page for the "([^"]*)" abstractor abstraction schema$/) do |predicate|
+  abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: predicate).first
+  visit(abstractor.new_abstractor_abstraction_schema_abstractor_object_value_path(abstractor_abstraction_schema))
+end
+
+When(/^I visit the edit page for the first abstractor object value$/) do
+  node_id = all('.abstractor_object_value')[0]['id']
+  abstractor_object_value_id  = node_id.match('\d+')[0].to_i
+  @abstractor_object_value = Abstractor::AbstractorObjectValue.find(abstractor_object_value_id)
+  all('.abstractor_object_value')[0].find('.edit_abstractor_abstraction_schema_abstractor_object_value_link').click
 end
 
 When(/^I log out$/) do
@@ -130,6 +159,30 @@ Then(/^I should be on the pathology cases index page$/) do
   match_path(pathology_cases_path())
 end
 
+Then(/^I should be on the abstractor abstraction schemas page$/) do
+  match_path(abstractor.abstractor_abstraction_schemas_path())
+end
+
+Then(/^I should be on the index page for the "([^"]*)" abstractor abstraction schema$/) do |predicate|
+  abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: predicate).first
+  match_path(abstractor.abstractor_abstraction_schema_abstractor_object_values_path(abstractor_abstraction_schema))
+end
+
+Then(/^I should be on the new abstractor object value page for the "([^"]*)" abstractor abstraction schema$/) do |predicate|
+  abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: predicate).first
+  match_path(abstractor.new_abstractor_abstraction_schema_abstractor_object_value_path(abstractor_abstraction_schema))
+end
+
+Then(/^I should be on the edit abstractor object value page for the "([^"]*)" abstractor abstraction schema$/) do |predicate|
+  abstractor_abstraction_schema = Abstractor::AbstractorAbstractionSchema.where(predicate: predicate).first
+  match_path(abstractor.edit_abstractor_abstraction_schema_abstractor_object_value_path(abstractor_abstraction_schema, @abstractor_object_value))
+end
+
+Then(/^I should be informed that I am unauthorized$/) do
+  match_path(main_app.root_path)
+  expect(all('#flash')[0].text).to eq(ApplicationController::UNAUTHORIZED_MESSAGE)
+end
+
 def match_path(path)
   current_path = URI.parse(current_url).path
   expect(current_path).to eq(path)
@@ -158,7 +211,7 @@ end
 #   | name           | description          | date_available           |
 #   | Ruby Book      | Ruby guide           | DATE: Date.today         |
 #   | Rails Book     | A Ruby on Rails text | DATE: Date.today + 1.day |
- 
+
 # -----------------------------------------
 # See that the given model has records that
 # exactly match the columns given in the table
@@ -166,23 +219,23 @@ end
 Then /^the "([^\"]*)" records should match$/ do |model_name, table|
   # What model are we dealing with
   model_class = model_name.constantize
-  
+
   # Make sure the number of records matches the number of entries in the
   # test table
   "Record Count:#{model_class.count}".should == "Record Count:#{table.hashes.count}"
-  
+
   # Sort the records as we search using the field name order
   field_list_csv = table.hashes.first.collect { |field| field[0].to_s }.join(', ')
-  
+
   # Loop through the table given
   table.hashes.each_with_index do |record, i|
     # Fetch the record corresponding with the row we are on
     record_to_test = model_class.limit(1).offset(i).first
-    
+
     # Review each input filter
     record.each_pair do |field_name, raw_expected_value|
       # See if the filter value uses out magical dynamic date formatting
-      if raw_expected_value.is_a?(String) && 
+      if raw_expected_value.is_a?(String) &&
         (match_data = raw_expected_value.match(/^DATE: (.+?)$/) || match_data = raw_expected_value.match(/^VALUE: (.+?)$/))
         # Get the portion of the regex that has the executable code
         ruby_date_code = match_data[1]
@@ -204,7 +257,7 @@ Then /^the "([^\"]*)" records should match$/ do |model_name, table|
       end
       # Get the value in the database for the current field
       value_to_test = record_to_test.read_attribute(field_name)
-      
+
       # Verify that the correct value exists
       "#{field_name}:#{value_to_test.to_s}".should == "#{field_name}:#{expected_value.to_s}"
     end

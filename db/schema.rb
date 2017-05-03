@@ -154,10 +154,7 @@ ActiveRecord::Schema.define(version: 20170408021058) do
     t.string   "vocabulary_code",    limit: 255
     t.string   "vocabulary",         limit: 255
     t.string   "vocabulary_version", limit: 255
-<<<<<<< HEAD
     t.text     "comments",           limit: 65535
-=======
->>>>>>> master
     t.boolean  "case_sensitive",                   default: false
   end
 

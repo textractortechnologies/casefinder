@@ -5,7 +5,11 @@ module Abstractor
   class AbstractorAbstractionsController < ApplicationController
     include Abstractor::Methods::Controllers::AbstractorAbstractionsController
     include Abstractor::AbstractorAbstractionsControllerCustomMethods
-    before_action :authenticate_user!
+    before_action :authenticate_user!, :authorize_user!
+
+    def authorize_user!
+      authorize Abstractor::AbstractorAbstraction.new, :all?
+    end
 
     def update_wokflow_status
       abstraction_workflow_status = params[:abstraction_workflow_status]
