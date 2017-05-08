@@ -1,5 +1,49 @@
 # Case Finder Changelog
 =======
+## 1.1.3
+Released on May 7, 2017
+
+* Only allow 'admins' to view and visit the dictionary maintenance pages.
+https://github.com/textractortechnologies/casefinder/issues/227
+
+* Create a link between the value variant and the suggestion.
+https://github.com/textractortechnologies/casefinder/issues/225
+
+* Fix display of label/delete button on variant values for adding/editing an abstractor object value.
+https://github.com/textractortechnologies/casefinder/issues/224
+
+* Authenticate and authorize the Rules resource.
+https://github.com/textractortechnologies/casefinder/issues/223
+
+* Do not find soft deleted suggestions when searching pathology cases by suggestions.
+https://github.com/textractortechnologies/casefinder/issues/222
+
+* Do not display soft deleted suggestions on pathology cases index page.
+https://github.com/textractortechnologies/casefinder/issues/221
+
+* Allow accepted values belonging to deleted object values to be re-exported.
+https://github.com/textractortechnologies/casefinder/issues/220
+
+* Create rules engine to retrieve and process rules and perform operations on generated suggestions based on the rules.
+https://github.com/textractortechnologies/casefinder/issues/219
+
+* Expire NLP schema cache if update timestamp is out of date via post.
+https://github.com/textractortechnologies/casefinder/issues/218
+
+*Post update timestamp for each schema along with schemas accompanying note.
+https://github.com/textractortechnologies/casefinder/issues/217
+
+* Create UI to maintain the dictionary objects and variants.
+https://github.com/textractortechnologies/casefinder/issues/216
+
+* Create new rules resource that accepts an array of schemas and returns all the rules associated with the schemas.
+https://github.com/textractortechnologies/casefinder/issues/213
+
+* Change posting of note and schema be all at once per note.
+https://github.com/textractortechnologies/casefinder/issues/212
+
+* Allow dictionary items to be marked as case sensitive.
+https://github.com/textractortechnologies/casefinder/issues/211
 
 ## 1.1.2
 Released on Feburary 20, 2017
