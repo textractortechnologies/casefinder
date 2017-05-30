@@ -1,3 +1,29 @@
+# select count(distinct pc.accession_number)
+# from pathology_cases pc join abstractor_abstractions aa on pc.id = aa.about_id
+#                         join abstractor_suggestions sug on aa.id = sug.abstractor_abstraction_id
+#                         join abstractor_subjects sub on aa.abstractor_subject_id = sub.id
+#                         join abstractor_abstraction_schemas sh on sub.abstractor_abstraction_schema_id = sh.id
+# where sh.predicate = 'has_cancer_histology'
+# and sug.unknown = true
+# SELECT DISTINCT [pathology_cases].*
+# FROM [pathology_cases] join abstractor_abstractions on abstractor_abstractions.about_id = pathology_cases.id and abstractor_abstractions.about_type = 'PathologyCase'
+# WHERE (pathology_cases.created_at < '05-08-2017 14:55:29.446')
+# AND (not exists(select 1 from abstractor_suggestions
+#                 where abstractor_abstractions.id = abstractor_suggestions.abstractor_abstraction_id)
+# )
+# select DISTINCT pc.accession_number
+#      , pc.collection_date
+#      , sh.predicate
+#      , sug.suggested_value
+#      , sug.unknown
+# from pathology_cases pc join abstractor_abstractions aa on pc.id = aa.about_id
+#                         join abstractor_suggestions sug on aa.id = sug.abstractor_abstraction_id
+#                         join abstractor_subjects sub on aa.abstractor_subject_id = sub.id
+#                         join abstractor_abstraction_schemas sh on sub.abstractor_abstraction_schema_id = sh.id
+#                         join abstractor_suggestion_sources src on sug.id = src.abstractor_suggestion_id
+# where pc.created_at >= '5/8/2017'
+# order by pc.accession_number, sh.predicate, sug.suggested_value
+
 # select DISTINCT pc.accession_number
 #      , pc.collection_date
 #      , sh.predicate
@@ -9,7 +35,7 @@
 #                         join abstractor_subjects sub on aa.abstractor_subject_id = sub.id
 #                         join abstractor_abstraction_schemas sh on sub.abstractor_abstraction_schema_id = sh.id
 #                         join abstractor_suggestion_sources src on sug.id = src.abstractor_suggestion_id
-# where pc.created_at >= '4/21/2017'
+# where pc.created_at >= '5/08/2017'
 # --and pc.accession_number = '?'
 # order by pc.accession_number, sh.predicate, sug.suggested_value
 

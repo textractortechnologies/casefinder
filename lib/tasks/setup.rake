@@ -1,7 +1,6 @@
 require 'csv'
 require './lib/case_finder/setup/'
 namespace :setup do
-
   desc "Rules"
   task(rules: :environment) do  |t, args|
     abstractor_abstraction_schema_has_cancer_histology = Abstractor::AbstractorAbstractionSchema.where(predicate: 'has_cancer_histology').first
@@ -83,7 +82,7 @@ namespace :setup do
                                   "8071/3","8072/3","8073/3","8074/3","8075/3","8076/2","8076/3","8077/2",
                                   "8078/3","8080/2","8081/2","8082/3","8083/3","8084/3","8090/1","8090/3",
                                   "8091/3","8092/3","8093/3","8094/3","8095/3","8097/3","8098/3","8102/3",
-                                  "8110/0","8110/3"))
+                                  "8110/0","8110/3","8742/2"))
        and exists(Site())
        and forall (Site (code in ("C44.0","C44.1","C44.2","C44.3","C44.4","C44.5","C44.6","C44.7","C44.8","C44.9")))
     then
@@ -322,7 +321,7 @@ namespace :setup do
        and exists(Site(code != "C61.9"))
        and exists(Site(code == "C61.9"))
     then
-        suggestions.addNewHist("adenocarcinoma, nos (8140/3)", $hist.suggestion.getSuggestion_sources());
+       suggestions.addNewHist("adenocarcinoma, nos (8140/3)", $hist.suggestion.getSuggestion_sources());
     end
     HEREDOC
 
@@ -560,6 +559,97 @@ namespace :setup do
       $hist : Histology(code in ("9761/3"))
     then
       suggestions.addNewSite("blood (c42.0)", $hist.suggestion.getSuggestion_sources());
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    # #Rule 23
+    # abstractor_rule = Abstractor::AbstractorRule.new
+    # abstractor_rule.rule = <<-HEREDOC
+    # // ---------------------------------------------------------------------------------------------------------------------
+    # // RULE DESCRIPTION: Rule 23
+    # // ---------------------------------------------------------------------------------------------------------------------
+    # // When site is: C42.0
+    # // ---------------------------------------------------------------------------------------------------------------------
+    # // Then add histology: neoplasm, malignant (8000/3)
+    # // ---------------------------------------------------------------------------------------------------------------------
+    # rule "23: Add neoplasm, malignant (8000/3)"
+    # when
+    #   $site: (Site(code == "C42.0"))
+    # then
+    #   suggestions.addNewHist("neoplasm, malignant (8000/3)", $site.suggestion.getSuggestion_sources());
+    # end
+    # HEREDOC
+    #
+    # abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    # abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    # abstractor_rule.save!
+
+    #Rule 24
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION: Rule 24
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: lymphoma
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then add site: lymph node, nos (c77.9)
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "23: Add lymph node, nos (c77.9) "
+    when
+      $hist : Histology(code in ("9650/3", "9651/3", "9652/3", "9653/3",
+      "9655/3", "9659/3", "9663/3", "9823/3", "9727/3", "9811/3",
+      "9812/3", "9813/3", "9814/3", "9815/3", "9816/3", "9817/3",
+      "9818/3", "9827/3", "9837/3", "9590/3", "9591/3", "9670/3",
+      "9671/3", "9673/3", "9678/3", "9679/3", "9684/3", "9687/3",
+      "9688/3", "9689/3", "9689/6", "9690/3", "9691/3", "9695/3",
+      "9698/3", "9699/3", "9700/3", "9701/3", "9702/3", "9705/3",
+      "9708/3", "9709/3", "9712/3", "9714/3", "9716/3", "9717/3",
+      "9718/3", "9719/3", "9724/3", "9725/3", "9726/3", "9728/3",
+      "9729/3", "9735/3", "9737/3", "9738/3", "9596/3", "9680/3",
+      "9597/3", "9734/3", "9751/3", "9755/3", "9756/3", "9757/3",
+      "9758/3", "9759/3", "9930/3"))
+    then
+      suggestions.addNewSite("lymph node, nos (c77.9)", $hist.suggestion.getSuggestion_sources());
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
+    #Rule 25
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION: Rule 25
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: skin cancer
+    // and sites are all skin sites except one
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then remove skin histology
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "Remove Histology codes when skin site and just one other site"
+    when
+      $hist : Histology(code in ("8000/3","8000/6","8000/9","8001/3","8002/3","8003/3","8004/3","8005/3",
+      "8010/2","8010/3","8010/6","8010/9","8011/3","8012/3","8013/3","8014/3",
+      "8015/3","8020/3","8021/3","8022/3","8030/3","8031/3","8032/3","8033/3",
+      "8034/3","8035/3","8041/3","8042/3","8043/3","8044/3","8045/3","8046/3",
+      "8050/2","8050/3","8051/3","8052/2","8052/3","8070/2","8070/3","8070/6",
+      "8071/3","8072/3","8073/3","8074/3","8075/3","8076/2","8076/3","8077/2",
+      "8078/3","8080/2","8081/2","8082/3","8083/3","8084/3","8090/1","8090/3",
+      "8091/3","8092/3","8093/3","8094/3","8095/3","8097/3","8098/3","8102/3",
+      "8110/0","8110/3", "8742/2"))
+      $site1 : Site()
+      $site2 : Site(code in ("C44.0","C44.1","C44.2","C44.3","C44.4",
+      "C44.5","C44.6","C44.7","C44.8","C44.9",
+      "C53.0", "C53.1", "C53.8", "C53.9")) // skin sites
+      and forall(Site(code == $site1.code || code == $site2.code))
+    then
+      suggestions.remove($hist.suggestion);
     end
     HEREDOC
 
