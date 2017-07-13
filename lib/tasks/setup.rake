@@ -658,6 +658,34 @@ namespace :setup do
     abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
     abstractor_rule.save!
 
+    #Rule 26
+    abstractor_rule = Abstractor::AbstractorRule.new
+    abstractor_rule.rule = <<-HEREDOC
+    // ---------------------------------------------------------------------------------------------------------------------
+    // RULE DESCRIPTION: Rule 26
+    // ---------------------------------------------------------------------------------------------------------------------
+    // When histology is: melanoma
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Then add site: skin, nos (c44.9)
+    // ---------------------------------------------------------------------------------------------------------------------
+    rule "26: Add skin, nos (c44.9)"
+    when
+      $hist : Histology(code in ("8720/0","8720/2","8720/3","8721/3","8722/0","8722/3",
+                                 "8723/0","8723/3","8725/0","8726/0","8727/0","8728/0","8728/1",
+                                 "8728/3","8730/0","8730/3","8740/0","8740/3","8741/2","8741/3",
+                                 "8742/2","8742/3","8743/3","8744/3","8745/3","8746/3","8750/0",
+                                 "8760/0","8761/0","8761/1","8761/3","8762/1","8770/0","8770/3",
+                                 "8771/0","8771/3","8772/0","8772/3","8773/3","8774/3","8780/0",
+                                 "8780/3","8790/0"))
+    then
+      suggestions.addNewSite("skin, nos (c44.9)", $hist.suggestion.getSuggestion_sources());
+    end
+    HEREDOC
+
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_histology.id)
+    abstractor_rule.abstractor_rule_abstractor_subjects.build(abstractor_subject_id: abstractor_subject_abstraction_schema_has_cancer_site.id)
+    abstractor_rule.save!
+
     #Rule 99
     abstractor_rule = Abstractor::AbstractorRule.new
     abstractor_rule.rule = <<-HEREDOC
