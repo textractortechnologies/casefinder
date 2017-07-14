@@ -14,6 +14,13 @@ class BatchExportsController < ApplicationController
       current_user.email,
       BatchExport.find_exportable_primary_cancer_abstractor_abstraction_groups(options)
     )
+    @not_fully_set_abstractor_abstraction_groups = []
+    @abstractor_abstraction_groups.each do |abstractor_abstraction_group|
+      if !abstractor_abstraction_group.fully_set?
+        @not_fully_set_abstractor_abstraction_groups << abstractor_abstraction_group
+      end
+    end
+
     respond_to do |format|
       format.html { @abstractor_abstraction_groups = @abstractor_abstraction_groups.paginate(per_page: 10, page: params[:page]) }
     end

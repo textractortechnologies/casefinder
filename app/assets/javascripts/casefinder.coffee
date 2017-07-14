@@ -21,6 +21,9 @@ $ ->
     $('#batch_exports').change ->
       batchExportUrl = new (Casefinder.Url)(config.batchExportUrl)
       window.location.href = batchExportUrl.sub(id: $(this).val())
+    if parseInt(config.not_fully_set_abstractor_abstraction_groups_size) > 0
+      $('.create_batch_export_link').prop('disabled', true)
+      $('.create_batch_export_link').addClass('create_batch_export_link_disabled')
     return
 
 (exports ? this).Casefinder.Url = (url) ->
@@ -85,7 +88,7 @@ $ ->
 
   $(".inactivity_ok").click () ->
     clearInterval sub_timer
-      
+
   # reset main timer i,e idle time to 0 on mouse move, keypress or reload
   reset_main_timer()
 

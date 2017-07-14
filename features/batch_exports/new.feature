@@ -54,6 +54,40 @@ Feature: Viewing a new batch export
     And I check "lower gum (c03.1)" within ".has_cancer_site"
     And I click the "Submit to METRIQ" button
     And I wait 2 seconds
+    And the pathology case with the accesion number "123" becomes not fully set
+    And I visit the new batch export page
+    Then the ".create_batch_export_link_disabled" button should be disabled
+    And I should see "There are some pathology cases for export that are not fully set!" within ".batch_export_details .alert-box"
+    And I should see not fully set batch exports with the following information
+      | Accession Number | Collection Date  | Histology                      | Site                        |
+      | 123              | 01/01/2015       |                                | base of tongue, nos (c01.9) |
+
+  @javascript
+  Scenario: Listing pathlogy cases ready for export, creating an export, viewing an existing export and exporting the simple format
+    Given pathology cases with the following information exist
+      | Accession Number | Collection Date    | Note                                                                                                        | Patient         | MRN   | SSN | Birth Date | Sex | Attending    |  Surgeon      |
+      | 123              | 01/01/2015         | Looks like carcinoma of of the external lip to me.  But maybe large cell carcinoma of the base of tongue.   | Harold Baines   | 999   | 666 | 01/01/1970 | M   | Jones, Bob   |  Smith, Barry |
+      | 124              | 02/01/2015         | Base of tounge looks all good to me.                                                                        | Paul Konerko    | 888   | 555 | 01/01/1980 | M   | Jones, Mary  |  Smith, Norm  |
+      | 125              | 03/01/2015         | Pleomorphic carcinoma of the lower gum is the likley culprit.                                               | Minnie Minoso   | 777   | 444 | 01/01/1960 | M   | Jones, Sam   |  Smith, Nancy |
+    And "example.user@test.com" is authorized
+    When "example.user@test.com" logs in with password "secret"
+    And I wait 1 seconds
+    And I visit the pathology cases index page
+    Then I should see pathology cases with the following information
+      | Accession Number | Collection Date  | Suggested Histologies   | Suggested Sites |
+      | 123              | 01/01/2015       | carcinoma, nos (8010/3)&large cell carcinoma, nos (8012/3) | base of tongue, nos (c01.9)&external lip, nos (c00.2)&lip, nos (c00.9)&tongue, nos (c02.9) |
+      | 125              | 03/01/2015       | carcinoma, nos (8010/3)&pleomorphic carcinoma (8022/3)     | gum, nos (c03.9)&lower gum (c03.1)                                                         |
+    When I click "Review" for accession number "123"
+    And I wait 1 seconds
+    And I check "carcinoma, nos (8010/3)" within ".has_cancer_histology"
+    And I check "base of tongue, nos (c01.9)" within ".has_cancer_site"
+    And I click the "Submit to METRIQ" button
+    And I wait 2 seconds
+    Then I should be on the edit page of accession number "125"
+    And I check "pleomorphic carcinoma (8022/3)" within ".has_cancer_histology"
+    And I check "lower gum (c03.1)" within ".has_cancer_site"
+    And I click the "Submit to METRIQ" button
+    And I wait 2 seconds
     And I visit the new batch export page
     And I wait 2 seconds
     Then I should see batch exports with the following information in order
@@ -109,7 +143,6 @@ Feature: Viewing a new batch export
     | example.user@test.com | VALUE: AccessAudit.controller_action_access     | batch_exports:show with params: {"export_type"=>"simple", "format"=>"text", "id"=>"1"} |
 
   @javascript
-  @wip
   Scenario: Exporting the full format
     Given pathology cases with the following information exist
       | Accession Number | Collection Date    | Note                                                                                                        | Patient         | MRN   | SSN | Birth Date | Sex | Attending    |  Surgeon      |
