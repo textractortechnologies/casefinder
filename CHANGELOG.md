@@ -1,5 +1,44 @@
 # Case Finder Changelog
 =======
+## 1.1.4
+Released on June 17, 2017
+
+* Fix rule no. 25 for removing skin histology suggestions if multiple skin sites and one non skin site.
+https://github.com/textractortechnologies/casefinder/issues/231
+
+* Improve formatting of notes.  Match formatting in Powerpath.  Handle newlines better overall in the display and highlighting of note.
+https://github.com/textractortechnologies/casefinder/issues/232
+
+* Remove "8077/2" from list of trigger histologies for Rule no. 2, 25 (the skin rules).
+https://github.com/textractortechnologies/casefinder/issues/233
+
+* Improve the sentence detection in the NLP engine.
+https://github.com/textractortechnologies/casefinder/issues/247
+
+* lentigo maligna (8742/2) should not be part of the skin rule
+https://github.com/textractortechnologies/casefinder/issues/248
+
+* Why no suggestion for "CHRONIC LYMPHOCYTIC LEUKEMIA"?  Too liberal sentence detection.
+https://github.com/textractortechnologies/casefinder/issues/250
+
+* Add rule: If histology=melamona, add site 'Skin,nos'
+https://github.com/textractortechnologies/casefinder/issues/253
+
+* Add validation to prevent an abstraction from being 'Submit to METRIQ' if blank.
+https://github.com/textractortechnologies/casefinder/issues/254
+
+* Enable ability to 'Remove from METRIQ' a pathology case that is not fully set.
+https://github.com/textractortechnologies/casefinder/issues/255
+
+* Add validation on 'Export' screen to check for any cases 'Added to METRIQ' that are not fully set.
+https://github.com/textractortechnologies/casefinder/issues/256
+
+* Clicking the 'Edit' button on a site/histology and then clicking 'Cancel' should restore the existing state.
+https://github.com/textractortechnologies/casefinder/issues/257
+
+* Clicking 'Edit' on a site/histology should disable the 'Submit to METRIQ' button.
+https://github.com/textractortechnologies/casefinder/issues/258
+
 ## 1.1.3
 Released on May 7, 2017
 
