@@ -171,3 +171,14 @@
     }
   }
 }
+#abstractor_settings {
+  @include grid-column($columns: 24);
+  .abstractor_settings_list {
+    table {
+      @include grid-column($columns: 24);
+    }
+  }
+}
+.edit_abstractor_setting_link {
+  @include button($button-tny, $radius: false);
+}

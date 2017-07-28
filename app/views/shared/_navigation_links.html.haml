@@ -15,18 +15,10 @@
   = link_to main_app.new_batch_export_path(), class: 'item' do
     %i{ class: "fi-download" }
     %span Export
-  = link_to '#', class: 'item', data: {dropdown: "drop"} do
-    %i{ class: "fi-wrench" }
-    %span Settings &raquo;
-  %ul#drop.tiny.f-dropdown{data: {dropdown_content: ''} }
-    - if policy(Abstractor::AbstractorAbstractionSchema).all? 
-      %li 
-        = link_to Abstractor::UserInterface.abstractor_relative_path(abstractor.abstractor_abstraction_schemas_path), class: 'item' do
-          Dictionaries
-    - if policy(Abstractor::AbstractorRule).all?  
-      %li 
-        = link_to Abstractor::UserInterface.abstractor_relative_path(abstractor.abstractor_rules_path), class: 'item' do
-          Rules
+  - if policy(Abstractor::AbstractorAbstractionSchema).all?  || policy(Abstractor::AbstractorRule).all?  
+    = link_to Abstractor::UserInterface.abstractor_relative_path(abstractor.abstractor_settings_path), class: 'item' do
+      %i{ class: "fi-wrench" }
+      %span Settings
   = link_to main_app.destroy_user_session_path(), method: 'delete', class: 'item' do
     %i{ class: "fi-unlock" }
     %span Log out
