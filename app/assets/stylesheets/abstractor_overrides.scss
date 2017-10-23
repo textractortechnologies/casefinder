@@ -5,15 +5,18 @@
   @include button($button-tny, $radius: false);
 
 }
-
 .edit_abstractor_abstraction_schema_abstractor_object_value_link {
   @include button($button-tny, $radius: false);
 }
-
 .delete_abstractor_abstraction_schema_abstractor_object_value_link {
   @include button($button-tny, $alert-color, $radius: false);
 }
-
+.edit_abstractor_rule_link {
+  @include button($button-tny, $radius: false);
+}
+.delete_abstractor_rule_link {
+  @include button($button-tny, $alert-color, $radius: false);
+}
 #abstractor_object_value .navigation {
   @include grid-row();
   @include grid-column(
@@ -21,7 +24,6 @@
    $push: 21
   );
 }
-
 .abstractor_footer {
   top: 35%;
 }
@@ -91,7 +93,6 @@
       @include grid-column($columns: 2);
     }
   }
-
   .abstractor_object_value_variant_remove {
     @include grid-column($columns: 2);
     .abstractor_object_value_variant_delete_link {
@@ -108,4 +109,76 @@
   input[type="submit"] {
     @include button($button-tny, $radius: false);
   }
+}
+
+#abstractor_rules {
+  @include grid-column($columns: 24);
+  .abstractor_rules_header {
+    form#search_abstractor_rules_form {
+      label {
+        font-weight: bold;
+        margin-bottom: .5rem;
+        padding-left: .25rem;
+      }
+      .abstractor_search {
+        @include grid-column($columns: 20);
+      }
+      .abstractor_navigation {
+        @include grid-column($columns: 4);
+        margin-top: 2rem;
+      }
+    }
+  }
+  .abstractor_rules_list {
+    .pagination {
+      @include grid-column($columns: 24);
+    }
+
+    table {
+      @include grid-column($columns: 24);
+    }
+  }
+  .new_abstractor_rule_link {
+    @include button($button-tny, $radius: false);
+  }
+}
+#abstractor_rule {
+  @include grid-column($columns: 24);
+  label {
+    font-weight: bold;
+    margin-bottom: .5rem;
+    padding-left: .25rem;
+  }
+  input[type="submit"] {
+    @include button($button-tny, $radius: false);
+  }
+  .abstractor_rule_abstractor_subject {
+    .abstractor_rule_abstractor_subject_abstractor_subject {
+      @include grid-column($columns: 20);
+    }
+    .abstractor_rule_abstractor_subject_remove {
+      @include grid-column($columns: 2);
+      .abstractor_rule_abstractor_subject_delete_link {
+        @include button($button-tny, $alert-color, $radius: false);
+        margin-top: 2rem;
+      }
+    }
+  }
+  .links {
+    @include grid-column($columns: 24);
+    .abstractor_rule_abstractor_subject_add_link {
+      @include button($button-tny, $radius: false);
+    }
+  }
+}
+#abstractor_settings {
+  @include grid-column($columns: 24);
+  .abstractor_settings_list {
+    table {
+      @include grid-column($columns: 24);
+    }
+  }
+}
+.edit_abstractor_setting_link {
+  @include button($button-tny, $radius: false);
 }

@@ -5,7 +5,10 @@ module Abstractor
   class AbstractorRulesController < ApplicationController
     include Abstractor::Methods::Controllers::AbstractorRulesController
     include Abstractor::AbstractorRulesControllerCustomMethods
-    acts_as_token_authentication_handler_for User, only: [:index]
-    protect_from_forgery except: [:index]
+    before_action :authenticate_user!, :authorize_user!
+
+	def authorize_user!
+      authorize Abstractor::AbstractorRule.new, :all?
+    end
   end
 end
