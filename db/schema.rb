@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170705002057) do
+ActiveRecord::Schema.define(version: 20170729114710) do
 
   create_table "abstractor_abstraction_group_members", force: :cascade do |t|
     t.integer  "abstractor_abstraction_group_id", limit: 4
@@ -182,11 +182,12 @@ ActiveRecord::Schema.define(version: 20170705002057) do
   end
 
   create_table "abstractor_rules", force: :cascade do |t|
-    t.text     "rule",       limit: 65535, null: false
+    t.text     "rule",        limit: 65535, null: false
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name",       limit: 255
+    t.string   "name",        limit: 255
+    t.string   "description", limit: 255
   end
 
   create_table "abstractor_section_name_variants", force: :cascade do |t|
@@ -418,7 +419,7 @@ ActiveRecord::Schema.define(version: 20170705002057) do
 
   create_table "roles", force: :cascade do |t|
     t.string   "name",                limit: 255, null: false
-    t.string   "external_identifier", limit: 255, null: false
+    t.string   "external_identifier", limit: 255
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
