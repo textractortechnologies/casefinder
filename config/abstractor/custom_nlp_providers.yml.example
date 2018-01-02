@@ -7,10 +7,10 @@ health_heritage_casefinder_nlp_service:
       staging: http://localhost:8080/text%2Dweb%2Dservice%2D1.0/suggest
       production: http://localhost:8080/suggest
   multiple_suggestion_endpoint:
-      development: http://localhost:8080/text-web-service-1.0/multiple_suggest
-      test: http://localhost:8080/multiple_suggest
-      staging: http://localhost:8080/text%2Dweb%2Dservice%2D1.0/multiple_suggest
-      production: http://localhost:8080/multiple_suggest
+      development: http://localhost:8080/text-web-service-1.0/suggest
+      test: http://localhost:8080/suggest
+      staging: http://localhost:8080/text%2Dweb%2Dservice%2D1.0/suggest
+      production: http://localhost:8080/suggest
   suggestion_endpoint_credentials:
       development:
           "username": textractor_casefinder

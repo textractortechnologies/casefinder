@@ -1,3 +1,8 @@
+development:
+  adapter: pg
+  host: localhost
+  database: casefinder
+
 staging:
   adapter: sqlserver
   dataserver: WIN-J8TCRMKGKHM

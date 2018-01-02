@@ -1,0 +1,27 @@
+FROM ruby:2.1.5
+
+ARG DEBIAN_FRONTEND=noninteractive
+# Install java so rjb gem can be installed
+# nodejs is for https://github.com/rails/execjs
+# slapd is to run a local ldap server for testing
+RUN \
+  apt-get update && \
+  apt-get upgrade -y && \
+  apt-get install -y \
+    slapd \
+    default-jre \
+    default-jdk \
+    nodejs
+
+
+EXPOSE 3000
+
+WORKDIR /app
+COPY . /app
+
+ENV JAVA_HOME=/usr/lib/jvm/default-java
+
+RUN \
+  bundle install
+
+CMD /app/start_all
